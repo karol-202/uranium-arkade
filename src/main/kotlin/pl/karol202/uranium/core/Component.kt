@@ -1,26 +1,28 @@
 package pl.karol202.uranium.core
 
-abstract class Component<P : Props>(props: P)
+abstract class Component<P : Props>(props: P) : Detachable
 {
 	private var invalidateCallback: ((Component<P>) -> Unit)? = null
 
-	internal fun mount(invalidateCallback: (Component<P>) -> Unit)
+	internal fun attach(invalidateCallback: (Component<P>) -> Unit)
 	{
 		this.invalidateCallback = invalidateCallback
-		onMount()
+		onAttach()
 	}
 
-	protected open fun onMount() { }
+	protected open fun onAttach() { }
 
-	abstract fun Builder.render(): Node<*>
-
-	internal fun unmount()
+	override fun detach()
 	{
 		invalidateCallback = null
-		onUnmount()
+		onDetach()
 	}
 
-	protected open fun onUnmount() { }
+	protected open fun onDetach() { }
+
+	internal fun render() = Builder().also { it.render() }.elements
+
+	abstract fun Builder.render()
 }
 
-fun <P : Props> Builder.component(constructor: (P) -> Component<P>, props: P) = ComponentNode(constructor, props)
+fun <P : Props> Builder.component(constructor: (P) -> Component<P>, props: P) = add(ComponentElement(constructor, props))
