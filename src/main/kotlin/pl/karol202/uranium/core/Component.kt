@@ -1,10 +1,20 @@
 package pl.karol202.uranium.core
 
-abstract class Component<P : Props>(props: P) : Detachable
+abstract class Component<P : Props, S : State>(props: P,
+                                               state: S) : Detachable
 {
-	private var invalidateCallback: ((Component<P>) -> Unit)? = null
+	var props = props
+		internal set
+	var state = state
+		set(value)
+		{
+			field = value
+			invalidate()
+		}
 
-	internal fun attach(invalidateCallback: (Component<P>) -> Unit)
+	private var invalidateCallback: ((Component<P, S>) -> Unit)? = null
+
+	internal fun attach(invalidateCallback: (Component<P, S>) -> Unit)
 	{
 		this.invalidateCallback = invalidateCallback
 		onAttach()
@@ -23,6 +33,8 @@ abstract class Component<P : Props>(props: P) : Detachable
 	internal fun render() = Builder().also { it.render() }.elements
 
 	abstract fun Builder.render()
+
+	private fun invalidate() = invalidateCallback?.invoke(this)
 }
 
-fun <P : Props> Builder.component(constructor: (P) -> Component<P>, props: P) = add(ComponentElement(constructor, props))
+fun <P : Props> Builder.component(constructor: (P) -> Component<P, *>, props: P) = add(ComponentElement(constructor, props))

@@ -2,7 +2,7 @@ package pl.karol202.uranium.core
 
 sealed class TreeNode(private val content: Detachable) : Detachable
 {
-	class ComponentNode(private val component: Component<*>) : TreeNode(component)
+	class ComponentNode(private val component: Component<*, *>) : TreeNode(component)
 	{
 		override val allComponents get() = childrenComponents + component
 	}
@@ -14,8 +14,8 @@ sealed class TreeNode(private val content: Detachable) : Detachable
 
 	private var children = emptyList<TreeNode>()
 
-	abstract val allComponents: List<Component<*>>
-	val childrenComponents: List<Component<*>> get() = children.flatMap { it.allComponents }
+	abstract val allComponents: List<Component<*, *>>
+	val childrenComponents: List<Component<*, *>> get() = children.flatMap { it.allComponents }
 
 	fun attachChildren(children: List<TreeNode>)
 	{

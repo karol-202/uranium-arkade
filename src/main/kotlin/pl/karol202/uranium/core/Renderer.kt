@@ -3,7 +3,7 @@ package pl.karol202.uranium.core
 abstract class Renderer
 {
 	private lateinit var rootNode: TreeNode
-	private val registeredComponentNodes = mutableMapOf<Component<*>, TreeNode.ComponentNode>()
+	private val registeredComponentNodes = mutableMapOf<Component<*, *>, TreeNode.ComponentNode>()
 
 	fun render(element: Element<*>)
 	{
@@ -30,19 +30,19 @@ abstract class Renderer
 	private fun ComponentElement<*>.createAttachedComponent() =
 			this.createComponent().also { it.attach(this@Renderer::invalidate) }
 
-	private fun createRegisteredNode(component: Component<*>) =
+	private fun createRegisteredNode(component: Component<*, *>) =
 			TreeNode.ComponentNode(component).also { component.register(it) }
 
-	private fun Component<*>.renderToNodes() = render().map { it.toTreeNode() }
+	private fun Component<*, *>.renderToNodes() = render().map { it.toTreeNode() }
 
-	private fun invalidate(component: Component<*>)
+	private fun invalidate(component: Component<*, *>)
 	{
 		val node = component.findNode()
 		node.clear()
 		node.attachChildren(component.renderToNodes())
 	}
 
-	private fun Component<*>.findNode() = registeredComponentNodes[this] ?: throw IllegalStateException("Unregistered component")
+	private fun Component<*, *>.findNode() = registeredComponentNodes[this] ?: throw IllegalStateException("Unregistered component")
 
 	private fun TreeNode.ComponentNode.clear()
 	{
@@ -50,12 +50,12 @@ abstract class Renderer
 		detachChildren()
 	}
 
-	private fun Component<*>.register(node: TreeNode.ComponentNode)
+	private fun Component<*, *>.register(node: TreeNode.ComponentNode)
 	{
 		registeredComponentNodes[this] = node
 	}
 
-	private fun Component<*>.unregister()
+	private fun Component<*, *>.unregister()
 	{
 		registeredComponentNodes.remove(this)
 	}

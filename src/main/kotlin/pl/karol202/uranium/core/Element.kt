@@ -10,7 +10,7 @@ interface ParentElement
 	val children: List<Element<*>>
 }
 
-class ComponentElement<P : Props>(val componentConstructor: (P) -> Component<P>,
+class ComponentElement<P : Props>(val componentConstructor: (P) -> Component<P, *>,
                                   override val props: P) : Element<P>
 {
 	fun createComponent() = componentConstructor(props)
