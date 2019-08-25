@@ -2,6 +2,7 @@
   <dictionary name="karol">
     <words>
       <w>renderable</w>
+      <w>rerendering</w>
     </words>
   </dictionary>
 </component>

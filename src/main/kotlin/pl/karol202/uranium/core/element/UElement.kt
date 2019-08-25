@@ -1,10 +1,11 @@
 package pl.karol202.uranium.core.element
 
-import pl.karol202.uranium.core.common.Props
+import pl.karol202.uranium.core.common.HasProps
+import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
 
-class UElement<P : Props>(val componentConstructor: (P) -> UComponent<P, *>,
-                          override val props: P) : Element<P>
+class UElement<P : UProps>(val componentConstructor: (P) -> UComponent<P>,
+                           override val props: P) : HasProps<P>
 {
-	override fun createComponent() = componentConstructor(props)
+	fun createComponent() = componentConstructor(props)
 }
