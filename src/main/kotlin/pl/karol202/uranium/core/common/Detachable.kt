@@ -1,4 +1,4 @@
-package pl.karol202.uranium.core
+package pl.karol202.uranium.core.common
 
 interface Detachable
 {

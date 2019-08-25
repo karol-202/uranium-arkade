@@ -1,4 +1,6 @@
-package pl.karol202.uranium.core
+package pl.karol202.uranium.core.component
+
+import pl.karol202.uranium.core.element.Element
 
 class Builder
 {
