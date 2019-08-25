@@ -1,8 +1,8 @@
 package pl.karol202.uranium.core.component
 
-import pl.karol202.uranium.core.common.Attachable
-import pl.karol202.uranium.core.common.Detachable
-import pl.karol202.uranium.core.common.Renderable
-import pl.karol202.uranium.core.common.WithKey
+import pl.karol202.uranium.core.common.*
 
-interface Component : WithKey, Renderable, Attachable, Detachable
+interface Component<P : Props> : Renderable, Attachable, Detachable, HasProps<P>
+{
+	override var props: P
+}

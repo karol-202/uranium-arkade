@@ -1,8 +1,6 @@
 package pl.karol202.uranium.core.common
 
-interface WithKey
+interface HasKey
 {
 	val key: Any
 }
-
-object AutoKey

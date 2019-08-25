@@ -5,7 +5,7 @@ import pl.karol202.uranium.core.element.Element
 
 class Renderer
 {
-	private lateinit var rootNode: TreeNode
+	private lateinit var rootNode: TreeNode<*>
 
 	fun renderRoot(element: Element<*>)
 	{
@@ -17,13 +17,13 @@ class Renderer
 
 	private fun Element<*>.toNode() = createComponent().attached().toNode()
 
-	private fun Component.attached() = also { attach { it.rendered() } }
+	private fun Component<*>.attached() = also { attach { it.rendered() } }
 
-	private fun Component.toNode() = TreeNode(this)
+	private fun Component<*>.toNode() = TreeNode(this)
 
-	private fun Component.rendered() = findComponentNode(this).rendered()
+	private fun Component<*>.rendered() = findComponentNode(this).rendered()
 
-	private fun TreeNode.rendered() = also { render(this@Renderer) }
+	private fun TreeNode<*>.rendered() = also { render(this@Renderer) }
 
-	private fun findComponentNode(component: Component) = rootNode.findComponentNode(component) ?: throw IllegalArgumentException()
+	private fun findComponentNode(component: Component<*>) = rootNode.findNode(component) ?: throw IllegalArgumentException()
 }

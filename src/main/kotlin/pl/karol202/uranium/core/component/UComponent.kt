@@ -4,19 +4,15 @@ import pl.karol202.uranium.core.common.Props
 import pl.karol202.uranium.core.common.State
 import pl.karol202.uranium.core.element.UElement
 
-abstract class UComponent<P : Props, S : State>(props: P,
-                                                state: S) : Component
+abstract class UComponent<P : Props, S : State>(override var props: P,
+                                                state: S) : Component<P>
 {
-	var props = props
-		internal set
 	var state = state
 		set(value)
 		{
 			field = value
 			invalidate()
 		}
-
-	override val key get() = props.key
 
 	private var invalidateListener: (() -> Unit)? = null
 
