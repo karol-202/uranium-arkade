@@ -1,6 +1,8 @@
 package pl.karol202.uranium.core.common
 
-interface Attachable
+import pl.karol202.uranium.core.context.Context
+
+interface Attachable<C : Context<*>>
 {
-	fun attach(invalidateListener: () -> Unit)
+	fun attach(context: C)
 }

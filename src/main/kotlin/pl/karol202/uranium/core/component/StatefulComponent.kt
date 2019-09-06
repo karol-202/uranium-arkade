@@ -2,9 +2,10 @@ package pl.karol202.uranium.core.component
 
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.common.UState
+import pl.karol202.uranium.core.context.InvalidateableContext
 
-abstract class StatefulComponent<P : UProps, S : UState>(props: P,
-                                                         state: S) : AbstractComponent<P>(props)
+abstract class StatefulComponent<C : InvalidateableContext<*>, P : UProps, S : UState>(props: P,
+                                                                                       state: S) : AbstractComponent<C, P>(props)
 {
 	var state = state
 		set(value)
@@ -17,5 +18,5 @@ abstract class StatefulComponent<P : UProps, S : UState>(props: P,
 
 	protected abstract fun Builder.render()
 
-	private fun invalidate() = invalidateListener?.invoke()
+	private fun invalidate() = context?.invalidate()
 }

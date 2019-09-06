@@ -1,18 +1,19 @@
 package pl.karol202.uranium.core.internal
 
+import pl.karol202.uranium.core.context.Context
 import pl.karol202.uranium.core.common.Detachable
 import pl.karol202.uranium.core.common.HasKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
 import pl.karol202.uranium.core.element.UElement
 
-class TreeNode<P : UProps>(private val component: UComponent<P>) : Detachable, HasKey
+class TreeNode<C : Context<*>, P : UProps>(private val component: UComponent<C, P>) : Detachable, HasKey
 {
-	private var children = emptyList<TreeNode<*>>()
+	private var children = emptyList<TreeNode<C, *>>()
 
 	override val key get() = component.key
 
-	fun findNode(component: UComponent<*>): TreeNode<*>? =
+	fun findNode(component: UComponent<C, *>): TreeNode<C, *>? =
 			if(this.component == component) this
 			else children.mapNotNull { it.findNode(component) }.first()
 
@@ -30,7 +31,8 @@ class TreeNode<P : UProps>(private val component: UComponent<P>) : Detachable, H
 
 	private fun <P : UProps> UElement<P>.reuse(renderer: Renderer) = findChildrenWithKey<P>(key)?.updated(this, renderer)
 
-	private fun <P : UProps> findChildrenWithKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<P>
+	@Suppress("UNCHECKED_CAST")
+	private fun <P : UProps> findChildrenWithKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<C, P>
 
 	private fun updated(element: UElement<P>, renderer: Renderer) =
 			if(needsRerender(element)) withNewProps(element).rendered(renderer)
@@ -42,7 +44,7 @@ class TreeNode<P : UProps>(private val component: UComponent<P>) : Detachable, H
 
 	private fun rendered(renderer: Renderer) = also { render(renderer) }
 
-	private fun UElement<*>.render(renderer: Renderer): TreeNode<*> = renderer.renderElement(this)
+	private fun UElement<*>.render(renderer: Renderer): TreeNode<C, *> = renderer.renderElement(this)
 
 	override fun detach()
 	{
