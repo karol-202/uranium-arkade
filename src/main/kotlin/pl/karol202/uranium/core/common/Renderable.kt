@@ -2,7 +2,7 @@ package pl.karol202.uranium.core.common
 
 import pl.karol202.uranium.core.element.UElement
 
-interface Renderable
+interface Renderable<N>
 {
-	fun render(): List<UElement<*, *>>
+	fun render(): List<UElement<N, *>>
 }

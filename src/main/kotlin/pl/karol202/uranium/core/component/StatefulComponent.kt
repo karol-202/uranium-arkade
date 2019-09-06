@@ -2,11 +2,12 @@ package pl.karol202.uranium.core.component
 
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.common.UState
-import pl.karol202.uranium.core.context.InvalidateableContext
 
-abstract class StatefulComponent<C : InvalidateableContext<*>, P : UProps, S : UState>(props: P,
-                                                                                       state: S) : AbstractComponent<C, P>(props)
+abstract class StatefulComponent<N, P : UProps, S : UState>(props: P,
+                                                            state: S) : AbstractComponent<N, P>(props)
 {
+	override val context = parentContext ?: throw IllegalStateException("Not attached yet")
+
 	var state = state
 		set(value)
 		{
@@ -14,9 +15,9 @@ abstract class StatefulComponent<C : InvalidateableContext<*>, P : UProps, S : U
 			invalidate()
 		}
 
-	override fun render() = Builder().also { it.render() }.elements
+	override fun render() = UBuilder<N>().also { it.render() }.elements
 
-	protected abstract fun Builder.render()
+	protected abstract fun UBuilder<N>.render()
 
-	private fun invalidate() = context?.invalidate()
+	private fun invalidate() = parentContext?.invalidate()
 }

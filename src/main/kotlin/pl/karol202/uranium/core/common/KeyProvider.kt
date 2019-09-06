@@ -1,6 +1,6 @@
 package pl.karol202.uranium.core.common
 
-interface HasKey
+interface KeyProvider
 {
 	val key: Any
 }

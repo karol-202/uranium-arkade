@@ -1,50 +1,55 @@
 package pl.karol202.uranium.core.internal
 
-import pl.karol202.uranium.core.context.Context
 import pl.karol202.uranium.core.common.Detachable
-import pl.karol202.uranium.core.common.HasKey
+import pl.karol202.uranium.core.common.KeyProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
 import pl.karol202.uranium.core.element.UElement
 
-class TreeNode<C : Context<*>, P : UProps>(private val component: UComponent<C, P>) : Detachable, HasKey
+class TreeNode<N, P : UProps>(private val component: UComponent<N, P>) : Detachable, KeyProvider
 {
-	private var children = emptyList<TreeNode<C, *>>()
+	private var children = emptyList<TreeNode<N, *>>()
 
 	override val key get() = component.key
 
-	fun findNode(component: UComponent<C, *>): TreeNode<C, *>? =
+	fun findNode(component: UComponent<N, *>): TreeNode<N, *>? =
 			if(this.component == component) this
 			else children.mapNotNull { it.findNode(component) }.first()
 
-	fun render(renderer: Renderer)
+	fun render(renderer: Renderer<N>)
 	{
 		val newElements = component.render()
 		val newKeys = newElements.map { it.key }
 		detachOldChildren(newKeys)
-		children = newElements.map { it.reuseOrRenderElement(renderer) }
+		updateChildren(renderer, newElements)
 	}
 
 	private fun detachOldChildren(newKeys: List<Any>) = children.filter { it.key !in newKeys }.forEach { it.detach() }
 
-	private fun UElement<*>.reuseOrRenderElement(renderer: Renderer) = reuse(renderer) ?: render(renderer)
+	private fun updateChildren(renderer: Renderer<N>, newElements: List<UElement<N, *>>)
+	{
+		children = newElements.map { it.reuseOrRenderElement(renderer) }
+	}
 
-	private fun <P : UProps> UElement<P>.reuse(renderer: Renderer) = findChildrenWithKey<P>(key)?.updated(this, renderer)
+	private fun UElement<N, *>.reuseOrRenderElement(renderer: Renderer<N>) = reuse(renderer) ?: render(renderer)
+
+	private fun UElement<N, *>.render(renderer: Renderer<N>): TreeNode<N, *> = renderer.renderElement(this, component.context)
+
+	private fun <P : UProps> UElement<N, P>.reuse(renderer: Renderer<N>) = findChildrenWithKey<P>(key)?.updated(this, renderer)
 
 	@Suppress("UNCHECKED_CAST")
-	private fun <P : UProps> findChildrenWithKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<C, P>
+	private fun <P : UProps> findChildrenWithKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<N, P>
 
-	private fun updated(element: UElement<P>, renderer: Renderer) =
+	private fun updated(element: UElement<N, P>, renderer: Renderer<N>) =
 			if(needsRerender(element)) withNewProps(element).rendered(renderer)
 			else withNewProps(element)
 
-	private fun needsRerender(element: UElement<P>) = component.props == element.props
+	// Returning false doesn't have to necessarily mean that props haven't changed
+	private fun needsRerender(element: UElement<N, P>) = component.props == element.props
 
-	private fun withNewProps(element: UElement<P>) = also { component.props = element.props }
+	private fun withNewProps(element: UElement<N, P>) = also { component.modifyPropsInternal(element.props) }
 
-	private fun rendered(renderer: Renderer) = also { render(renderer) }
-
-	private fun UElement<*>.render(renderer: Renderer): TreeNode<C, *> = renderer.renderElement(this)
+	private fun rendered(renderer: Renderer<N>) = also { render(renderer) }
 
 	override fun detach()
 	{

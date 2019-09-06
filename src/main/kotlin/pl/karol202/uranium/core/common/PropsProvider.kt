@@ -1,6 +1,6 @@
 package pl.karol202.uranium.core.common
 
-interface HasProps<P : UProps> : HasKey
+interface PropsProvider<P : UProps> : KeyProvider
 {
 	val props: P
 

@@ -1,30 +1,31 @@
 package pl.karol202.uranium.core.internal
 
-import pl.karol202.uranium.core.context.Context
 import pl.karol202.uranium.core.component.UComponent
+import pl.karol202.uranium.core.context.UContext
+import pl.karol202.uranium.core.context.invalidateable
 import pl.karol202.uranium.core.element.UElement
 
-class Renderer<C : Context<*>>
+class Renderer<N>
 {
-	private lateinit var rootNode: TreeNode<C, *>
+	private lateinit var rootNode: TreeNode<N, *>
 
-	fun renderRoot(element: UElement<C, *>, context: C)
+	fun renderRoot(element: UElement<N, *>, context: UContext<N>)
 	{
 		check(!::rootNode.isInitialized) { "Already rendered" }
 		rootNode = renderElement(element, context)
 	}
 
-	fun renderElement(element: UElement<C, *>, context: C) = element.toNode().rendered()
+	fun renderElement(element: UElement<N, *>, context: UContext<N>) = element.toNode(context).rendered()
 
-	private fun UElement<C, *>.toNode() = createComponent().attached().toNode()
+	private fun UElement<N, *>.toNode(context: UContext<N>) = createComponent().attached(context).toNode()
 
-	private fun UComponent<C, *>.attached() = also { attach() }
+	private fun UComponent<N, *>.attached(context: UContext<N>) = also { attach(context.invalidateable { rendered() }) }
 
-	private fun UComponent<C, *>.toNode() = TreeNode(this)
+	private fun UComponent<N, *>.toNode() = TreeNode(this)
 
-	private fun UComponent<C, *>.rendered() = findComponentNode(this).rendered()
+	private fun UComponent<N, *>.rendered() = findComponentNode(this).rendered()
 
-	private fun TreeNode<C, *>.rendered() = also { render(this@Renderer) }
+	private fun TreeNode<N, *>.rendered() = also { render(this@Renderer) }
 
-	private fun findComponentNode(component: UComponent<C, *>) = rootNode.findNode(component) ?: throw IllegalArgumentException()
+	private fun findComponentNode(component: UComponent<N, *>) = rootNode.findNode(component) ?: throw IllegalArgumentException()
 }

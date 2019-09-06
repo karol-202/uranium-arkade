@@ -2,30 +2,33 @@ package pl.karol202.uranium.core.component
 
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.context.InvalidateableContext
-import pl.karol202.uranium.core.element.UElement
 
-abstract class AbstractComponent<C : InvalidateableContext<*>, P : UProps>(override var props: P) : UComponent<C, P>
+abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 {
-	protected companion object
-	{
-		val EMPTY = emptyList<UElement<*, *>>()
-	}
+	final override var props = props
+		private set
 
-	protected var context: C? = null
+	protected var parentContext: InvalidateableContext<N>? = null
+		private set
 
-	override fun attach(context: C)
+	override fun attach(parentContext: InvalidateableContext<N>)
 	{
-		this.context = context
+		this.parentContext = parentContext
 		onAttach()
 	}
 
 	override fun detach()
 	{
 		onDetach()
-		context = null
+		parentContext = null
 	}
 
 	protected open fun onAttach() { }
 
 	protected open fun onDetach() { }
+
+	override fun modifyPropsInternal(props: P)
+	{
+		this.props = props
+	}
 }
