@@ -5,4 +5,6 @@ import pl.karol202.uranium.core.context.UContext
 interface ContextProvider<N>
 {
 	val context: UContext<N>?
+
+	fun requireContext() = context ?: throw NullPointerException("No context")
 }
