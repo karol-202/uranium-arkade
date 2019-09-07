@@ -8,9 +8,9 @@ import java.awt.Button
 class SwingButton(props: Props) : SwingControl<SwingButton.Props>(props)
 {
 	class Props(key: Any,
-	            val text: String) : UProps(key)
+	            val text: String?) : UProps(key)
 
-	override val control = Button(props.text)
+	override val control = Button()
 
 	override fun onUpdate()
 	{
@@ -18,4 +18,5 @@ class SwingButton(props: Props) : SwingControl<SwingButton.Props>(props)
 	}
 }
 
-fun SwingBuilder.button(key: Any, text: String) = component(::SwingButton, SwingButton.Props(key, text))
+fun SwingBuilder.button(key: Any,
+                        text: String? = null) = component(::SwingButton, SwingButton.Props(key, text))

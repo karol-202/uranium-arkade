@@ -10,15 +10,15 @@ import java.awt.Component
 
 abstract class SwingControl<P : UProps>(props: P) : SwingComponent<P>(props)
 {
-	override val context: SwingContext? = null
+	protected abstract val control: SwingNative
 
-	abstract val control: SwingNative
+	override val context: SwingContext? = null
 
 	override fun onAttach(parentContext: InvalidateableSwingContext) = parentContext.attachNative(control)
 
 	override fun render() = emptyList<UElement<Component, *>>().also { onUpdate() }
 
-	open fun onUpdate() { }
+	protected open fun onUpdate() { }
 
 	override fun onDetach(parentContext: InvalidateableSwingContext) = parentContext.detachNative(control)
 }

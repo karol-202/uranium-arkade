@@ -1,5 +1,6 @@
 package pl.karol202.uranium.swing
 
+import pl.karol202.uranium.core.common.ChildrenProps
 import pl.karol202.uranium.core.component.AbstractComponent
 import pl.karol202.uranium.core.component.StatefulComponent
 import pl.karol202.uranium.core.component.UBuilder
@@ -8,8 +9,13 @@ import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.internal.Renderer
 import java.awt.Component
+import java.awt.Container
 
 typealias SwingNative = Component
+
+typealias SwingContainer = Container
+
+typealias SwingChildrenProps = ChildrenProps<SwingNative>
 
 typealias SwingElement<P> = UElement<SwingNative, P>
 

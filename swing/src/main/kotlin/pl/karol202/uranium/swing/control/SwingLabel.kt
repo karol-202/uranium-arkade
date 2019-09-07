@@ -8,9 +8,9 @@ import java.awt.Label
 class LabelSwingContext(props: Props) : SwingControl<LabelSwingContext.Props>(props)
 {
 	class Props(key: Any,
-	            val text: String) : UProps(key)
+	            val text: String?) : UProps(key)
 
-	override val control = Label(props.text)
+	override val control = Label()
 
 	override fun onUpdate()
 	{
@@ -18,4 +18,5 @@ class LabelSwingContext(props: Props) : SwingControl<LabelSwingContext.Props>(pr
 	}
 }
 
-fun SwingBuilder.label(key: Any, text: String) = component(::LabelSwingContext, LabelSwingContext.Props(key, text))
+fun SwingBuilder.label(key: Any,
+                       text: String? = null) = component(::LabelSwingContext, LabelSwingContext.Props(key, text))

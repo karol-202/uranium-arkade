@@ -1,15 +1,11 @@
 package pl.karol202.uranium.swing
 
-import pl.karol202.uranium.core.context.UContext
-import java.awt.Component
-import java.awt.Container
-
-class SwingContextImpl(private val container: Container) : UContext<Component>
+class SwingContextImpl(private val container: SwingContainer) : SwingContext
 {
-	override fun attachNative(nativeComponent: Component)
+	override fun attachNative(nativeComponent: SwingNative)
 	{
 		container.add(nativeComponent)
 	}
 
-	override fun detachNative(nativeComponent: Component) = container.remove(nativeComponent)
+	override fun detachNative(nativeComponent: SwingNative) = container.remove(nativeComponent)
 }
