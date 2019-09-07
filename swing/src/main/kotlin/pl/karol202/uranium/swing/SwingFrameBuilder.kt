@@ -3,7 +3,7 @@ package pl.karol202.uranium.swing
 import java.awt.Dimension
 import javax.swing.JFrame
 
-class UraniumSwingFrameBuilder internal constructor(private val rootSupplier: SwingBuilder.() -> SwingElement<*>)
+class SwingFrameBuilder internal constructor(private val rootSupplier: SwingBuilder.() -> SwingElement<*>)
 {
 	private var defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 	private var isVisible = true
@@ -22,13 +22,13 @@ class UraniumSwingFrameBuilder internal constructor(private val rootSupplier: Sw
 
 	fun withTitle(title: String) = also { this.title = title }
 
-	fun build() = object : UraniumSwingFrame()
+	fun build() = object : SwingFrame()
 	{
 		override val SwingBuilder.rootElement get() = rootSupplier()
 
 		override fun JFrame.initFrame()
 		{
-			val builder = this@UraniumSwingFrameBuilder
+			val builder = this@SwingFrameBuilder
 
 			defaultCloseOperation = builder.defaultCloseOperation
 			isVisible = builder.isVisible

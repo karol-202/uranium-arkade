@@ -2,11 +2,11 @@ package pl.karol202.uranium.swing
 
 import javax.swing.JFrame
 
-abstract class UraniumSwingFrame
+abstract class SwingFrame
 {
 	companion object
 	{
-		fun withRoot(rootSupplier: SwingBuilder.() -> SwingElement<*>) = UraniumSwingFrameBuilder(rootSupplier)
+		fun withRoot(rootSupplier: SwingBuilder.() -> SwingElement<*>) = SwingFrameBuilder(rootSupplier)
 	}
 
 	protected abstract val SwingBuilder.rootElement: SwingElement<*>
