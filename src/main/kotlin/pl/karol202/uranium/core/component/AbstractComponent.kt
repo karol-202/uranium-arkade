@@ -14,18 +14,18 @@ abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 	override fun attach(parentContext: InvalidateableContext<N>)
 	{
 		this.parentContext = parentContext
-		onAttach()
+		onAttach(parentContext)
 	}
 
 	override fun detach()
 	{
-		onDetach()
+		onDetach(parentContext ?: throw IllegalStateException("Already detached"))
 		parentContext = null
 	}
 
-	protected open fun onAttach() { }
+	protected open fun onAttach(parentContext: InvalidateableContext<N>) { }
 
-	protected open fun onDetach() { }
+	protected open fun onDetach(parentContext: InvalidateableContext<N>) { }
 
 	override fun modifyPropsInternal(props: P)
 	{

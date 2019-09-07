@@ -6,7 +6,7 @@ import pl.karol202.uranium.core.common.UState
 abstract class StatefulComponent<N, P : UProps, S : UState>(props: P,
                                                             state: S) : AbstractComponent<N, P>(props)
 {
-	override val context = parentContext ?: throw IllegalStateException("Not attached yet")
+	override val context = parentContext
 
 	var state = state
 		set(value)
