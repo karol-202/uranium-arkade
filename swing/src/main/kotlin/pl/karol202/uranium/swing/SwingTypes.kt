@@ -8,12 +8,12 @@ import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.internal.Renderer
-import java.awt.Component
-import java.awt.Container
+import javax.swing.JComponent
+import javax.swing.JPanel
 
-typealias SwingNative = Component
+typealias SwingNative = JComponent
 
-typealias SwingContainer = Container
+typealias SwingContainer = JPanel
 
 typealias SwingChildrenProps = ChildrenProps<SwingNative>
 
