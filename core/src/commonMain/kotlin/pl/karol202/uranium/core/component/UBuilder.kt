@@ -7,8 +7,7 @@ class UBuilder<N>
 	var elements = emptyList<UElement<N, *>>()
 		private set
 
-	fun add(element: UElement<N, *>)
-	{
-		this.elements = this.elements + element
+	fun add(element: UElement<N, *>) = element.also {
+		this.elements = this.elements + it
 	}
 }

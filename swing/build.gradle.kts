@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-	implementation(project(":core"))
+	api(project(":core"))
 
 	implementation(kotlin("stdlib-jdk8"))
 }
