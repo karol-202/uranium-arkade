@@ -45,7 +45,7 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>) : Detacha
 			else withNewProps(element)
 
 	// Returning false doesn't have to necessarily mean that props haven't changed
-	private fun needsRerender(element: UElement<N, P>) = component.props == element.props
+	private fun needsRerender(element: UElement<N, P>) = component.props != element.props
 
 	private fun withNewProps(element: UElement<N, P>) = also { component.modifyPropsInternal(element.props) }
 

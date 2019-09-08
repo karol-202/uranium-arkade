@@ -4,30 +4,15 @@ import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.swing.SwingBuilder
 import pl.karol202.uranium.swing.SwingComponent
 import pl.karol202.uranium.swing.util.BaseListeners
+import pl.karol202.uranium.swing.util.HorizontalAlign
+import pl.karol202.uranium.swing.util.VerticalAlign
 import javax.swing.Icon
 import javax.swing.JLabel
-import javax.swing.SwingConstants
 
 class LabelSwingContext(props: Props) : SwingControl<LabelSwingContext.Props>(props)
 {
-	enum class HorizontalAlign(val code: Int)
-	{
-		LEFT(SwingConstants.LEFT),
-		CENTER(SwingConstants.CENTER),
-		RIGHT(SwingConstants.RIGHT),
-		LEADING(SwingConstants.LEADING),
-		TRAILING(SwingConstants.TRAILING)
-	}
-
-	enum class VerticalAlign(val code: Int)
-	{
-		TOP(SwingConstants.TOP),
-		CENTER(SwingConstants.CENTER),
-		BOTTOM(SwingConstants.BOTTOM)
-	}
-
 	class Props(key: Any,
-	            baseListeners: BaseListeners,
+	            baseListeners: BaseListeners?,
 	            enabled: Boolean,
 	            visible: Boolean,
 	            val text: String?,
@@ -56,17 +41,17 @@ class LabelSwingContext(props: Props) : SwingControl<LabelSwingContext.Props>(pr
 }
 
 fun SwingBuilder.label(key: Any,
-                       baseListeners: BaseListeners = BaseListeners(),
+                       baseListeners: BaseListeners? = null,
                        enabled: Boolean = true,
                        visible: Boolean = true,
                        text: String? = null,
                        icon: Icon? = null,
                        disabledIcon: Icon? = null,
                        iconTextGap: Int = 4,
-                       horizontalAlign: LabelSwingContext.HorizontalAlign = LabelSwingContext.HorizontalAlign.LEADING,
-                       verticalAlign: LabelSwingContext.VerticalAlign = LabelSwingContext.VerticalAlign.CENTER,
-                       horizontalTextPosition: LabelSwingContext.HorizontalAlign = LabelSwingContext.HorizontalAlign.TRAILING,
-                       verticalTextPosition: LabelSwingContext.VerticalAlign = LabelSwingContext.VerticalAlign.CENTER) =
+                       horizontalAlign: HorizontalAlign = HorizontalAlign.LEADING,
+                       verticalAlign: VerticalAlign = VerticalAlign.CENTER,
+                       horizontalTextPosition: HorizontalAlign = HorizontalAlign.TRAILING,
+                       verticalTextPosition: VerticalAlign = VerticalAlign.CENTER) =
 		component(::LabelSwingContext,
 		          LabelSwingContext.Props(key, baseListeners, enabled, visible, text, icon, disabledIcon, iconTextGap,
 		                                  horizontalAlign, verticalAlign, horizontalTextPosition, verticalTextPosition))
