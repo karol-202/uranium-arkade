@@ -1,5 +1,9 @@
-package pl.karol202.uranium.swing
+package pl.karol202.uranium.swing.frame
 
+import pl.karol202.uranium.swing.SwingBuilder
+import pl.karol202.uranium.swing.SwingContextImpl
+import pl.karol202.uranium.swing.SwingElement
+import pl.karol202.uranium.swing.SwingRenderer
 import javax.swing.JFrame
 
 abstract class SwingFrame

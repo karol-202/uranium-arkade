@@ -1,5 +1,7 @@
-package pl.karol202.uranium.swing
+package pl.karol202.uranium.swing.frame
 
+import pl.karol202.uranium.swing.SwingBuilder
+import pl.karol202.uranium.swing.SwingElement
 import java.awt.Dimension
 import javax.swing.JFrame
 

@@ -1,8 +1,5 @@
 package pl.karol202.uranium.swing
 
-import pl.karol202.uranium.core.common.ChildrenProps
-import pl.karol202.uranium.core.component.AbstractComponent
-import pl.karol202.uranium.core.component.StatefulComponent
 import pl.karol202.uranium.core.component.UBuilder
 import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.core.context.UContext
@@ -15,13 +12,7 @@ typealias SwingNative = JComponent
 
 typealias SwingContainer = Container
 
-typealias SwingChildrenProps = ChildrenProps<SwingNative>
-
 typealias SwingElement<P> = UElement<SwingNative, P>
-
-typealias SwingComponent<P> = AbstractComponent<SwingNative, P>
-
-typealias StatefulSwingComponent<P, S> = StatefulComponent<SwingNative, P, S>
 
 typealias SwingBuilder = UBuilder<SwingNative>
 
