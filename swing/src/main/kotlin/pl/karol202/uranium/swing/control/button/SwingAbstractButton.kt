@@ -7,8 +7,9 @@ import pl.karol202.uranium.swing.util.BaseListeners
 import pl.karol202.uranium.swing.util.HorizontalAlign
 import pl.karol202.uranium.swing.util.VerticalAlign
 import java.awt.Insets
-import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import java.awt.event.ItemEvent
+import java.awt.event.ItemListener
 import javax.swing.AbstractButton
 import javax.swing.Icon
 
@@ -31,22 +32,26 @@ abstract class SwingAbstractButton<P : SwingAbstractButton.Props>(props: P) : Sw
 	                 val contentAreaFilled: Boolean,
 	                 val focusPainted: Boolean,
 	                 val rolloverEnabled: Boolean,
+	                 val selected: Boolean,
 	                 val horizontalAlign: HorizontalAlign,
 	                 val horizontalTextPosition: HorizontalAlign,
 	                 val verticalAlign: VerticalAlign,
 	                 val verticalTextPosition: VerticalAlign,
 	                 val margin: Insets?,
 	                 val multiClickThreshold: Long,
-	                 val onAction: ((ActionEvent) -> Unit)?) : SwingComponent.Props(key, baseListeners, enabled, visible)
+	                 val onClick: (() -> Unit)?,
+	                 val onSelect: ((Boolean) -> Unit)?) : SwingComponent.Props(key, baseListeners, enabled, visible)
 
 	abstract override val native: AbstractButton
 
-	private val actionListener = ActionListener { props.onAction?.invoke(it) }
+	private val actionListener = ActionListener { props.onClick?.invoke() }
+	private val itemListener = ItemListener { props.onSelect?.invoke(it.stateChange == ItemEvent.SELECTED) }
 
 	override fun onAttach(parentContext: InvalidateableSwingContext)
 	{
 		super.onAttach(parentContext)
 		native.addActionListener(actionListener)
+		native.addItemListener(itemListener)
 	}
 
 	override fun onUpdate()
@@ -65,6 +70,7 @@ abstract class SwingAbstractButton<P : SwingAbstractButton.Props>(props: P) : Sw
 		native.isContentAreaFilled = props.contentAreaFilled
 		native.isFocusPainted = props.focusPainted
 		native.isRolloverEnabled = props.rolloverEnabled
+		native.isSelected = props.selected
 		native.horizontalAlignment = props.horizontalAlign.code
 		native.horizontalTextPosition = props.horizontalTextPosition.code
 		native.verticalAlignment = props.verticalAlign.code
@@ -77,5 +83,6 @@ abstract class SwingAbstractButton<P : SwingAbstractButton.Props>(props: P) : Sw
 	{
 		super.onDetach(parentContext)
 		native.removeActionListener(actionListener)
+		native.removeItemListener(itemListener)
 	}
 }

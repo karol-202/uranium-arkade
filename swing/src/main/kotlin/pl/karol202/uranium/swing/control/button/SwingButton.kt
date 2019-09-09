@@ -6,42 +6,11 @@ import pl.karol202.uranium.swing.util.BaseListeners
 import pl.karol202.uranium.swing.util.HorizontalAlign
 import pl.karol202.uranium.swing.util.VerticalAlign
 import java.awt.Insets
-import java.awt.event.ActionEvent
 import javax.swing.Icon
 import javax.swing.JButton
 
-class SwingButton(props: Props) : SwingAbstractButton<SwingButton.Props>(props)
+class SwingButton(props: Props) : SwingAbstractButton<SwingAbstractButton.Props>(props)
 {
-	class Props(key: Any,
-	            baseListeners: BaseListeners?,
-	            enabled: Boolean,
-	            visible: Boolean,
-	            text: String?,
-	            icon: Icon?,
-	            pressedIcon: Icon?,
-	            selectedIcon: Icon?,
-	            rolloverIcon: Icon?,
-	            rolloverSelectedIcon: Icon?,
-	            disabledIcon: Icon?,
-	            disabledSelectedIcon: Icon?,
-	            iconTextGap: Int,
-	            borderPainted: Boolean,
-	            contentAreaFilled: Boolean,
-	            focusPainted: Boolean,
-	            rolloverEnabled: Boolean,
-	            horizontalAlign: HorizontalAlign,
-	            horizontalTextPosition: HorizontalAlign,
-	            verticalAlign: VerticalAlign,
-	            verticalTextPosition: VerticalAlign,
-	            margin: Insets?,
-	            multiClickThreshold: Long,
-	            onAction: ((ActionEvent) -> Unit)?) :
-			SwingAbstractButton.Props(key, baseListeners, enabled, visible, text, icon, pressedIcon, selectedIcon,
-			                          rolloverIcon, rolloverSelectedIcon, disabledIcon, disabledSelectedIcon, iconTextGap,
-			                          borderPainted, contentAreaFilled, focusPainted, rolloverEnabled, horizontalAlign,
-			                          horizontalTextPosition, verticalAlign, verticalTextPosition, margin,
-			                          multiClickThreshold, onAction)
-
 	override val native = JButton()
 }
 
@@ -62,16 +31,18 @@ fun SwingBuilder.button(key: Any,
                         contentAreaFilled: Boolean = true,
                         focusPainted: Boolean = true,
                         rolloverEnabled: Boolean = false,
+                        selected: Boolean = false,
                         horizontalAlign: HorizontalAlign = HorizontalAlign.CENTER,
                         horizontalTextPosition: HorizontalAlign = HorizontalAlign.TRAILING,
                         verticalAlign: VerticalAlign = VerticalAlign.CENTER,
                         verticalTextPosition: VerticalAlign = VerticalAlign.CENTER,
                         margin: Insets? = null,
                         multiClickThreshold: Long = 0,
-                        onAction: ((ActionEvent) -> Unit)? = null) =
+                        onClick: (() -> Unit)? = null,
+                        onSelect: ((Boolean) -> Unit)? = null) =
 		component(::SwingButton,
-		          SwingButton.Props(key, baseListeners, enabled, visible, text, icon, pressedIcon, selectedIcon,
-		                            rolloverIcon, rolloverSelectedIcon, disabledIcon, disabledSelectedIcon, iconTextGap,
-		                            borderPainted, contentAreaFilled, focusPainted, rolloverEnabled, horizontalAlign,
-		                            horizontalTextPosition, verticalAlign, verticalTextPosition, margin, multiClickThreshold,
-		                            onAction))
+		          SwingAbstractButton.Props(key, baseListeners, enabled, visible, text, icon, pressedIcon, selectedIcon,
+		                                    rolloverIcon, rolloverSelectedIcon, disabledIcon, disabledSelectedIcon,
+		                                    iconTextGap, borderPainted, contentAreaFilled, focusPainted, rolloverEnabled,
+		                                    selected, horizontalAlign, horizontalTextPosition, verticalAlign,
+		                                    verticalTextPosition, margin, multiClickThreshold, onClick, onSelect))
