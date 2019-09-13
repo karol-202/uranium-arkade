@@ -1,71 +1,84 @@
 package pl.karol202.uranium.swing
 
-import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.AbstractComponent
+import pl.karol202.uranium.core.common.BaseProps
+import pl.karol202.uranium.core.common.CompositeProps
+import pl.karol202.uranium.core.util.Prop
+import pl.karol202.uranium.core.util.prop
 import pl.karol202.uranium.swing.util.*
 
-abstract class SwingComponent<P : SwingComponent.Props>(props: P) : AbstractComponent<SwingNative, P>(props)
+class SwingComponent(props: Props) : SwingAbstractComponent<SwingComponent.Props>(props)
 {
-	open class Props(key: Any,
-	                 val baseListeners: BaseListeners?,
-	                 val enabled: Boolean,
-	                 val visible: Boolean) : UProps(key)
+	data class Props(override val parentProps: BaseProps = BaseProps(),
+	                 val context: SwingContext,
+	                 val native: SwingNative,
+	                 val children: List<SwingElement<*>>,
+	                 val baseListeners: Prop<BaseListeners> = Prop.NoValue,
+	                 val enabled: Prop<Boolean> = Prop.NoValue,
+	                 val visible: Prop<Boolean> = Prop.NoValue) : CompositeProps<Props, BaseProps>(parentProps)
+	{
+		override fun withParentProps(parentProps: BaseProps) = copy(parentProps = parentProps)
+	}
 
-	protected abstract val native: SwingNative
+	override val context = props.context
 
-	private val componentListener = ComponentListenerDelegate { props.baseListeners?.componentListener }
-	private val focusListener = FocusListenerDelegate { props.baseListeners?.focusListener }
-	private val hierarchyBoundsListener = HierarchyBoundsListenerDelegate { props.baseListeners?.hierarchyBoundsListener }
-	private val hierarchyListener = HierarchyListenerDelegate { props.baseListeners?.hierarchyListener }
-	private val inputMethodListener = InputMethodListenerDelegate { props.baseListeners?.inputMethodListener }
-	private val keyListener = KeyListenerDelegate { props.baseListeners?.keyListener }
-	private val mouseListener = MouseListenerDelegate { props.baseListeners?.mouseListener }
-	private val mouseMotionListener = MouseMotionListenerDelegate { props.baseListeners?.mouseMotionListener }
-	private val mouseWheelListener = MouseWheelListenerDelegate { props.baseListeners?.mouseWheelListener }
-	private val ancestorListener = AncestorListenerDelegate { props.baseListeners?.ancestorListener }
-	private val vetoableChangeListener = VetoableChangeListenerDelegate { props.baseListeners?.vetoableChangeListener }
+	private val baseListeners = props.baseListeners.value
+	private val componentListener = ComponentListenerDelegate { baseListeners?.componentListener }
+	private val focusListener = FocusListenerDelegate { baseListeners?.focusListener }
+	private val hierarchyBoundsListener = HierarchyBoundsListenerDelegate { baseListeners?.hierarchyBoundsListener }
+	private val hierarchyListener = HierarchyListenerDelegate { baseListeners?.hierarchyListener }
+	private val inputMethodListener = InputMethodListenerDelegate { baseListeners?.inputMethodListener }
+	private val keyListener = KeyListenerDelegate { baseListeners?.keyListener }
+	private val mouseListener = MouseListenerDelegate { baseListeners?.mouseListener }
+	private val mouseMotionListener = MouseMotionListenerDelegate { baseListeners?.mouseMotionListener }
+	private val mouseWheelListener = MouseWheelListenerDelegate { baseListeners?.mouseWheelListener }
+	private val ancestorListener = AncestorListenerDelegate { baseListeners?.ancestorListener }
+	private val vetoableChangeListener = VetoableChangeListenerDelegate { baseListeners?.vetoableChangeListener }
 
 	override fun onAttach(parentContext: InvalidateableSwingContext)
 	{
-		native.addComponentListener(componentListener)
-		native.addFocusListener(focusListener)
-		native.addHierarchyBoundsListener(hierarchyBoundsListener)
-		native.addHierarchyListener(hierarchyListener)
-		native.addInputMethodListener(inputMethodListener)
-		native.addKeyListener(keyListener)
-		native.addMouseListener(mouseListener)
-		native.addMouseMotionListener(mouseMotionListener)
-		native.addMouseWheelListener(mouseWheelListener)
-		native.addAncestorListener(ancestorListener)
-		native.addVetoableChangeListener(vetoableChangeListener)
+		props.native.addComponentListener(componentListener)
+		props.native.addFocusListener(focusListener)
+		props.native.addHierarchyBoundsListener(hierarchyBoundsListener)
+		props.native.addHierarchyListener(hierarchyListener)
+		props.native.addInputMethodListener(inputMethodListener)
+		props.native.addKeyListener(keyListener)
+		props.native.addMouseListener(mouseListener)
+		props.native.addMouseMotionListener(mouseMotionListener)
+		props.native.addMouseWheelListener(mouseWheelListener)
+		props.native.addAncestorListener(ancestorListener)
+		props.native.addVetoableChangeListener(vetoableChangeListener)
 
-		parentContext.attachNative(native)
+		parentContext.attachNative(props.native)
 	}
 
 	override fun onDetach(parentContext: InvalidateableSwingContext)
 	{
-		native.removeComponentListener(componentListener)
-		native.removeFocusListener(focusListener)
-		native.removeHierarchyBoundsListener(hierarchyBoundsListener)
-		native.removeHierarchyListener(hierarchyListener)
-		native.removeInputMethodListener(inputMethodListener)
-		native.removeKeyListener(keyListener)
-		native.removeMouseListener(mouseListener)
-		native.removeMouseMotionListener(mouseMotionListener)
-		native.removeMouseWheelListener(mouseWheelListener)
-		native.removeAncestorListener(ancestorListener)
-		native.removeVetoableChangeListener(vetoableChangeListener)
+		props.native.removeComponentListener(componentListener)
+		props.native.removeFocusListener(focusListener)
+		props.native.removeHierarchyBoundsListener(hierarchyBoundsListener)
+		props.native.removeHierarchyListener(hierarchyListener)
+		props.native.removeInputMethodListener(inputMethodListener)
+		props.native.removeKeyListener(keyListener)
+		props.native.removeMouseListener(mouseListener)
+		props.native.removeMouseMotionListener(mouseMotionListener)
+		props.native.removeMouseWheelListener(mouseWheelListener)
+		props.native.removeAncestorListener(ancestorListener)
+		props.native.removeVetoableChangeListener(vetoableChangeListener)
 
-		parentContext.detachNative(native)
+		parentContext.detachNative(props.native)
 	}
 
-	final override fun render() = renderChildren().also { onUpdate() }
+	override fun render() = props.children.also { onUpdate() }
 
-	protected abstract fun renderChildren(): List<SwingElement<*>>
-
-	protected open fun onUpdate()
+	private fun onUpdate()
 	{
-		native.isEnabled = props.enabled
-		native.isVisible = props.visible
+		props.enabled.ifPresent { props.native.isEnabled = it }
+		props.visible.ifPresent { props.native.isVisible = it }
 	}
 }
+
+fun <P : CompositeProps<P, P2>, P2 : CompositeProps<P2, BaseProps>> SwingComponentBuilder<P>.key(key: Any) =
+		withProps { withParentProps(parentProps.withParentProps(parentProps.parentProps.copy(key = key))) }
+
+fun <P : CompositeProps<P, SwingComponent.Props>> SwingComponentBuilder<P>.baseListeners(baseListeners: BaseListeners) =
+		withProps { withParentProps(parentProps.copy(baseListeners = baseListeners.prop())) }

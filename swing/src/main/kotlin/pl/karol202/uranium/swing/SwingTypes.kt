@@ -1,11 +1,13 @@
 package pl.karol202.uranium.swing
 
+import pl.karol202.uranium.core.component.AbstractComponent
 import pl.karol202.uranium.core.component.StatefulComponent
-import pl.karol202.uranium.core.component.UBuilder
 import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.internal.Renderer
+import pl.karol202.uranium.core.util.ComponentBuilder
+import pl.karol202.uranium.core.util.RenderBuilder
 import java.awt.Container
 import javax.swing.JComponent
 
@@ -15,9 +17,13 @@ typealias SwingContainer = Container
 
 typealias SwingElement<P> = UElement<SwingNative, P>
 
+typealias SwingAbstractComponent<P> = AbstractComponent<SwingNative, P>
+
 typealias SwingStatefulComponent<P, S> = StatefulComponent<SwingNative, P, S>
 
-typealias SwingBuilder = UBuilder<SwingNative>
+typealias SwingRenderBuilder = RenderBuilder<SwingNative>
+
+typealias SwingComponentBuilder<P> = ComponentBuilder<SwingNative, P>
 
 typealias SwingContext = UContext<SwingNative>
 

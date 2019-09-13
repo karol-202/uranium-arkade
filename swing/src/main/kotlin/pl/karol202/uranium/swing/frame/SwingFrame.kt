@@ -1,6 +1,6 @@
 package pl.karol202.uranium.swing.frame
 
-import pl.karol202.uranium.swing.SwingBuilder
+import pl.karol202.uranium.swing.SwingRenderBuilder
 import pl.karol202.uranium.swing.SwingContextImpl
 import pl.karol202.uranium.swing.SwingElement
 import pl.karol202.uranium.swing.SwingRenderer
@@ -10,10 +10,10 @@ abstract class SwingFrame
 {
 	companion object
 	{
-		fun withRoot(rootSupplier: SwingBuilder.() -> SwingElement<*>) = SwingFrameBuilder(rootSupplier)
+		fun withRoot(rootSupplier: SwingRenderBuilder.() -> SwingElement<*>) = SwingFrameBuilder(rootSupplier)
 	}
 
-	protected abstract val SwingBuilder.rootElement: SwingElement<*>
+	protected abstract val SwingRenderBuilder.rootElement: SwingElement<*>
 
 	private val frame = JFrame()
 
@@ -25,7 +25,7 @@ abstract class SwingFrame
 
 	private fun render() = SwingRenderer().renderRoot(createRootElement(), createContext())
 
-	private fun createRootElement() = SwingBuilder().rootElement
+	private fun createRootElement() = SwingRenderBuilder().rootElement
 
 	private fun createContext() = SwingContextImpl(frame)
 

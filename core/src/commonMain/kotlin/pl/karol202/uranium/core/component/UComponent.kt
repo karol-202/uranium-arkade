@@ -1,8 +1,10 @@
 package pl.karol202.uranium.core.component
 
 import pl.karol202.uranium.core.common.*
+import pl.karol202.uranium.core.context.ContextProvider
 import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.util.RenderBuilder
 
 interface UComponent<N, P : UProps> : Renderable<N>,
                                       Attachable<InvalidateableContext<N>>,
@@ -13,5 +15,5 @@ interface UComponent<N, P : UProps> : Renderable<N>,
 	fun modifyPropsInternal(props: P)
 }
 
-fun <N, P : UProps> UBuilder<N>.component(constructor: (P) -> UComponent<N, P>, props: P) =
+fun <N, P : UProps> RenderBuilder<N>.component(constructor: (P) -> UComponent<N, P>, props: P) =
 		add(UElement(constructor, props))

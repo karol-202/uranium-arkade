@@ -2,6 +2,7 @@ package pl.karol202.uranium.core.component
 
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.common.UState
+import pl.karol202.uranium.core.util.RenderBuilder
 import kotlin.jvm.JvmName
 
 abstract class StatefulComponent<N, P : UProps, S : UState>(props: P,
@@ -17,9 +18,9 @@ abstract class StatefulComponent<N, P : UProps, S : UState>(props: P,
 			invalidate()
 		}
 
-	override fun render() = UBuilder<N>().also { it.render() }.elements
+	override fun render() = RenderBuilder<N>().also { it.render() }.elements
 
-	protected abstract fun UBuilder<N>.render()
+	protected abstract fun RenderBuilder<N>.render()
 
 	private fun invalidate() = parentContext?.invalidate()
 

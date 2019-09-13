@@ -1,5 +1,6 @@
 package pl.karol202.uranium.swing.control.button
 
+import pl.karol202.uranium.core.util.Prop
 import pl.karol202.uranium.swing.InvalidateableSwingContext
 import pl.karol202.uranium.swing.SwingComponent
 import pl.karol202.uranium.swing.control.SwingControl
@@ -15,31 +16,31 @@ import javax.swing.Icon
 
 abstract class SwingAbstractButton<P : SwingAbstractButton.Props>(props: P) : SwingControl<P>(props)
 {
-	open class Props(key: Any,
-	                 baseListeners: BaseListeners?,
-	                 enabled: Boolean,
-	                 visible: Boolean,
-	                 val text: String?,
-	                 val icon: Icon?,
-	                 val pressedIcon: Icon?,
-	                 val selectedIcon: Icon?,
-	                 val rolloverIcon: Icon?,
-	                 val rolloverSelectedIcon: Icon?,
-	                 val disabledIcon: Icon?,
-	                 val disabledSelectedIcon: Icon?,
-	                 val iconTextGap: Int,
-	                 val borderPainted: Boolean,
-	                 val contentAreaFilled: Boolean,
-	                 val focusPainted: Boolean,
-	                 val rolloverEnabled: Boolean,
-	                 val selected: Boolean,
-	                 val horizontalAlign: HorizontalAlign,
-	                 val horizontalTextPosition: HorizontalAlign,
-	                 val verticalAlign: VerticalAlign,
-	                 val verticalTextPosition: VerticalAlign,
-	                 val margin: Insets?,
-	                 val multiClickThreshold: Long,
-	                 val onClick: (() -> Unit)?,
+	open class Props(override val key: Any,
+	                 override val baseListeners: Prop<BaseListeners>,
+	                 override val enabled: Prop<Boolean>,
+	                 override val visible: Prop<Boolean>,
+	                 val text: Prop<String?>,
+	                 val icon: Prop<Icon?>,
+	                 val pressedIcon: Prop<Icon?>,
+	                 val selectedIcon: Prop<Icon?>,
+	                 val rolloverIcon: Prop<Icon?>,
+	                 val rolloverSelectedIcon: Prop<Icon?>,
+	                 val disabledIcon: Prop<Icon?>,
+	                 val disabledSelectedIcon: Prop<Icon?>,
+	                 val iconTextGap: Prop<Int>,
+	                 val borderPainted: Prop<Boolean>,
+	                 val contentAreaFilled: Prop<Boolean>,
+	                 val focusPainted: Prop<Boolean>,
+	                 val rolloverEnabled: Prop<Boolean>,
+	                 val selected: Prop<Boolean>,
+	                 val horizontalAlign: Prop<HorizontalAlign>,
+	                 val horizontalTextPosition: Prop<HorizontalAlign>,
+	                 val verticalAlign: Prop<VerticalAlign>,
+	                 val verticalTextPosition: Prop<VerticalAlign>,
+	                 val margin: Prop<Insets?>,
+	                 val multiClickThreshold: Prop<Long>,
+	                 val onClick: Prop<(() -> Unit)?>,
 	                 val onSelect: ((Boolean) -> Unit)?) : SwingComponent.Props(key, baseListeners, enabled, visible)
 
 	abstract override val native: AbstractButton

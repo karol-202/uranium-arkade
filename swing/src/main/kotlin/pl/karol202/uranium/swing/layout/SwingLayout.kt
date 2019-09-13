@@ -1,8 +1,10 @@
 package pl.karol202.uranium.swing.layout
 
-import pl.karol202.uranium.swing.SwingBuilder
+import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.swing.SwingRenderBuilder
 import pl.karol202.uranium.swing.SwingComponent
 import pl.karol202.uranium.swing.SwingContextImpl
+import pl.karol202.uranium.swing.SwingElement
 import pl.karol202.uranium.swing.util.BaseListeners
 import java.awt.LayoutManager
 import javax.swing.JPanel
@@ -13,10 +15,7 @@ abstract class SwingLayout<P : SwingLayout.Props>(props: P) : SwingComponent<P>(
 	                 baseListeners: BaseListeners,
 	                 enabled: Boolean,
 	                 visible: Boolean,
-	                 block: SwingBuilder.() -> Unit) : SwingComponent.Props(key, baseListeners, enabled, visible)
-	{
-		val children = SwingBuilder().also(block).elements
-	}
+	                 val children: List<SwingElement<*>>) : SwingComponent.Props(key, baseListeners, enabled, visible)
 
 	final override val native = JPanel()
 
