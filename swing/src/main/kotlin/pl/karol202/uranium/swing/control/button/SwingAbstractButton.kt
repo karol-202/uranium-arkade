@@ -1,10 +1,10 @@
 package pl.karol202.uranium.swing.control.button
 
+import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.util.Prop
-import pl.karol202.uranium.swing.InvalidateableSwingContext
-import pl.karol202.uranium.swing.SwingComponent
-import pl.karol202.uranium.swing.control.SwingControl
-import pl.karol202.uranium.swing.util.BaseListeners
+import pl.karol202.uranium.core.util.RenderBuilder
+import pl.karol202.uranium.core.util.buildComponent
+import pl.karol202.uranium.swing.*
 import pl.karol202.uranium.swing.util.HorizontalAlign
 import pl.karol202.uranium.swing.util.VerticalAlign
 import java.awt.Insets
@@ -14,12 +14,10 @@ import java.awt.event.ItemListener
 import javax.swing.AbstractButton
 import javax.swing.Icon
 
-abstract class SwingAbstractButton<P : SwingAbstractButton.Props>(props: P) : SwingControl<P>(props)
+class SwingAbstractButton(props: Props,
+                          private val native: AbstractButton) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
 {
-	open class Props(override val key: Any,
-	                 override val baseListeners: Prop<BaseListeners>,
-	                 override val enabled: Prop<Boolean>,
-	                 override val visible: Prop<Boolean>,
+	data class Props(override val swingProps: SwingNativeComponent.Props,
 	                 val text: Prop<String?>,
 	                 val icon: Prop<Icon?>,
 	                 val pressedIcon: Prop<Icon?>,
@@ -41,12 +39,15 @@ abstract class SwingAbstractButton<P : SwingAbstractButton.Props>(props: P) : Sw
 	                 val margin: Prop<Insets?>,
 	                 val multiClickThreshold: Prop<Long>,
 	                 val onClick: Prop<(() -> Unit)?>,
-	                 val onSelect: ((Boolean) -> Unit)?) : SwingComponent.Props(key, baseListeners, enabled, visible)
+	                 val onSelect: Prop<((Boolean) -> Unit)?>) : UProps by swingProps,
+	                                                             SwingNativeComponent.Props.Provider<Props>
+	{
+		override fun withSwingProps(builder: SwingNativeComponent.Props.() -> SwingNativeComponent.Props) =
+				copy(swingProps = swingProps.builder())
+	}
 
-	abstract override val native: AbstractButton
-
-	private val actionListener = ActionListener { props.onClick?.invoke() }
-	private val itemListener = ItemListener { props.onSelect?.invoke(it.stateChange == ItemEvent.SELECTED) }
+	private val actionListener = ActionListener { props.onClick.value?.invoke() }
+	private val itemListener = ItemListener { props.onSelect.value?.invoke(it.stateChange == ItemEvent.SELECTED) }
 
 	override fun onAttach(parentContext: InvalidateableSwingContext)
 	{
@@ -55,35 +56,43 @@ abstract class SwingAbstractButton<P : SwingAbstractButton.Props>(props: P) : Sw
 		native.addItemListener(itemListener)
 	}
 
-	override fun onUpdate()
-	{
-		super.onUpdate()
-		native.text = props.text
-		native.icon = props.icon
-		native.pressedIcon = props.pressedIcon
-		native.selectedIcon = props.selectedIcon
-		native.rolloverIcon = props.rolloverIcon
-		native.rolloverSelectedIcon = props.rolloverSelectedIcon
-		native.disabledIcon = props.disabledIcon
-		native.disabledSelectedIcon = props.disabledSelectedIcon
-		native.iconTextGap = props.iconTextGap
-		native.isBorderPainted = props.borderPainted
-		native.isContentAreaFilled = props.contentAreaFilled
-		native.isFocusPainted = props.focusPainted
-		native.isRolloverEnabled = props.rolloverEnabled
-		native.isSelected = props.selected
-		native.horizontalAlignment = props.horizontalAlign.code
-		native.horizontalTextPosition = props.horizontalTextPosition.code
-		native.verticalAlignment = props.verticalAlign.code
-		native.verticalTextPosition = props.verticalTextPosition.code
-		native.margin = props.margin
-		native.multiClickThreshhold = props.multiClickThreshold
-	}
-
 	override fun onDetach(parentContext: InvalidateableSwingContext)
 	{
 		super.onDetach(parentContext)
 		native.removeActionListener(actionListener)
 		native.removeItemListener(itemListener)
 	}
+
+	override fun RenderBuilder<SwingNative>.render()
+	{
+		+ nativeComponent(native = native)
+		onUpdate()
+	}
+
+	private fun onUpdate()
+	{
+		props.text.ifPresent { native.text = it }
+		props.icon.ifPresent { native.icon = it }
+		props.pressedIcon.ifPresent { native.pressedIcon = it }
+		props.selectedIcon.ifPresent { native.selectedIcon = it }
+		props.rolloverIcon.ifPresent { native.rolloverIcon = it }
+		props.rolloverSelectedIcon.ifPresent { native.rolloverSelectedIcon = it }
+		props.disabledIcon.ifPresent { native.disabledIcon = it }
+		props.disabledSelectedIcon.ifPresent { native.disabledSelectedIcon = it }
+		props.iconTextGap.ifPresent { native.iconTextGap = it }
+		props.borderPainted.ifPresent { native.isBorderPainted = it }
+		props.contentAreaFilled.ifPresent { native.isContentAreaFilled = it }
+		props.focusPainted.ifPresent { native.isFocusPainted = it }
+		props.rolloverEnabled.ifPresent { native.isRolloverEnabled = it }
+		props.selected.ifPresent { native.isSelected = it }
+		props.horizontalAlign.ifPresent { native.horizontalAlignment = it.code }
+		props.horizontalTextPosition.ifPresent { native.horizontalTextPosition = it.code }
+		props.verticalAlign.ifPresent { native.verticalAlignment = it.code }
+		props.verticalTextPosition.ifPresent { native.verticalTextPosition = it.code }
+		props.margin.ifPresent { native.margin = it }
+		props.multiClickThreshold.ifPresent { native.multiClickThreshhold = it }
+	}
 }
+
+fun SwingRenderBuilder.abstractButton(native: AbstractButton, props: SwingAbstractButton.Props) =
+		buildComponent({ SwingAbstractButton(it, native) }, props)

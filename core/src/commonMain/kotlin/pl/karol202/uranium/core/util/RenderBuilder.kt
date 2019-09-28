@@ -10,6 +10,10 @@ class RenderBuilder<N>
 	operator fun ComponentBuilder<N, *>.unaryPlus() = add(build())
 
 	fun add(element: UElement<N, *>) = element.also {
-		this.elements = this.elements + it
+		this.elements += it
+	}
+
+	fun add(elements: List<UElement<N, *>>) = elements.also {
+		this.elements += it
 	}
 }

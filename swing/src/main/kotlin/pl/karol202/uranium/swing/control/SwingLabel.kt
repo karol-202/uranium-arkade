@@ -1,11 +1,13 @@
 package pl.karol202.uranium.swing.control
 
-import pl.karol202.uranium.core.common.CompositeProps
+import pl.karol202.uranium.core.common.AutoKey
+import pl.karol202.uranium.core.common.BaseProps
+import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.util.Prop
+import pl.karol202.uranium.core.util.RenderBuilder
 import pl.karol202.uranium.core.util.buildComponent
 import pl.karol202.uranium.core.util.prop
 import pl.karol202.uranium.swing.*
-import pl.karol202.uranium.swing.util.BaseListeners
 import pl.karol202.uranium.swing.util.HorizontalAlign
 import pl.karol202.uranium.swing.util.VerticalAlign
 import javax.swing.Icon
@@ -13,7 +15,7 @@ import javax.swing.JLabel
 
 class SwingLabel(props: Props) : SwingAbstractComponent<SwingLabel.Props>(props)
 {
-	data class Props(override val parentProps: SwingComponent.Props = SwingComponent.Props(),
+	data class Props(override val swingProps: SwingNativeComponent.Props,
 	                 val text: Prop<String?> = Prop.NoValue,
 	                 val icon: Prop<Icon?> = Prop.NoValue,
 	                 val disabledIcon: Prop<Icon?> = Prop.NoValue,
@@ -21,17 +23,23 @@ class SwingLabel(props: Props) : SwingAbstractComponent<SwingLabel.Props>(props)
 	                 val horizontalAlign: Prop<HorizontalAlign> = Prop.NoValue,
 	                 val verticalAlign: Prop<VerticalAlign> = Prop.NoValue,
 	                 val horizontalTextPosition: Prop<HorizontalAlign> = Prop.NoValue,
-	                 val verticalTextPosition: Prop<VerticalAlign> = Prop.NoValue) :
-			CompositeProps<Props, SwingComponent.Props>(parentProps)
+	                 val verticalTextPosition: Prop<VerticalAlign> = Prop.NoValue) : UProps by swingProps,
+	                                                                                 SwingNativeComponent.Props.Provider<Props>
 	{
-		override fun withParentProps(parentProps: SwingComponent.Props) = copy(parentProps = parentProps)
+		override fun withSwingProps(builder: SwingNativeComponent.Props.() -> SwingNativeComponent.Props) =
+				copy(swingProps = swingProps.builder())
 	}
 
-	override val native = JLabel()
+	private val native = JLabel()
 
-	override fun onUpdate()
+	override fun RenderBuilder<SwingNative>.render()
 	{
-		super.onUpdate()
+		+ nativeComponent(native = native, props = props.swingProps)
+		onUpdate()
+	}
+
+	private fun onUpdate()
+	{
 		props.text.ifPresent { native.text = it }
 		props.icon.ifPresent { native.icon = it }
 		props.disabledIcon.ifPresent { native.disabledIcon = it }
@@ -45,9 +53,8 @@ class SwingLabel(props: Props) : SwingAbstractComponent<SwingLabel.Props>(props)
 
 private typealias LabelBuilder = SwingComponentBuilder<SwingLabel.Props>
 
-fun SwingRenderBuilder.label(key: Any) = buildComponent(::SwingLabel, SwingLabel.Props(key = key))
-fun LabelBuilder.enabled(enabled: Boolean) = withProps { copy(enabled = enabled.prop()) }
-fun LabelBuilder.visible(visible: Boolean) = withProps { copy(visible = visible.prop()) }
+fun SwingRenderBuilder.label(key: Any = AutoKey) =
+		buildComponent(::SwingLabel, SwingLabel.Props(SwingNativeComponent.Props(BaseProps(key))))
 fun LabelBuilder.text(text: String) = withProps { copy(text = text.prop()) }
 fun LabelBuilder.icon(icon: Icon) = withProps { copy(icon = icon.prop()) }
 fun LabelBuilder.disabledIcon(disabledIcon: Icon) = withProps { copy(disabledIcon = disabledIcon.prop()) }
