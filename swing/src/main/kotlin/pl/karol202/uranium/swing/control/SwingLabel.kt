@@ -57,8 +57,8 @@ fun SwingRenderBuilder.label(key: Any = AutoKey) =
 		buildComponent(::SwingLabel, SwingLabel.Props(SwingNativeComponent.Props(BaseProps(key))))
 fun LabelBuilder.text(text: String) = withProps { copy(text = text.prop()) }
 fun LabelBuilder.icon(icon: Icon) = withProps { copy(icon = icon.prop()) }
-fun LabelBuilder.disabledIcon(disabledIcon: Icon) = withProps { copy(disabledIcon = disabledIcon.prop()) }
-fun LabelBuilder.iconTextGap(iconTextGap: Int) = withProps { copy(iconTextGap = iconTextGap.prop()) }
+fun LabelBuilder.disabledIcon(icon: Icon) = withProps { copy(disabledIcon = icon.prop()) }
+fun LabelBuilder.iconTextGap(gap: Int) = withProps { copy(iconTextGap = gap.prop()) }
 fun LabelBuilder.horizontalAlign(align: HorizontalAlign) = withProps { copy(horizontalAlign = align.prop()) }
 fun LabelBuilder.verticalAlign(align: VerticalAlign) = withProps { copy(verticalAlign = align.prop()) }
 fun LabelBuilder.horizontalTextPosition(position: HorizontalAlign) = withProps { copy(horizontalTextPosition = position.prop()) }
