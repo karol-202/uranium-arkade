@@ -12,6 +12,8 @@ import pl.karol202.uranium.swing.control.button.radioButton
 import pl.karol202.uranium.swing.control.label
 import pl.karol202.uranium.swing.control.text
 import pl.karol202.uranium.swing.frame.SwingFrame
+import pl.karol202.uranium.swing.layout.alignOnBaseline
+import pl.karol202.uranium.swing.layout.content
 import pl.karol202.uranium.swing.layout.flowLayout
 import pl.karol202.uranium.swing.util.BaseListeners
 import javax.swing.UIManager
@@ -30,7 +32,7 @@ class CounterComponent(props: UProps) : SwingStatefulComponent<UProps, CounterCo
 	override fun SwingRenderBuilder.render()
 	{
 		flowLayout(key = 0) {
-			+label(key = 0)
+			+ label(key = 0)
 					.text("Licznik: ${state.counter} ${state.checked}")
 					.baseListeners(BaseListeners())
 			button(key = 1, text = "Hello world", onClick = { increment() })

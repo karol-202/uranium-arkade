@@ -1,11 +1,13 @@
 package pl.karol202.uranium.swing.layout
 
-import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingRenderBuilder
-import pl.karol202.uranium.swing.util.BaseListeners
+import pl.karol202.uranium.core.common.AutoKey
+import pl.karol202.uranium.core.common.BaseProps
+import pl.karol202.uranium.core.common.UProps
+import pl.karol202.uranium.core.util.*
+import pl.karol202.uranium.swing.*
 import java.awt.FlowLayout
 
-class SwingFlowLayout(props: Props) : SwingLayout<SwingFlowLayout.Props>(props)
+class SwingFlowLayout(props: Props) : SwingAbstractComponent<SwingFlowLayout.Props>(props)
 {
 	enum class Align(val code: Int)
 	{
@@ -16,32 +18,39 @@ class SwingFlowLayout(props: Props) : SwingLayout<SwingFlowLayout.Props>(props)
 		TRAILING(FlowLayout.TRAILING)
 	}
 
-	class Props(key: Any,
-	            baseListeners: BaseListeners,
-	            enabled: Boolean,
-	            visible: Boolean,
-	            block: SwingRenderBuilder.() -> Unit,
-	            val align: Align?,
-	            val alignOnBaseline: Boolean?,
-	            val horizontalGap: Int?,
-	            val verticalGap: Int?) : SwingLayout.Props(key, baseListeners, enabled, visible, block)
+	data class Props(override val swingProps: SwingNativeComponent.Props,
+	                 val align: Prop<Align> = Prop.NoValue,
+	                 val alignOnBaseline: Prop<Boolean> = Prop.NoValue,
+	                 val horizontalGap: Prop<Int> = Prop.NoValue,
+	                 val verticalGap: Prop<Int> = Prop.NoValue) : UProps by swingProps,
+	                                                              SwingNativeComponent.Props.Provider<Props>
+	{
+		override fun withSwingProps(builder: SwingNativeComponent.Props.() -> SwingNativeComponent.Props) =
+				copy(swingProps = swingProps.builder())
+	}
 
-	override fun createLayout() = FlowLayout().apply {
-		props.align?.let { alignment = it.code }
-		props.alignOnBaseline?.let { alignOnBaseline = it }
-		props.horizontalGap?.let { hgap = it }
-		props.verticalGap?.let { vgap = it }
+	private val layoutManager = FlowLayout()
+
+	override fun RenderBuilder<SwingNative>.render()
+	{
+		+ layout(layoutManager = layoutManager, props = props.swingProps)
+		onUpdate()
+	}
+
+	private fun onUpdate() = layoutManager.apply {
+		props.align.ifPresent { alignment = it.code }
+		props.alignOnBaseline.ifPresent { alignOnBaseline = it }
+		props.horizontalGap.ifPresent { hgap = it }
+		props.verticalGap.ifPresent { vgap = it }
 	}
 }
 
-fun SwingRenderBuilder.flowLayout(key: Any,
-                                  baseListeners: BaseListeners = BaseListeners(),
-                                  enabled: Boolean = true,
-                                  visible: Boolean = true,
-                                  align: SwingFlowLayout.Align? = null,
-                                  alignOnBaseline: Boolean? = null,
-                                  horizontalGap: Int? = null,
-                                  verticalGap: Int? = null,
-                                  block: SwingRenderBuilder.() -> Unit) =
-		component(::SwingFlowLayout, SwingFlowLayout.Props(key, baseListeners, enabled, visible, block,
-		                                                   align, alignOnBaseline, horizontalGap, verticalGap))
+private typealias FlowLayoutBuilder = SwingComponentBuilder<SwingFlowLayout.Props>
+
+fun SwingRenderBuilder.flowLayout(key: Any = AutoKey, block: SwingRenderBuilder.() -> Unit = {}) =
+		buildComponent(::SwingFlowLayout, SwingFlowLayout.Props(SwingNativeComponent.Props(BaseProps(key)))).content(block)
+fun FlowLayoutBuilder.align(align: SwingFlowLayout.Align) = withProps { copy(align = align.prop()) }
+fun FlowLayoutBuilder.alignOnBaseline(align: Boolean) = withProps { copy(alignOnBaseline = align.prop()) }
+fun FlowLayoutBuilder.horizontalGap(gap: Int) = withProps { copy(horizontalGap = gap.prop()) }
+fun FlowLayoutBuilder.verticalGap(gap: Int) = withProps { copy(verticalGap = gap.prop()) }
+fun FlowLayoutBuilder.content(block: SwingRenderBuilder.() -> Unit) = withProps { withSwingProps { copy(children = block.render()) } }

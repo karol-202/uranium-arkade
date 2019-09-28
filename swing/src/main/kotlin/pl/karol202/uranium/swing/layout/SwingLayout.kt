@@ -1,31 +1,23 @@
 package pl.karol202.uranium.swing.layout
 
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.SwingContextImpl
-import pl.karol202.uranium.swing.SwingElement
-import pl.karol202.uranium.swing.util.BaseListeners
+import pl.karol202.uranium.core.util.RenderBuilder
+import pl.karol202.uranium.core.util.buildComponent
+import pl.karol202.uranium.swing.*
 import java.awt.LayoutManager
 import javax.swing.JPanel
 
-abstract class SwingLayout<P : SwingLayout.Props>(props: P) : SwingNativeComponent<P>(props)
+class SwingLayout(layoutManager: LayoutManager,
+                  props: SwingNativeComponent.Props) : SwingAbstractComponent<SwingNativeComponent.Props>(props)
 {
-	open class Props(key: Any,
-	                 baseListeners: BaseListeners,
-	                 enabled: Boolean,
-	                 visible: Boolean,
-	                 val children: List<SwingElement<*>>) : SwingNativeComponent.Props(key, baseListeners, enabled, visible)
-
-	final override val native = JPanel()
+	private val native = JPanel(layoutManager)
 
 	override val context = SwingContextImpl(native)
 
-	override fun renderChildren() = props.children
-
-	override fun onUpdate()
+	override fun RenderBuilder<SwingNative>.render()
 	{
-		super.onUpdate()
-		native.layout = createLayout()
+		+ nativeComponent(native = native, props = props)
 	}
-
-	protected abstract fun createLayout(): LayoutManager
 }
+
+fun SwingRenderBuilder.layout(layoutManager: LayoutManager, props: SwingNativeComponent.Props) =
+		buildComponent({ SwingLayout(layoutManager, it) }, props)

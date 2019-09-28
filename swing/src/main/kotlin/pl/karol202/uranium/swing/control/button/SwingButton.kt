@@ -1,8 +1,11 @@
 package pl.karol202.uranium.swing.control.button
 
+import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.util.RenderBuilder
+import pl.karol202.uranium.core.util.buildComponent
 import pl.karol202.uranium.swing.SwingAbstractComponent
 import pl.karol202.uranium.swing.SwingNative
+import pl.karol202.uranium.swing.SwingRenderBuilder
 import javax.swing.JButton
 
 class SwingButton(props: SwingAbstractButton.Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
@@ -14,3 +17,5 @@ class SwingButton(props: SwingAbstractButton.Props) : SwingAbstractComponent<Swi
 		+ abstractButton(native, props)
 	}
 }
+
+fun SwingRenderBuilder.button(key: Any = AutoKey) = buildComponent(::SwingButton, SwingAbstractButton.Props.fromKey(key))

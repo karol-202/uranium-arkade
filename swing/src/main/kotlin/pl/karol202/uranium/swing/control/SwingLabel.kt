@@ -38,16 +38,15 @@ class SwingLabel(props: Props) : SwingAbstractComponent<SwingLabel.Props>(props)
 		onUpdate()
 	}
 
-	private fun onUpdate()
-	{
-		props.text.ifPresent { native.text = it }
-		props.icon.ifPresent { native.icon = it }
-		props.disabledIcon.ifPresent { native.disabledIcon = it }
-		props.iconTextGap.ifPresent { native.iconTextGap = it }
-		props.horizontalAlign.ifPresent { native.horizontalAlignment = it.code }
-		props.verticalAlign.ifPresent { native.verticalAlignment = it.code }
-		props.horizontalTextPosition.ifPresent { native.horizontalTextPosition = it.code }
-		props.verticalTextPosition.ifPresent { native.verticalTextPosition = it.code }
+	private fun onUpdate() = native.apply {
+		props.text.ifPresent { text = it }
+		props.icon.ifPresent { icon = it }
+		props.disabledIcon.ifPresent { disabledIcon = it }
+		props.iconTextGap.ifPresent { iconTextGap = it }
+		props.horizontalAlign.ifPresent { horizontalAlignment = it.code }
+		props.verticalAlign.ifPresent { verticalAlignment = it.code }
+		props.horizontalTextPosition.ifPresent { horizontalTextPosition = it.code }
+		props.verticalTextPosition.ifPresent { verticalTextPosition = it.code }
 	}
 }
 

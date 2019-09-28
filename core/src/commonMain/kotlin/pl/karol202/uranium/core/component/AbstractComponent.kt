@@ -2,6 +2,7 @@ package pl.karol202.uranium.core.component
 
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.context.InvalidateableContext
+import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.util.RenderBuilder
 
 abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
@@ -9,10 +10,9 @@ abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 	final override var props = props
 		private set
 
-	protected var parentContext: InvalidateableContext<N>? = null
-		private set
+	private var parentContext: InvalidateableContext<N>? = null
 
-	override val context get() = parentContext
+	override val context: UContext<N>? get() = parentContext
 
 	override fun attach(parentContext: InvalidateableContext<N>)
 	{

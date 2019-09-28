@@ -8,11 +8,11 @@ import pl.karol202.uranium.core.util.buildComponent
 import pl.karol202.uranium.core.util.prop
 import pl.karol202.uranium.swing.util.*
 
-class SwingNativeComponent(props: Props,
-                           private val native: SwingNative,
-                           private val children: List<SwingElement<*>>) : SwingAbstractComponent<SwingNativeComponent.Props>(props)
+class SwingNativeComponent(private val native: SwingNative,
+                           props: Props) : SwingAbstractComponent<SwingNativeComponent.Props>(props)
 {
 	data class Props(val baseProps: BaseProps,
+	                 val children: List<SwingElement<*>> = emptyList(),
 	                 val baseListeners: Prop<BaseListeners> = Prop.NoValue,
 	                 val enabled: Prop<Boolean> = Prop.NoValue,
 	                 val visible: Prop<Boolean> = Prop.NoValue) : UProps by baseProps
@@ -74,23 +74,20 @@ class SwingNativeComponent(props: Props,
 
 	override fun RenderBuilder<SwingNative>.render()
 	{
-		add(children)
+		add(props.children)
 		onUpdate()
 	}
 
-	private fun onUpdate()
-	{
-		props.enabled.ifPresent { native.isEnabled = it }
-		props.visible.ifPresent { native.isVisible = it }
+	private fun onUpdate() = native.apply {
+		props.enabled.ifPresent { isEnabled = it }
+		props.visible.ifPresent { isVisible = it }
 	}
 }
 
-private typealias NativeComponentBuilder = SwingComponentBuilder<SwingNativeComponent.Props.Provider<*>>
+private typealias NativeComponentBuilder = SwingComponentBuilder<out SwingNativeComponent.Props.Provider<*>>
 
-fun SwingRenderBuilder.nativeComponent(native: SwingNative,
-                                       children: List<SwingElement<*>> = emptyList(),
-                                       props: SwingNativeComponent.Props) =
-		buildComponent({ SwingNativeComponent(it, native, children) }, props)
+fun SwingRenderBuilder.nativeComponent(native: SwingNative, props: SwingNativeComponent.Props) =
+		buildComponent({ SwingNativeComponent(native, it) }, props)
 fun NativeComponentBuilder.baseListeners(baseListeners: BaseListeners) =
 		withProps { withSwingProps { copy(baseListeners = baseListeners.prop()) } }
 fun NativeComponentBuilder.enabled(enabled: Boolean) = withProps { withSwingProps { copy(enabled = enabled.prop()) } }

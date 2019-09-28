@@ -17,3 +17,5 @@ class RenderBuilder<N>
 		this.elements += it
 	}
 }
+
+fun <N> (RenderBuilder<N>.() -> Unit).render() = RenderBuilder<N>().also(this).elements
