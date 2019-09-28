@@ -2,28 +2,41 @@ package pl.karol202.uranium.swing
 
 import pl.karol202.uranium.core.common.BaseProps
 import pl.karol202.uranium.core.common.UProps
+import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.Prop
 import pl.karol202.uranium.core.util.RenderBuilder
-import pl.karol202.uranium.core.util.buildComponent
 import pl.karol202.uranium.core.util.prop
 import pl.karol202.uranium.swing.util.*
 
 class SwingNativeComponent(private val native: SwingNative,
+                           private val contextOverride: SwingContext?,
                            props: Props) : SwingAbstractComponent<SwingNativeComponent.Props>(props)
 {
+	companion object
+	{
+		fun props(key: Any) = Props(BaseProps(key))
+	}
+
 	data class Props(val baseProps: BaseProps,
 	                 val children: List<SwingElement<*>> = emptyList(),
 	                 val baseListeners: Prop<BaseListeners> = Prop.NoValue,
 	                 val enabled: Prop<Boolean> = Prop.NoValue,
-	                 val visible: Prop<Boolean> = Prop.NoValue) : UProps by baseProps
+	                 val visible: Prop<Boolean> = Prop.NoValue) : UProps by baseProps,
+	                                                              PropsProvider<Props>
 	{
-		interface Provider<S : Provider<S>> : UProps
-		{
-			val swingProps: Props
+		override val swingProps = this
 
-			fun withSwingProps(builder: Props.() -> Props): S
-		}
+		override fun withSwingProps(builder: Props.() -> Props) = builder()
 	}
+
+	interface PropsProvider<S : PropsProvider<S>> : UProps
+	{
+		val swingProps: Props
+
+		fun withSwingProps(builder: Props.() -> Props): S
+	}
+
+	override val context get() = contextOverride ?: super.context
 
 	private val baseListeners = props.baseListeners.value
 	private val componentListener = ComponentListenerDelegate { baseListeners?.componentListener }
@@ -74,7 +87,7 @@ class SwingNativeComponent(private val native: SwingNative,
 
 	override fun RenderBuilder<SwingNative>.render()
 	{
-		add(props.children)
+		+ props.children
 		onUpdate()
 	}
 
@@ -84,11 +97,11 @@ class SwingNativeComponent(private val native: SwingNative,
 	}
 }
 
-private typealias NativeComponentBuilder = SwingComponentBuilder<out SwingNativeComponent.Props.Provider<*>>
-
-fun SwingRenderBuilder.nativeComponent(native: SwingNative, props: SwingNativeComponent.Props) =
-		buildComponent({ SwingNativeComponent(native, it) }, props)
-fun NativeComponentBuilder.baseListeners(baseListeners: BaseListeners) =
+fun SwingRenderBuilder.nativeComponent(native: SwingNative, contextOverride: SwingContext? = null, props: SwingNativeComponent.Props) =
+		component({ SwingNativeComponent(native, contextOverride, it) }, props)
+fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.baseListeners(baseListeners: BaseListeners) =
 		withProps { withSwingProps { copy(baseListeners = baseListeners.prop()) } }
-fun NativeComponentBuilder.enabled(enabled: Boolean) = withProps { withSwingProps { copy(enabled = enabled.prop()) } }
-fun NativeComponentBuilder.visible(visible: Boolean) = withProps { withSwingProps { copy(visible = visible.prop()) } }
+fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.enabled(enabled: Boolean) =
+		withProps { withSwingProps { copy(enabled = enabled.prop()) } }
+fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.visible(visible: Boolean) =
+		withProps { withSwingProps { copy(visible = visible.prop()) } }

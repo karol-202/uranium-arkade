@@ -1,8 +1,8 @@
 package pl.karol202.uranium.swing.control.button
 
 import pl.karol202.uranium.core.common.AutoKey
+import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.RenderBuilder
-import pl.karol202.uranium.core.util.buildComponent
 import pl.karol202.uranium.swing.SwingAbstractComponent
 import pl.karol202.uranium.swing.SwingNative
 import pl.karol202.uranium.swing.SwingRenderBuilder
@@ -18,4 +18,4 @@ class SwingRadioButton(props: SwingAbstractButton.Props) : SwingAbstractComponen
 	}
 }
 
-fun SwingRenderBuilder.radioButton(key: Any = AutoKey) = buildComponent(::SwingRadioButton, SwingAbstractButton.Props.fromKey(key))
+fun SwingRenderBuilder.radioButton(key: Any = AutoKey) = component(::SwingRadioButton, SwingAbstractButton.props(key))

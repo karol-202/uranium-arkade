@@ -1,10 +1,9 @@
 package pl.karol202.uranium.swing.control.button
 
-import pl.karol202.uranium.core.common.BaseProps
 import pl.karol202.uranium.core.common.UProps
+import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.Prop
 import pl.karol202.uranium.core.util.RenderBuilder
-import pl.karol202.uranium.core.util.buildComponent
 import pl.karol202.uranium.core.util.prop
 import pl.karol202.uranium.swing.*
 import pl.karol202.uranium.swing.util.HorizontalAlign
@@ -19,6 +18,11 @@ import javax.swing.Icon
 class SwingAbstractButton(private val native: AbstractButton,
                           props: Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
 {
+	companion object
+	{
+		fun props(key: Any) = Props(SwingNativeComponent.props(key))
+	}
+
 	data class Props(override val swingProps: SwingNativeComponent.Props,
 	                 val text: Prop<String?> = Prop.NoValue,
 	                 val icon: Prop<Icon?> = Prop.NoValue,
@@ -42,13 +46,8 @@ class SwingAbstractButton(private val native: AbstractButton,
 	                 val multiClickThreshold: Prop<Long> = Prop.NoValue,
 	                 val onClick: Prop<() -> Unit> = Prop.NoValue,
 	                 val onSelect: Prop<(Boolean) -> Unit> = Prop.NoValue) : UProps by swingProps,
-	                                                             SwingNativeComponent.Props.Provider<Props>
+	                                                             SwingNativeComponent.PropsProvider<Props>
 	{
-		companion object
-		{
-			fun fromKey(key: Any) = Props(SwingNativeComponent.Props(BaseProps(key)))
-		}
-
 		override fun withSwingProps(builder: SwingNativeComponent.Props.() -> SwingNativeComponent.Props) =
 				copy(swingProps = swingProps.builder())
 	}
@@ -100,29 +99,29 @@ class SwingAbstractButton(private val native: AbstractButton,
 	}
 }
 
-private typealias AbstractButtonBuilder = SwingComponentBuilder<SwingAbstractButton.Props>
+private typealias AbstractButtonElement = SwingElement<SwingAbstractButton.Props>
 
 fun SwingRenderBuilder.abstractButton(native: AbstractButton, props: SwingAbstractButton.Props) =
-		buildComponent({ SwingAbstractButton(native, it) }, props)
-fun AbstractButtonBuilder.text(text: String?) = withProps { copy(text = text.prop()) }
-fun AbstractButtonBuilder.icon(icon: Icon?) = withProps { copy(icon = icon.prop()) }
-fun AbstractButtonBuilder.pressedIcon(icon: Icon?) = withProps { copy(pressedIcon = icon.prop()) }
-fun AbstractButtonBuilder.selectedIcon(icon: Icon?) = withProps { copy(selectedIcon = icon.prop()) }
-fun AbstractButtonBuilder.rolloverIcon(icon: Icon?) = withProps { copy(rolloverIcon = icon.prop()) }
-fun AbstractButtonBuilder.rolloverSelectedIcon(icon: Icon?) = withProps { copy(rolloverSelectedIcon = icon.prop()) }
-fun AbstractButtonBuilder.disabledIcon(icon: Icon?) = withProps { copy(disabledIcon = icon.prop()) }
-fun AbstractButtonBuilder.disabledSelectedIcon(icon: Icon?) = withProps { copy(disabledSelectedIcon = icon.prop()) }
-fun AbstractButtonBuilder.iconTextGap(gap: Int) = withProps { copy(iconTextGap = gap.prop()) }
-fun AbstractButtonBuilder.borderPainted(painted: Boolean) = withProps { copy(borderPainted = painted.prop()) }
-fun AbstractButtonBuilder.contentAreaFilled(filled: Boolean) = withProps { copy(contentAreaFilled = filled.prop()) }
-fun AbstractButtonBuilder.focusPainted(painted: Boolean) = withProps { copy(focusPainted = painted.prop()) }
-fun AbstractButtonBuilder.rolloverEnabled(enabled: Boolean) = withProps { copy(rolloverEnabled = enabled.prop()) }
-fun AbstractButtonBuilder.selected(selected: Boolean) = withProps { copy(selected = selected.prop()) }
-fun AbstractButtonBuilder.horizontalAlign(align: HorizontalAlign) = withProps { copy(horizontalAlign = align.prop()) }
-fun AbstractButtonBuilder.verticalAlign(align: VerticalAlign) = withProps { copy(verticalAlign = align.prop()) }
-fun AbstractButtonBuilder.horizontalTextPosition(position: HorizontalAlign) = withProps { copy(horizontalTextPosition = position.prop()) }
-fun AbstractButtonBuilder.verticalTextPosition(position: VerticalAlign) = withProps { copy(verticalTextPosition = position.prop()) }
-fun AbstractButtonBuilder.margin(margin: Insets?) = withProps { copy(margin = margin.prop()) }
-fun AbstractButtonBuilder.multiClickThreshold(threshold: Long) = withProps { copy(multiClickThreshold = threshold.prop()) }
-fun AbstractButtonBuilder.onClick(onClick: () -> Unit) = withProps { copy(onClick = onClick.prop()) }
-fun AbstractButtonBuilder.onSelect(onSelect: (Boolean) -> Unit) = withProps { copy(onSelect = onSelect.prop()) }
+		component({ SwingAbstractButton(native, it) }, props)
+fun AbstractButtonElement.text(text: String?) = withProps { copy(text = text.prop()) }
+fun AbstractButtonElement.icon(icon: Icon?) = withProps { copy(icon = icon.prop()) }
+fun AbstractButtonElement.pressedIcon(icon: Icon?) = withProps { copy(pressedIcon = icon.prop()) }
+fun AbstractButtonElement.selectedIcon(icon: Icon?) = withProps { copy(selectedIcon = icon.prop()) }
+fun AbstractButtonElement.rolloverIcon(icon: Icon?) = withProps { copy(rolloverIcon = icon.prop()) }
+fun AbstractButtonElement.rolloverSelectedIcon(icon: Icon?) = withProps { copy(rolloverSelectedIcon = icon.prop()) }
+fun AbstractButtonElement.disabledIcon(icon: Icon?) = withProps { copy(disabledIcon = icon.prop()) }
+fun AbstractButtonElement.disabledSelectedIcon(icon: Icon?) = withProps { copy(disabledSelectedIcon = icon.prop()) }
+fun AbstractButtonElement.iconTextGap(gap: Int) = withProps { copy(iconTextGap = gap.prop()) }
+fun AbstractButtonElement.borderPainted(painted: Boolean) = withProps { copy(borderPainted = painted.prop()) }
+fun AbstractButtonElement.contentAreaFilled(filled: Boolean) = withProps { copy(contentAreaFilled = filled.prop()) }
+fun AbstractButtonElement.focusPainted(painted: Boolean) = withProps { copy(focusPainted = painted.prop()) }
+fun AbstractButtonElement.rolloverEnabled(enabled: Boolean) = withProps { copy(rolloverEnabled = enabled.prop()) }
+fun AbstractButtonElement.selected(selected: Boolean) = withProps { copy(selected = selected.prop()) }
+fun AbstractButtonElement.horizontalAlign(align: HorizontalAlign) = withProps { copy(horizontalAlign = align.prop()) }
+fun AbstractButtonElement.verticalAlign(align: VerticalAlign) = withProps { copy(verticalAlign = align.prop()) }
+fun AbstractButtonElement.horizontalTextPosition(position: HorizontalAlign) = withProps { copy(horizontalTextPosition = position.prop()) }
+fun AbstractButtonElement.verticalTextPosition(position: VerticalAlign) = withProps { copy(verticalTextPosition = position.prop()) }
+fun AbstractButtonElement.margin(margin: Insets?) = withProps { copy(margin = margin.prop()) }
+fun AbstractButtonElement.multiClickThreshold(threshold: Long) = withProps { copy(multiClickThreshold = threshold.prop()) }
+fun AbstractButtonElement.onClick(onClick: () -> Unit) = withProps { copy(onClick = onClick.prop()) }
+fun AbstractButtonElement.onSelect(onSelect: (Boolean) -> Unit) = withProps { copy(onSelect = onSelect.prop()) }

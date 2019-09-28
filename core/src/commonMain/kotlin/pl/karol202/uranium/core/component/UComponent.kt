@@ -15,4 +15,4 @@ interface UComponent<N, P : UProps> : Renderable<N>,
 	fun modifyPropsInternal(props: P)
 }
 
-fun <N, P : UProps> RenderBuilder<N>.component(constructor: (P) -> UComponent<N, P>, props: P) = add(UElement(constructor, props))
+fun <N, P : UProps> RenderBuilder<N>.component(constructor: (P) -> UComponent<N, P>, props: P) = UElement(constructor, props)

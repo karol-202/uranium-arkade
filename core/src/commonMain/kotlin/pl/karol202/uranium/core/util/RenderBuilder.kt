@@ -7,14 +7,12 @@ class RenderBuilder<N>
 	var elements = emptyList<UElement<N, *>>()
 		private set
 
-	operator fun ComponentBuilder<N, *>.unaryPlus() = add(build())
-
-	fun add(element: UElement<N, *>) = element.also {
-		this.elements += it
+	operator fun UElement<N, *>.unaryPlus() = also {
+		this@RenderBuilder.elements += it
 	}
 
-	fun add(elements: List<UElement<N, *>>) = elements.also {
-		this.elements += it
+	operator fun List<UElement<N, *>>.unaryPlus() = also {
+		this@RenderBuilder.elements += it
 	}
 }
 

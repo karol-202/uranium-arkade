@@ -1,8 +1,8 @@
 package pl.karol202.uranium.swing.control.button
 
 import pl.karol202.uranium.core.common.AutoKey
+import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.RenderBuilder
-import pl.karol202.uranium.core.util.buildComponent
 import pl.karol202.uranium.swing.SwingAbstractComponent
 import pl.karol202.uranium.swing.SwingNative
 import pl.karol202.uranium.swing.SwingRenderBuilder
@@ -18,4 +18,4 @@ class SwingCheckBox(props: SwingAbstractButton.Props) : SwingAbstractComponent<S
 	}
 }
 
-fun SwingRenderBuilder.checkBox(key: Any = AutoKey) = buildComponent(::SwingCheckBox, SwingAbstractButton.Props.fromKey(key))
+fun SwingRenderBuilder.checkBox(key: Any = AutoKey) = component(::SwingCheckBox, SwingAbstractButton.props(key))
