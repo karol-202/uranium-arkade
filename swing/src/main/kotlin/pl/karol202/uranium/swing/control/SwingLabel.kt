@@ -66,9 +66,9 @@ private typealias Provider<P> = SwingLabel.PropsProvider<P>
 fun <P : Provider<P>> SwingElement<P>.withLabelProps(builder: Builder<SwingLabel.Props>) = withProps { withLabelProps(builder) }
 
 fun SwingRenderBuilder.label(key: Any = AutoKey) = component(::SwingLabel, SwingLabel.Props(SwingNativeComponent.props(key)))
-fun <P : Provider<P>> SwingElement<P>.text(text: String) = withLabelProps { copy(text = text.prop()) }
-fun <P : Provider<P>> SwingElement<P>.icon(icon: Icon) = withLabelProps { copy(icon = icon.prop()) }
-fun <P : Provider<P>> SwingElement<P>.disabledIcon(icon: Icon) = withLabelProps { copy(disabledIcon = icon.prop()) }
+fun <P : Provider<P>> SwingElement<P>.text(text: String?) = withLabelProps { copy(text = text.prop()) }
+fun <P : Provider<P>> SwingElement<P>.icon(icon: Icon?) = withLabelProps { copy(icon = icon.prop()) }
+fun <P : Provider<P>> SwingElement<P>.disabledIcon(icon: Icon?) = withLabelProps { copy(disabledIcon = icon.prop()) }
 fun <P : Provider<P>> SwingElement<P>.iconTextGap(gap: Int) = withLabelProps { copy(iconTextGap = gap.prop()) }
 fun <P : Provider<P>> SwingElement<P>.horizontalAlign(align: HorizontalAlign) = withLabelProps { copy(horizontalAlign = align.prop()) }
 fun <P : Provider<P>> SwingElement<P>.verticalAlign(align: VerticalAlign) = withLabelProps { copy(verticalAlign = align.prop()) }

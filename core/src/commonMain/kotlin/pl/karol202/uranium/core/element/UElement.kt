@@ -9,5 +9,5 @@ class UElement<N, P : UProps>(private val constructor: (P) -> UComponent<N, P>,
 {
 	fun withProps(propsBuilder: P.() -> P) = UElement(constructor, props.propsBuilder())
 
-	fun createComponent() = constructor(props)
+	internal fun createComponent() = constructor(props)
 }
