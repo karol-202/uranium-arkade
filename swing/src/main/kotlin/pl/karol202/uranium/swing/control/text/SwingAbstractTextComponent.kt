@@ -3,6 +3,7 @@ package pl.karol202.uranium.swing.control.text
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.context.InvalidateableContext
+import pl.karol202.uranium.core.util.Builder
 import pl.karol202.uranium.core.util.Prop
 import pl.karol202.uranium.core.util.RenderBuilder
 import pl.karol202.uranium.core.util.prop
@@ -44,17 +45,16 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
     {
         override val abstractTextProps = this
 
-        override fun withSwingProps(builder: SwingNativeComponent.Props.() -> SwingNativeComponent.Props) =
-                copy(swingProps = swingProps.builder())
+        override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) = copy(swingProps = swingProps.builder())
 
-        override fun withAbstractTextProps(builder: Props.() -> Props) = builder()
+        override fun withAbstractTextProps(builder: Builder<Props>) = builder()
     }
 
     interface PropsProvider<S : PropsProvider<S>> : UProps
     {
         val abstractTextProps: Props
 
-        fun withAbstractTextProps(builder: Props.() -> Props): S
+        fun withAbstractTextProps(builder: Builder<Props>): S
     }
 
     private val caretListener = CaretListener { props.onCaretMove.value?.invoke(it) }
