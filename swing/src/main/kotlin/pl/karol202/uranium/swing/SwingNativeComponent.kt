@@ -3,8 +3,8 @@ package pl.karol202.uranium.swing
 import pl.karol202.uranium.core.common.BaseProps
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.util.Builder
 import pl.karol202.uranium.core.util.Prop
-import pl.karol202.uranium.core.util.RenderBuilder
 import pl.karol202.uranium.core.util.prop
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.*
@@ -39,14 +39,14 @@ class SwingNativeComponent(private val native: SwingNative,
 	{
 		override val swingProps = this
 
-		override fun withSwingProps(builder: Props.() -> Props) = builder()
+		override fun withSwingProps(builder: Builder<Props>) = builder()
 	}
 
 	interface PropsProvider<S : PropsProvider<S>> : UProps
 	{
 		val swingProps: Props
 
-		fun withSwingProps(builder: Props.() -> Props): S
+		fun withSwingProps(builder: Builder<Props>): S
 	}
 
 	override val context get() = contextOverride ?: super.context
@@ -97,7 +97,7 @@ class SwingNativeComponent(private val native: SwingNative,
 		parentContext.detachNative(native)
 	}
 
-	override fun RenderBuilder<SwingNative>.render()
+	override fun SwingRenderBuilder.render()
 	{
 		+ props.children
 		onUpdate()
@@ -109,31 +109,22 @@ class SwingNativeComponent(private val native: SwingNative,
 	}
 }
 
+private typealias Provider<P> = SwingNativeComponent.PropsProvider<P>
+fun <P : Provider<P>> SwingElement<P>.withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		withProps { withSwingProps(builder) }
+
 fun SwingRenderBuilder.nativeComponent(native: SwingNative, contextOverride: SwingContext? = null, props: SwingNativeComponent.Props) =
 		component({ SwingNativeComponent(native, contextOverride, it) }, props)
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.componentListener(listener: ComponentListener) =
-		withProps { withSwingProps { copy(componentListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.focusListener(listener: FocusListener) =
-		withProps { withSwingProps { copy(focusListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.hierarchyBoundsListener(listener: HierarchyBoundsListener) =
-		withProps { withSwingProps { copy(hierarchyBoundsListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.hierarchyListener(listener: HierarchyListener) =
-		withProps { withSwingProps { copy(hierarchyListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.inputMethodListener(listener: InputMethodListener) =
-		withProps { withSwingProps { copy(inputMethodListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.keyListener(listener: KeyListener) =
-		withProps { withSwingProps { copy(keyListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.mouseListener(listener: MouseListener) =
-		withProps { withSwingProps { copy(mouseListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.mouseMotionListener(listener: MouseMotionListener) =
-		withProps { withSwingProps { copy(mouseMotionListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.mouseWheelListener(listener: MouseWheelListener) =
-		withProps { withSwingProps { copy(mouseWheelListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.ancestorListener(listener: AncestorListener) =
-		withProps { withSwingProps { copy(ancestorListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.vetoableChangeListener(listener: VetoableChangeListener) =
-		withProps { withSwingProps { copy(vetoableChangeListener = listener.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.enabled(enabled: Boolean) =
-		withProps { withSwingProps { copy(enabled = enabled.prop()) } }
-fun <P : SwingNativeComponent.PropsProvider<P>> SwingElement<P>.visible(visible: Boolean) =
-		withProps { withSwingProps { copy(visible = visible.prop()) } }
+fun <P : Provider<P>> SwingElement<P>.componentListener(listener: ComponentListener) = withSwingProps { copy(componentListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.focusListener(listener: FocusListener) = withSwingProps { copy(focusListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.hierarchyBoundsListener(listener: HierarchyBoundsListener) = withSwingProps { copy(hierarchyBoundsListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.hierarchyListener(listener: HierarchyListener) = withSwingProps { copy(hierarchyListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.inputMethodListener(listener: InputMethodListener) = withSwingProps { copy(inputMethodListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.keyListener(listener: KeyListener) = withSwingProps { copy(keyListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.mouseListener(listener: MouseListener) = withSwingProps { copy(mouseListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.mouseMotionListener(listener: MouseMotionListener) = withSwingProps { copy(mouseMotionListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.mouseWheelListener(listener: MouseWheelListener) = withSwingProps { copy(mouseWheelListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.ancestorListener(listener: AncestorListener) = withSwingProps { copy(ancestorListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.vetoableChangeListener(listener: VetoableChangeListener) = withSwingProps { copy(vetoableChangeListener = listener.prop()) }
+fun <P : Provider<P>> SwingElement<P>.enabled(enabled: Boolean) = withSwingProps { copy(enabled = enabled.prop()) }
+fun <P : Provider<P>> SwingElement<P>.visible(visible: Boolean) = withSwingProps { copy(visible = visible.prop()) }

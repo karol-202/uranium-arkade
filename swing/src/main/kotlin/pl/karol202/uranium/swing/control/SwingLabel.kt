@@ -3,6 +3,7 @@ package pl.karol202.uranium.swing.control
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.util.Builder
 import pl.karol202.uranium.core.util.Prop
 import pl.karol202.uranium.core.util.RenderBuilder
 import pl.karol202.uranium.core.util.prop
@@ -23,10 +24,22 @@ class SwingLabel(props: Props) : SwingAbstractComponent<SwingLabel.Props>(props)
 	                 val verticalAlign: Prop<VerticalAlign> = Prop.NoValue,
 	                 val horizontalTextPosition: Prop<HorizontalAlign> = Prop.NoValue,
 	                 val verticalTextPosition: Prop<VerticalAlign> = Prop.NoValue) : UProps by swingProps,
-	                                                                                 SwingNativeComponent.PropsProvider<Props>
+	                                                                                 SwingNativeComponent.PropsProvider<Props>,
+                                                                                     PropsProvider<Props>
 	{
-		override fun withSwingProps(builder: SwingNativeComponent.Props.() -> SwingNativeComponent.Props) =
+		override val labelProps = this
+
+		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
 				copy(swingProps = swingProps.builder())
+
+		override fun withLabelProps(builder: Builder<Props>) = builder()
+	}
+
+	interface PropsProvider<S : PropsProvider<S>> : UProps
+	{
+		val labelProps: Props
+
+		fun withLabelProps(builder: Builder<Props>): S
 	}
 
 	private val native = JLabel()
@@ -49,14 +62,15 @@ class SwingLabel(props: Props) : SwingAbstractComponent<SwingLabel.Props>(props)
 	}
 }
 
-private typealias LabelElement = SwingElement<SwingLabel.Props>
+private typealias Provider<P> = SwingLabel.PropsProvider<P>
+fun <P : Provider<P>> SwingElement<P>.withLabelProps(builder: Builder<SwingLabel.Props>) = withProps { withLabelProps(builder) }
 
 fun SwingRenderBuilder.label(key: Any = AutoKey) = component(::SwingLabel, SwingLabel.Props(SwingNativeComponent.props(key)))
-fun LabelElement.text(text: String) = withProps { copy(text = text.prop()) }
-fun LabelElement.icon(icon: Icon) = withProps { copy(icon = icon.prop()) }
-fun LabelElement.disabledIcon(icon: Icon) = withProps { copy(disabledIcon = icon.prop()) }
-fun LabelElement.iconTextGap(gap: Int) = withProps { copy(iconTextGap = gap.prop()) }
-fun LabelElement.horizontalAlign(align: HorizontalAlign) = withProps { copy(horizontalAlign = align.prop()) }
-fun LabelElement.verticalAlign(align: VerticalAlign) = withProps { copy(verticalAlign = align.prop()) }
-fun LabelElement.horizontalTextPosition(position: HorizontalAlign) = withProps { copy(horizontalTextPosition = position.prop()) }
-fun LabelElement.verticalTextPosition(position: VerticalAlign) = withProps { copy(verticalTextPosition = position.prop()) }
+fun <P : Provider<P>> SwingElement<P>.text(text: String) = withLabelProps { copy(text = text.prop()) }
+fun <P : Provider<P>> SwingElement<P>.icon(icon: Icon) = withLabelProps { copy(icon = icon.prop()) }
+fun <P : Provider<P>> SwingElement<P>.disabledIcon(icon: Icon) = withLabelProps { copy(disabledIcon = icon.prop()) }
+fun <P : Provider<P>> SwingElement<P>.iconTextGap(gap: Int) = withLabelProps { copy(iconTextGap = gap.prop()) }
+fun <P : Provider<P>> SwingElement<P>.horizontalAlign(align: HorizontalAlign) = withLabelProps { copy(horizontalAlign = align.prop()) }
+fun <P : Provider<P>> SwingElement<P>.verticalAlign(align: VerticalAlign) = withLabelProps { copy(verticalAlign = align.prop()) }
+fun <P : Provider<P>> SwingElement<P>.horizontalTextPosition(position: HorizontalAlign) = withLabelProps { copy(horizontalTextPosition = position.prop()) }
+fun <P : Provider<P>> SwingElement<P>.verticalTextPosition(position: VerticalAlign) = withLabelProps { copy(verticalTextPosition = position.prop()) }

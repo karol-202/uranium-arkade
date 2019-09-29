@@ -4,10 +4,7 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.BaseProps
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.util.Prop
-import pl.karol202.uranium.core.util.RenderBuilder
-import pl.karol202.uranium.core.util.prop
-import pl.karol202.uranium.core.util.render
+import pl.karol202.uranium.core.util.*
 import pl.karol202.uranium.swing.*
 import java.awt.FlowLayout
 
@@ -27,10 +24,21 @@ class SwingFlowLayout(props: Props) : SwingAbstractComponent<SwingFlowLayout.Pro
 	                 val alignOnBaseline: Prop<Boolean> = Prop.NoValue,
 	                 val horizontalGap: Prop<Int> = Prop.NoValue,
 	                 val verticalGap: Prop<Int> = Prop.NoValue) : UProps by swingProps,
-	                                                              SwingNativeComponent.PropsProvider<Props>
+	                                                              SwingNativeComponent.PropsProvider<Props>,
+                                                                  PropsProvider<Props>
 	{
-		override fun withSwingProps(builder: SwingNativeComponent.Props.() -> SwingNativeComponent.Props) =
-				copy(swingProps = swingProps.builder())
+		override val flowLayoutProps = this
+
+		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) = copy(swingProps = swingProps.builder())
+
+		override fun withFlowLayoutProps(builder: Builder<Props>) = builder()
+	}
+
+	interface PropsProvider<S : PropsProvider<S>> : UProps
+	{
+		val flowLayoutProps: Props
+
+		fun withFlowLayoutProps(builder: Builder<Props>): S
 	}
 
 	private val layoutManager = FlowLayout()
@@ -49,12 +57,14 @@ class SwingFlowLayout(props: Props) : SwingAbstractComponent<SwingFlowLayout.Pro
 	}
 }
 
-private typealias FlowLayoutElement = SwingElement<SwingFlowLayout.Props>
+private typealias Provider<P> = SwingFlowLayout.PropsProvider<P>
+fun <P : Provider<P>> SwingElement<P>.withFlowLayoutProps(builder: Builder<SwingFlowLayout.Props>) =
+		withProps { withFlowLayoutProps(builder) }
 
 fun SwingRenderBuilder.flowLayout(key: Any = AutoKey, block: SwingRenderBuilder.() -> Unit = {}) =
 		component(::SwingFlowLayout, SwingFlowLayout.Props(SwingNativeComponent.Props(BaseProps(key)))).content(block)
-fun FlowLayoutElement.align(align: SwingFlowLayout.Align) = withProps { copy(align = align.prop()) }
-fun FlowLayoutElement.alignOnBaseline(align: Boolean) = withProps { copy(alignOnBaseline = align.prop()) }
-fun FlowLayoutElement.horizontalGap(gap: Int) = withProps { copy(horizontalGap = gap.prop()) }
-fun FlowLayoutElement.verticalGap(gap: Int) = withProps { copy(verticalGap = gap.prop()) }
-fun FlowLayoutElement.content(block: SwingRenderBuilder.() -> Unit) = withProps { withSwingProps { copy(children = block.render()) } }
+fun <P : Provider<P>> SwingElement<P>.align(align: SwingFlowLayout.Align) = withFlowLayoutProps { copy(align = align.prop()) }
+fun <P : Provider<P>> SwingElement<P>.alignOnBaseline(align: Boolean) = withFlowLayoutProps { copy(alignOnBaseline = align.prop()) }
+fun <P : Provider<P>> SwingElement<P>.horizontalGap(gap: Int) = withFlowLayoutProps { copy(horizontalGap = gap.prop()) }
+fun <P : Provider<P>> SwingElement<P>.verticalGap(gap: Int) = withFlowLayoutProps { copy(verticalGap = gap.prop()) }
+fun <P : Provider<P>> SwingElement<P>.content(block: SwingRenderBuilder.() -> Unit) = withFlowLayoutProps { withSwingProps { copy(children = block.render()) } }
