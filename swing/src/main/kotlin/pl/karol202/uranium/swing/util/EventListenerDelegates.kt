@@ -2,6 +2,7 @@ package pl.karol202.uranium.swing.util
 
 import java.awt.event.*
 import java.beans.PropertyChangeEvent
+import java.beans.PropertyChangeListener
 import java.beans.VetoableChangeListener
 import javax.swing.event.AncestorEvent
 import javax.swing.event.AncestorListener
@@ -23,25 +24,25 @@ class FocusListenerDelegate(private val listenerSupplier: () -> FocusListener?) 
 class HierarchyBoundsListenerDelegate(private val listenerSupplier: () -> HierarchyBoundsListener?) : HierarchyBoundsListener
 {
 	override fun ancestorMoved(e: HierarchyEvent?) = listenerSupplier()?.ancestorMoved(e) ?: Unit
-	override fun ancestorResized(e: HierarchyEvent?)  = listenerSupplier()?.ancestorResized(e) ?: Unit
+	override fun ancestorResized(e: HierarchyEvent?) = listenerSupplier()?.ancestorResized(e) ?: Unit
 }
 
 class HierarchyListenerDelegate(private val listenerSupplier: () -> HierarchyListener?) : HierarchyListener
 {
-	override fun hierarchyChanged(e: HierarchyEvent?)  = listenerSupplier()?.hierarchyChanged(e) ?: Unit
+	override fun hierarchyChanged(e: HierarchyEvent?) = listenerSupplier()?.hierarchyChanged(e) ?: Unit
 }
 
 class InputMethodListenerDelegate(private val listenerSupplier: () -> InputMethodListener?) : InputMethodListener
 {
 	override fun caretPositionChanged(e: InputMethodEvent?) = listenerSupplier()?.caretPositionChanged(e) ?: Unit
-	override fun inputMethodTextChanged(e: InputMethodEvent?)  = listenerSupplier()?.inputMethodTextChanged(e) ?: Unit
+	override fun inputMethodTextChanged(e: InputMethodEvent?) = listenerSupplier()?.inputMethodTextChanged(e) ?: Unit
 }
 
 class KeyListenerDelegate(private val listenerSupplier: () -> KeyListener?) : KeyListener
 {
 	override fun keyTyped(e: KeyEvent?) = listenerSupplier()?.keyTyped(e) ?: Unit
 	override fun keyPressed(e: KeyEvent?) = listenerSupplier()?.keyPressed(e) ?: Unit
-	override fun keyReleased(e: KeyEvent?)  = listenerSupplier()?.keyReleased(e) ?: Unit
+	override fun keyReleased(e: KeyEvent?) = listenerSupplier()?.keyReleased(e) ?: Unit
 }
 
 class MouseListenerDelegate(private val listenerSupplier: () -> MouseListener?) : MouseListener
@@ -50,18 +51,30 @@ class MouseListenerDelegate(private val listenerSupplier: () -> MouseListener?) 
 	override fun mouseEntered(e: MouseEvent?) = listenerSupplier()?.mouseEntered(e) ?: Unit
 	override fun mouseClicked(e: MouseEvent?) = listenerSupplier()?.mouseClicked(e) ?: Unit
 	override fun mouseExited(e: MouseEvent?) = listenerSupplier()?.mouseExited(e) ?: Unit
-	override fun mousePressed(e: MouseEvent?)  = listenerSupplier()?.mousePressed(e) ?: Unit
+	override fun mousePressed(e: MouseEvent?) = listenerSupplier()?.mousePressed(e) ?: Unit
 }
 
 class MouseMotionListenerDelegate(private val listenerSupplier: () -> MouseMotionListener?) : MouseMotionListener
 {
 	override fun mouseMoved(e: MouseEvent?) = listenerSupplier()?.mouseMoved(e) ?: Unit
-	override fun mouseDragged(e: MouseEvent?)  = listenerSupplier()?.mouseDragged(e) ?: Unit
+	override fun mouseDragged(e: MouseEvent?) = listenerSupplier()?.mouseDragged(e) ?: Unit
 }
 
 class MouseWheelListenerDelegate(private val listenerSupplier: () -> MouseWheelListener?) : MouseWheelListener
 {
-	override fun mouseWheelMoved(e: MouseWheelEvent?)  = listenerSupplier()?.mouseWheelMoved(e) ?: Unit
+	override fun mouseWheelMoved(e: MouseWheelEvent?) = listenerSupplier()?.mouseWheelMoved(e) ?: Unit
+}
+
+class PropertyChangeListenerDelegate(private val listenerSupplier: () -> PropertyChangeListener?) : PropertyChangeListener
+{
+	override fun propertyChange(e: PropertyChangeEvent?) = listenerSupplier()?.propertyChange(e) ?: Unit
+}
+
+class ContainerListenerDelegate(private val listenerSupplier: () -> ContainerListener?) : ContainerListener
+{
+	override fun componentAdded(e: ContainerEvent?) = listenerSupplier()?.componentAdded(e) ?: Unit
+
+	override fun componentRemoved(e: ContainerEvent?) = listenerSupplier()?.componentRemoved(e) ?: Unit
 }
 
 class AncestorListenerDelegate(private val listenerSupplier: () -> AncestorListener?) : AncestorListener
