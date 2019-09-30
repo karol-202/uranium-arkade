@@ -170,44 +170,44 @@ fun SwingRenderBuilder.nativeComponent(native: () -> SwingNative,
                                        props: SwingNativeComponent.Props = SwingNativeComponent.Props(key)) =
 		component({ SwingNativeComponent(native(), contextOverride?.invoke(), it) }, props)
 
-private typealias Provider<P> = SwingNativeComponent.PropsProvider<P>
-fun <P : Provider<P>> SwingElement<P>.withSwingProps(builder: Builder<SwingNativeComponent.Props>) = withProps { withSwingProps(builder) }
-fun <P : Provider<P>> SwingElement<P>.componentListener(listener: ComponentListener) = withSwingProps { copy(componentListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.focusListener(listener: FocusListener) = withSwingProps { copy(focusListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.hierarchyBoundsListener(listener: HierarchyBoundsListener) = withSwingProps { copy(hierarchyBoundsListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.hierarchyListener(listener: HierarchyListener) = withSwingProps { copy(hierarchyListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.inputMethodListener(listener: InputMethodListener) = withSwingProps { copy(inputMethodListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.keyListener(listener: KeyListener) = withSwingProps { copy(keyListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.mouseListener(listener: MouseListener) = withSwingProps { copy(mouseListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.mouseMotionListener(listener: MouseMotionListener) = withSwingProps { copy(mouseMotionListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.mouseWheelListener(listener: MouseWheelListener) = withSwingProps { copy(mouseWheelListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.propertyChangeListener(listener: PropertyChangeListener) = withSwingProps { copy(propertyChangeListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.containerListener(listener: ContainerListener) = withSwingProps { copy(containerListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.ancestorListener(listener: AncestorListener) = withSwingProps { copy(ancestorListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.vetoableChangeListener(listener: VetoableChangeListener) = withSwingProps { copy(vetoableChangeListener = listener.prop()) }
-fun <P : Provider<P>> SwingElement<P>.enabled(enabled: Boolean) = withSwingProps { copy(enabled = enabled.prop()) }
-fun <P : Provider<P>> SwingElement<P>.visible(visible: Boolean) = withSwingProps { copy(visible = visible.prop()) }
-fun <P : Provider<P>> SwingElement<P>.focusable(focusable: Boolean) = withSwingProps { copy(focusable = focusable.prop()) }
-fun <P : Provider<P>> SwingElement<P>.opaque(opaque: Boolean) = withSwingProps { copy(opaque = opaque.prop()) }
-fun <P : Provider<P>> SwingElement<P>.inputMethodsEnabled(enabled: Boolean) = withSwingProps { copy(inputMethodsEnabled = enabled.prop()) }
-fun <P : Provider<P>> SwingElement<P>.autoscrollsEnabled(enabled: Boolean) = withSwingProps { copy(autoscrollsEnabled = enabled.prop()) }
-fun <P : Provider<P>> SwingElement<P>.doubleBuffered(enabled: Boolean) = withSwingProps { copy(doubleBuffered = enabled.prop()) }
-fun <P : Provider<P>> SwingElement<P>.requestFocus(enabled: Boolean) = withSwingProps { copy(requestFocus = enabled.prop()) }
-fun <P : Provider<P>> SwingElement<P>.verifyInputWhenFocusTarget(enabled: Boolean) = withSwingProps { copy(verifyInputWhenFocusTarget = enabled.prop()) }
-fun <P : Provider<P>> SwingElement<P>.orientation(orientation: ComponentOrientation) = withSwingProps { copy(orientation = orientation.prop()) }
-fun <P : Provider<P>> SwingElement<P>.background(background: Color?) = withSwingProps { copy(background = background.prop()) }
-fun <P : Provider<P>> SwingElement<P>.border(border: Border) = withSwingProps { copy(border = border.prop()) }
-fun <P : Provider<P>> SwingElement<P>.cursor(cursor: Cursor?) = withSwingProps { copy(cursor = cursor.prop()) }
-fun <P : Provider<P>> SwingElement<P>.font(font: Font?) = withSwingProps { copy(font = font.prop()) }
-fun <P : Provider<P>> SwingElement<P>.foreground(foreground: Color?) = withSwingProps { copy(foreground = foreground.prop()) }
-fun <P : Provider<P>> SwingElement<P>.locale(locale: Locale) = withSwingProps { copy(locale = locale.prop()) }
-fun <P : Provider<P>> SwingElement<P>.name(name: String) = withSwingProps { copy(name = name.prop()) }
-fun <P : Provider<P>> SwingElement<P>.tooltipText(text: String?) = withSwingProps { copy(tooltipText = text.prop()) }
-fun <P : Provider<P>> SwingElement<P>.alignmentX(alignX: Float) = withSwingProps { copy(alignmentX = alignX.prop()) }
-fun <P : Provider<P>> SwingElement<P>.alignmentY(alignY: Float) = withSwingProps { copy(alignmentY = alignY.prop()) }
-fun <P : Provider<P>> SwingElement<P>.bounds(bounds: Rectangle) = withSwingProps { copy(bounds = bounds.prop()) }
-fun <P : Provider<P>> SwingElement<P>.location(location: Point) = withSwingProps { copy(location = location.prop()) }
-fun <P : Provider<P>> SwingElement<P>.minimumSize(size: Dimension?) = withSwingProps { copy(minimumSize = size.prop()) }
-fun <P : Provider<P>> SwingElement<P>.maximumSize(size: Dimension?) = withSwingProps { copy(maximumSize = size.prop()) }
-fun <P : Provider<P>> SwingElement<P>.preferredSize(size: Dimension?) = withSwingProps { copy(preferredSize = size.prop()) }
-fun <P : Provider<P>> SwingElement<P>.size(size: Dimension) = withSwingProps { copy(size = size.prop()) }
+private typealias SNCProvider<P> = SwingNativeComponent.PropsProvider<P>
+fun <P : SNCProvider<P>> SwingElement<P>.withSwingProps(builder: Builder<SwingNativeComponent.Props>) = withProps { withSwingProps(builder) }
+fun <P : SNCProvider<P>> SwingElement<P>.componentListener(listener: ComponentListener) = withSwingProps { copy(componentListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.focusListener(listener: FocusListener) = withSwingProps { copy(focusListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.hierarchyBoundsListener(listener: HierarchyBoundsListener) = withSwingProps { copy(hierarchyBoundsListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.hierarchyListener(listener: HierarchyListener) = withSwingProps { copy(hierarchyListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.inputMethodListener(listener: InputMethodListener) = withSwingProps { copy(inputMethodListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.keyListener(listener: KeyListener) = withSwingProps { copy(keyListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.mouseListener(listener: MouseListener) = withSwingProps { copy(mouseListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.mouseMotionListener(listener: MouseMotionListener) = withSwingProps { copy(mouseMotionListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.mouseWheelListener(listener: MouseWheelListener) = withSwingProps { copy(mouseWheelListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.propertyChangeListener(listener: PropertyChangeListener) = withSwingProps { copy(propertyChangeListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.containerListener(listener: ContainerListener) = withSwingProps { copy(containerListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.ancestorListener(listener: AncestorListener) = withSwingProps { copy(ancestorListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.vetoableChangeListener(listener: VetoableChangeListener) = withSwingProps { copy(vetoableChangeListener = listener.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.enabled(enabled: Boolean) = withSwingProps { copy(enabled = enabled.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.visible(visible: Boolean) = withSwingProps { copy(visible = visible.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.focusable(focusable: Boolean) = withSwingProps { copy(focusable = focusable.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.opaque(opaque: Boolean) = withSwingProps { copy(opaque = opaque.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.inputMethodsEnabled(enabled: Boolean) = withSwingProps { copy(inputMethodsEnabled = enabled.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.autoscrollsEnabled(enabled: Boolean) = withSwingProps { copy(autoscrollsEnabled = enabled.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.doubleBuffered(enabled: Boolean) = withSwingProps { copy(doubleBuffered = enabled.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.requestFocus(enabled: Boolean) = withSwingProps { copy(requestFocus = enabled.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.verifyInputWhenFocusTarget(enabled: Boolean) = withSwingProps { copy(verifyInputWhenFocusTarget = enabled.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.orientation(orientation: ComponentOrientation) = withSwingProps { copy(orientation = orientation.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.background(background: Color?) = withSwingProps { copy(background = background.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.border(border: Border) = withSwingProps { copy(border = border.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.cursor(cursor: Cursor?) = withSwingProps { copy(cursor = cursor.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.font(font: Font?) = withSwingProps { copy(font = font.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.foreground(foreground: Color?) = withSwingProps { copy(foreground = foreground.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.locale(locale: Locale) = withSwingProps { copy(locale = locale.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.name(name: String) = withSwingProps { copy(name = name.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.tooltipText(text: String?) = withSwingProps { copy(tooltipText = text.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.alignmentX(alignX: Float) = withSwingProps { copy(alignmentX = alignX.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.alignmentY(alignY: Float) = withSwingProps { copy(alignmentY = alignY.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.bounds(bounds: Rectangle) = withSwingProps { copy(bounds = bounds.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.location(location: Point) = withSwingProps { copy(location = location.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.minimumSize(size: Dimension?) = withSwingProps { copy(minimumSize = size.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.maximumSize(size: Dimension?) = withSwingProps { copy(maximumSize = size.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.preferredSize(size: Dimension?) = withSwingProps { copy(preferredSize = size.prop()) }
+fun <P : SNCProvider<P>> SwingElement<P>.size(size: Dimension) = withSwingProps { copy(size = size.prop()) }

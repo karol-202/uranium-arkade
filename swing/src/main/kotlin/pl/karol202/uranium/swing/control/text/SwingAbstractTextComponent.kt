@@ -6,7 +6,6 @@ import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.core.util.Builder
 import pl.karol202.uranium.core.util.Prop
-import pl.karol202.uranium.core.util.RenderBuilder
 import pl.karol202.uranium.core.util.prop
 import pl.karol202.uranium.swing.*
 import java.awt.Color
@@ -68,7 +67,7 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
         native.removeCaretListener(caretListener)
     }
 
-    override fun RenderBuilder<SwingNative>.render()
+    override fun SwingRenderBuilder.render()
     {
         + nativeComponent(native = { native }, props = props.swingProps)
         onUpdate()
@@ -96,20 +95,20 @@ fun SwingRenderBuilder.abstractTextComponent(native: () -> JTextComponent,
                                              props: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props(key)) =
         component({ SwingAbstractTextComponent(native(), it) }, props)
 
-private typealias Provider<P> = SwingAbstractTextComponent.PropsProvider<P>
-fun <P : Provider<P>> SwingElement<P>.withAbstractTextProps(builder: Builder<SwingAbstractTextComponent.Props>) =
+private typealias SATCProvider<P> = SwingAbstractTextComponent.PropsProvider<P>
+fun <P : SATCProvider<P>> SwingElement<P>.withAbstractTextProps(builder: Builder<SwingAbstractTextComponent.Props>) =
         withProps { withAbstractTextProps(builder) }
-fun <P : Provider<P>> SwingElement<P>.text(text: String?) = withAbstractTextProps { copy(text = text.prop()) }
-fun <P : Provider<P>> SwingElement<P>.caretPosition(position: Int) = withAbstractTextProps { copy(caretPosition = position.prop()) }
-fun <P : Provider<P>> SwingElement<P>.selectionStart(position: Int) = withAbstractTextProps { copy(selectionStart = position.prop()) }
-fun <P : Provider<P>> SwingElement<P>.selectionEnd(position: Int) = withAbstractTextProps { copy(selectionEnd = position.prop()) }
-fun <P : Provider<P>> SwingElement<P>.highlighter(highlighter: Highlighter) = withAbstractTextProps { copy(highlighter = highlighter.prop()) }
-fun <P : Provider<P>> SwingElement<P>.keymap(keymap: Keymap) = withAbstractTextProps { copy(keymap = keymap.prop()) }
-fun <P : Provider<P>> SwingElement<P>.navigationFilter(filter: NavigationFilter) = withAbstractTextProps { copy(navigationFilter = filter.prop()) }
-fun <P : Provider<P>> SwingElement<P>.selectionColor(color: Color) = withAbstractTextProps { copy(selectionColor = color.prop()) }
-fun <P : Provider<P>> SwingElement<P>.selectedTextColor(color: Color) = withAbstractTextProps { copy(selectedTextColor = color.prop()) }
-fun <P : Provider<P>> SwingElement<P>.disabledTextColor(color: Color) = withAbstractTextProps { copy(disabledTextColor = color.prop()) }
-fun <P : Provider<P>> SwingElement<P>.caretColor(color: Color) = withAbstractTextProps { copy(caretColor = color.prop()) }
-fun <P : Provider<P>> SwingElement<P>.editable(editable: Boolean) = withAbstractTextProps { copy(editable = editable.prop()) }
-fun <P : Provider<P>> SwingElement<P>.margin(margin: Insets) = withAbstractTextProps { copy(margin = margin.prop()) }
-fun <P : Provider<P>> SwingElement<P>.onCaretMove(onMove: (CaretEvent) -> Unit) = withAbstractTextProps { copy(onCaretMove = onMove.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.text(text: String?) = withAbstractTextProps { copy(text = text.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.caretPosition(position: Int) = withAbstractTextProps { copy(caretPosition = position.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.selectionStart(position: Int) = withAbstractTextProps { copy(selectionStart = position.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.selectionEnd(position: Int) = withAbstractTextProps { copy(selectionEnd = position.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.highlighter(highlighter: Highlighter) = withAbstractTextProps { copy(highlighter = highlighter.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.keymap(keymap: Keymap) = withAbstractTextProps { copy(keymap = keymap.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.navigationFilter(filter: NavigationFilter) = withAbstractTextProps { copy(navigationFilter = filter.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.selectionColor(color: Color) = withAbstractTextProps { copy(selectionColor = color.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.selectedTextColor(color: Color) = withAbstractTextProps { copy(selectedTextColor = color.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.disabledTextColor(color: Color) = withAbstractTextProps { copy(disabledTextColor = color.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.caretColor(color: Color) = withAbstractTextProps { copy(caretColor = color.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.editable(editable: Boolean) = withAbstractTextProps { copy(editable = editable.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.margin(margin: Insets) = withAbstractTextProps { copy(margin = margin.prop()) }
+fun <P : SATCProvider<P>> SwingElement<P>.onCaretMove(onMove: (CaretEvent) -> Unit) = withAbstractTextProps { copy(onCaretMove = onMove.prop()) }

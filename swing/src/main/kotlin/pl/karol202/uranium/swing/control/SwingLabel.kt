@@ -5,7 +5,6 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.Builder
 import pl.karol202.uranium.core.util.Prop
-import pl.karol202.uranium.core.util.RenderBuilder
 import pl.karol202.uranium.core.util.prop
 import pl.karol202.uranium.swing.*
 import pl.karol202.uranium.swing.util.HorizontalAlign
@@ -44,7 +43,7 @@ class SwingLabel(private val native: JLabel,
 		fun withLabelProps(builder: Builder<Props>): S
 	}
 
-	override fun RenderBuilder<SwingNative>.render()
+	override fun SwingRenderBuilder.render()
 	{
 		+ nativeComponent(native = { native }, props = props.swingProps)
 		onUpdate()

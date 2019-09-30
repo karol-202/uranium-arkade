@@ -57,16 +57,16 @@ class SwingFlowLayout(props: Props) : SwingAbstractComponent<SwingFlowLayout.Pro
 	}
 }
 
-private typealias Provider<P> = SwingFlowLayout.PropsProvider<P>
-fun <P : Provider<P>> SwingElement<P>.withFlowLayoutProps(builder: Builder<SwingFlowLayout.Props>) =
+private typealias SFLProvider<P> = SwingFlowLayout.PropsProvider<P>
+fun <P : SFLProvider<P>> SwingElement<P>.withFlowLayoutProps(builder: Builder<SwingFlowLayout.Props>) =
 		withProps { withFlowLayoutProps(builder) }
 
 fun SwingRenderBuilder.flowLayout(key: Any = AutoKey,
                                   props: SwingFlowLayout.Props = SwingFlowLayout.Props(key),
                                   block: SwingRenderBuilder.() -> Unit = {}) =
 		component(::SwingFlowLayout, props).content(block)
-fun <P : Provider<P>> SwingElement<P>.align(align: SwingFlowLayout.Align) = withFlowLayoutProps { copy(align = align.prop()) }
-fun <P : Provider<P>> SwingElement<P>.alignOnBaseline(align: Boolean) = withFlowLayoutProps { copy(alignOnBaseline = align.prop()) }
-fun <P : Provider<P>> SwingElement<P>.horizontalGap(gap: Int) = withFlowLayoutProps { copy(horizontalGap = gap.prop()) }
-fun <P : Provider<P>> SwingElement<P>.verticalGap(gap: Int) = withFlowLayoutProps { copy(verticalGap = gap.prop()) }
-fun <P : Provider<P>> SwingElement<P>.content(block: SwingRenderBuilder.() -> Unit) = withFlowLayoutProps { withSwingProps { copy(children = block.render()) } }
+fun <P : SFLProvider<P>> SwingElement<P>.align(align: SwingFlowLayout.Align) = withFlowLayoutProps { copy(align = align.prop()) }
+fun <P : SFLProvider<P>> SwingElement<P>.alignOnBaseline(align: Boolean) = withFlowLayoutProps { copy(alignOnBaseline = align.prop()) }
+fun <P : SFLProvider<P>> SwingElement<P>.horizontalGap(gap: Int) = withFlowLayoutProps { copy(horizontalGap = gap.prop()) }
+fun <P : SFLProvider<P>> SwingElement<P>.verticalGap(gap: Int) = withFlowLayoutProps { copy(verticalGap = gap.prop()) }
+fun <P : SFLProvider<P>> SwingElement<P>.content(block: SwingRenderBuilder.() -> Unit) = withFlowLayoutProps { withSwingProps { copy(children = block.render()) } }

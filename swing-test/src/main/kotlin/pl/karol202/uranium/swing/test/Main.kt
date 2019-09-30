@@ -1,6 +1,6 @@
 package pl.karol202.uranium.swing.test
 
-import pl.karol202.uranium.core.common.BaseProps
+import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.swing.SwingRenderBuilder
@@ -20,7 +20,7 @@ fun main()
 	SwingFrame.withRoot { + counter(0) }.withTitle("Uranium test").withSize(640, 480).show()
 }
 
-class CounterComponent(props: BaseProps) : SwingStatefulComponent<BaseProps, CounterComponent.State>(props, State())
+class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, CounterComponent.State>(props, State())
 {
 	data class State(val text: String = "start",
 	                 val checked: Boolean = false) : UState
@@ -32,6 +32,7 @@ class CounterComponent(props: BaseProps) : SwingStatefulComponent<BaseProps, Cou
 			+ textField(key = 1).text(state.text)
 			+ checkBox(key = 2).text("Checkbox").selected(state.checked).onSelect { setChecked(it) }
 			+ radioButton(key = 3).text("Radio").selected(state.checked).onSelect { setChecked(it) }
+			+ toggleButton(key = 4).text("Toggle").selected(state.checked).onClick { setChecked(false) }
 		}
 	}
 
@@ -40,4 +41,4 @@ class CounterComponent(props: BaseProps) : SwingStatefulComponent<BaseProps, Cou
 	private fun setChecked(checked: Boolean) = setState(state.copy(checked = checked))
 }
 
-fun SwingRenderBuilder.counter(key: Any) = component(::CounterComponent, BaseProps(key))
+fun SwingRenderBuilder.counter(key: Any) = component(::CounterComponent, BasicProps(key))

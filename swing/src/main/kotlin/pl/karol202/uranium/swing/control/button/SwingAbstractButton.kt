@@ -5,15 +5,12 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.Builder
 import pl.karol202.uranium.core.util.Prop
-import pl.karol202.uranium.core.util.RenderBuilder
 import pl.karol202.uranium.core.util.prop
 import pl.karol202.uranium.swing.*
 import pl.karol202.uranium.swing.util.HorizontalAlign
 import pl.karol202.uranium.swing.util.VerticalAlign
 import java.awt.Insets
 import java.awt.event.ActionListener
-import java.awt.event.ItemEvent
-import java.awt.event.ItemListener
 import javax.swing.AbstractButton
 import javax.swing.Icon
 
@@ -44,10 +41,9 @@ class SwingAbstractButton(private val native: AbstractButton,
 	                 val multiClickThreshold: Prop<Long> = Prop.NoValue,
 	                 val mnemonic: Prop<Int> = Prop.NoValue,
 	                 val displayedMnemonicIndex: Prop<Int> = Prop.NoValue,
-	                 val onClick: Prop<() -> Unit> = Prop.NoValue,
-	                 val onSelect: Prop<(Boolean) -> Unit> = Prop.NoValue) : UProps by swingProps,
-	                                                                         SwingNativeComponent.PropsProvider<Props>,
-                                                                             PropsProvider<Props>
+	                 val onClick: Prop<() -> Unit> = Prop.NoValue) : UProps,
+	                                                                 SwingNativeComponent.PropsProvider<Props>,
+	                                                                 PropsProvider<Props>
 	{
 		override val abstractButtonProps = this
 
@@ -64,23 +60,20 @@ class SwingAbstractButton(private val native: AbstractButton,
 	}
 
 	private val actionListener = ActionListener { props.onClick.value?.invoke() }
-	private val itemListener = ItemListener { props.onSelect.value?.invoke(it.stateChange == ItemEvent.SELECTED) }
 
 	override fun onAttach(parentContext: InvalidateableSwingContext)
 	{
 		super.onAttach(parentContext)
 		native.addActionListener(actionListener)
-		native.addItemListener(itemListener)
 	}
 
 	override fun onDetach(parentContext: InvalidateableSwingContext)
 	{
 		super.onDetach(parentContext)
 		native.removeActionListener(actionListener)
-		native.removeItemListener(itemListener)
 	}
 
-	override fun RenderBuilder<SwingNative>.render()
+	override fun SwingRenderBuilder.render()
 	{
 		+ nativeComponent(native = { native }, props = props.swingProps)
 		onUpdate()
@@ -117,30 +110,28 @@ fun SwingRenderBuilder.abstractButton(native: () -> AbstractButton,
                                       props: SwingAbstractButton.Props = SwingAbstractButton.Props(key)) =
 		component({ SwingAbstractButton(native(), it) }, props)
 
-private typealias Provider<P> = SwingAbstractButton.PropsProvider<P>
-fun <P : Provider<P>> SwingElement<P>.withAbstractButtonProps(builder: Builder<SwingAbstractButton.Props>) =
-		withProps { withAbstractButtonProps(builder) }
-fun <P : Provider<P>> SwingElement<P>.text(text: String?) = withAbstractButtonProps { copy(text = text.prop()) }
-fun <P : Provider<P>> SwingElement<P>.icon(icon: Icon?) = withAbstractButtonProps { copy(icon = icon.prop()) }
-fun <P : Provider<P>> SwingElement<P>.pressedIcon(icon: Icon?) = withAbstractButtonProps { copy(pressedIcon = icon.prop()) }
-fun <P : Provider<P>> SwingElement<P>.selectedIcon(icon: Icon?) = withAbstractButtonProps { copy(selectedIcon = icon.prop()) }
-fun <P : Provider<P>> SwingElement<P>.rolloverIcon(icon: Icon?) = withAbstractButtonProps { copy(rolloverIcon = icon.prop()) }
-fun <P : Provider<P>> SwingElement<P>.rolloverSelectedIcon(icon: Icon?) = withAbstractButtonProps { copy(rolloverSelectedIcon = icon.prop()) }
-fun <P : Provider<P>> SwingElement<P>.disabledIcon(icon: Icon?) = withAbstractButtonProps { copy(disabledIcon = icon.prop()) }
-fun <P : Provider<P>> SwingElement<P>.disabledSelectedIcon(icon: Icon?) = withAbstractButtonProps { copy(disabledSelectedIcon = icon.prop()) }
-fun <P : Provider<P>> SwingElement<P>.iconTextGap(gap: Int) = withAbstractButtonProps { copy(iconTextGap = gap.prop()) }
-fun <P : Provider<P>> SwingElement<P>.borderPainted(painted: Boolean) = withAbstractButtonProps { copy(borderPainted = painted.prop()) }
-fun <P : Provider<P>> SwingElement<P>.contentAreaFilled(filled: Boolean) = withAbstractButtonProps { copy(contentAreaFilled = filled.prop()) }
-fun <P : Provider<P>> SwingElement<P>.focusPainted(painted: Boolean) = withAbstractButtonProps { copy(focusPainted = painted.prop()) }
-fun <P : Provider<P>> SwingElement<P>.rolloverEnabled(enabled: Boolean) = withAbstractButtonProps { copy(rolloverEnabled = enabled.prop()) }
-fun <P : Provider<P>> SwingElement<P>.selected(selected: Boolean) = withAbstractButtonProps { copy(selected = selected.prop()) }
-fun <P : Provider<P>> SwingElement<P>.horizontalAlign(align: HorizontalAlign) = withAbstractButtonProps { copy(horizontalAlign = align.prop()) }
-fun <P : Provider<P>> SwingElement<P>.verticalAlign(align: VerticalAlign) = withAbstractButtonProps { copy(verticalAlign = align.prop()) }
-fun <P : Provider<P>> SwingElement<P>.horizontalTextPosition(position: HorizontalAlign) = withAbstractButtonProps { copy(horizontalTextPosition = position.prop()) }
-fun <P : Provider<P>> SwingElement<P>.verticalTextPosition(position: VerticalAlign) = withAbstractButtonProps { copy(verticalTextPosition = position.prop()) }
-fun <P : Provider<P>> SwingElement<P>.margin(margin: Insets?) = withAbstractButtonProps { copy(margin = margin.prop()) }
-fun <P : Provider<P>> SwingElement<P>.multiClickThreshold(threshold: Long) = withAbstractButtonProps { copy(multiClickThreshold = threshold.prop()) }
-fun <P : Provider<P>> SwingElement<P>.onClick(onClick: () -> Unit) = withAbstractButtonProps { copy(onClick = onClick.prop()) }
-fun <P : Provider<P>> SwingElement<P>.onSelect(onSelect: (Boolean) -> Unit) = withAbstractButtonProps { copy(onSelect = onSelect.prop()) }
-fun <P : Provider<P>> SwingElement<P>.mnemonic(mnemonic: Int) = withAbstractButtonProps { copy(mnemonic = mnemonic.prop()) }
-fun <P : Provider<P>> SwingElement<P>.displayedMnemonicIndex(index: Int) = withAbstractButtonProps { copy(displayedMnemonicIndex = index.prop()) }
+private typealias SABProvider<P> = SwingAbstractButton.PropsProvider<P>
+fun <P : SABProvider<P>> SwingElement<P>.withAbstractButtonProps(builder: Builder<SwingAbstractButton.Props>) = withProps { withAbstractButtonProps(builder) }
+fun <P : SABProvider<P>> SwingElement<P>.text(text: String?) = withAbstractButtonProps { copy(text = text.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.icon(icon: Icon?) = withAbstractButtonProps { copy(icon = icon.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.pressedIcon(icon: Icon?) = withAbstractButtonProps { copy(pressedIcon = icon.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.selectedIcon(icon: Icon?) = withAbstractButtonProps { copy(selectedIcon = icon.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.rolloverIcon(icon: Icon?) = withAbstractButtonProps { copy(rolloverIcon = icon.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.rolloverSelectedIcon(icon: Icon?) = withAbstractButtonProps { copy(rolloverSelectedIcon = icon.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.disabledIcon(icon: Icon?) = withAbstractButtonProps { copy(disabledIcon = icon.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.disabledSelectedIcon(icon: Icon?) = withAbstractButtonProps { copy(disabledSelectedIcon = icon.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.iconTextGap(gap: Int) = withAbstractButtonProps { copy(iconTextGap = gap.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.borderPainted(painted: Boolean) = withAbstractButtonProps { copy(borderPainted = painted.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.contentAreaFilled(filled: Boolean) = withAbstractButtonProps { copy(contentAreaFilled = filled.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.focusPainted(painted: Boolean) = withAbstractButtonProps { copy(focusPainted = painted.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.rolloverEnabled(enabled: Boolean) = withAbstractButtonProps { copy(rolloverEnabled = enabled.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.selected(selected: Boolean) = withAbstractButtonProps { copy(selected = selected.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.horizontalAlign(align: HorizontalAlign) = withAbstractButtonProps { copy(horizontalAlign = align.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.verticalAlign(align: VerticalAlign) = withAbstractButtonProps { copy(verticalAlign = align.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.horizontalTextPosition(position: HorizontalAlign) = withAbstractButtonProps { copy(horizontalTextPosition = position.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.verticalTextPosition(position: VerticalAlign) = withAbstractButtonProps { copy(verticalTextPosition = position.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.margin(margin: Insets?) = withAbstractButtonProps { copy(margin = margin.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.multiClickThreshold(threshold: Long) = withAbstractButtonProps { copy(multiClickThreshold = threshold.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.mnemonic(mnemonic: Int) = withAbstractButtonProps { copy(mnemonic = mnemonic.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.displayedMnemonicIndex(index: Int) = withAbstractButtonProps { copy(displayedMnemonicIndex = index.prop()) }
+fun <P : SABProvider<P>> SwingElement<P>.onClick(onClick: () -> Unit) = withAbstractButtonProps { copy(onClick = onClick.prop()) }
