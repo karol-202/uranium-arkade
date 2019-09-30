@@ -1,5 +1,6 @@
 package pl.karol202.uranium.swing.control.text
 
+import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.context.InvalidateableContext
@@ -20,12 +21,8 @@ import javax.swing.text.NavigationFilter
 class SwingAbstractTextComponent(private val native: JTextComponent,
                                  props: Props) : SwingAbstractComponent<SwingAbstractTextComponent.Props>(props)
 {
-    companion object
-    {
-        fun props(key: Any) = Props(SwingNativeComponent.props(key))
-    }
-
-    data class Props(override val swingProps: SwingNativeComponent.Props,
+    data class Props(override val key: Any = AutoKey,
+                     override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
                      val text: Prop<String?> = Prop.NoValue,
                      val caretPosition: Prop<Int> = Prop.NoValue,
                      val selectionStart: Prop<Int> = Prop.NoValue,
@@ -39,7 +36,7 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
                      val caretColor: Prop<Color> = Prop.NoValue,
                      val editable: Prop<Boolean> = Prop.NoValue,
                      val margin: Prop<Insets> = Prop.NoValue,
-                     val onCaretMove: Prop<(CaretEvent) -> Unit> = Prop.NoValue) : UProps by swingProps,
+                     val onCaretMove: Prop<(CaretEvent) -> Unit> = Prop.NoValue) : UProps,
                                                                                    SwingNativeComponent.PropsProvider<Props>,
                                                                                    PropsProvider<Props>
     {
@@ -73,7 +70,7 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
 
     override fun RenderBuilder<SwingNative>.render()
     {
-        + nativeComponent(native = native, props = props.swingProps)
+        + nativeComponent(native = { native }, props = props.swingProps)
         onUpdate()
     }
 
@@ -94,33 +91,25 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
     }
 }
 
-fun SwingRenderBuilder.abstractTextComponent(native: JTextComponent, props: SwingAbstractTextComponent.Props) =
-        component({ SwingAbstractTextComponent(native, it) }, props)
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.text(text: String?) =
-        withProps { withAbstractTextProps { copy(text = text.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.caretPosition(position: Int) =
-        withProps { withAbstractTextProps { copy(caretPosition = position.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.selectionStart(position: Int) =
-        withProps { withAbstractTextProps { copy(selectionStart = position.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.selectionEnd(position: Int) =
-        withProps { withAbstractTextProps { copy(selectionEnd = position.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.highlighter(highlighter: Highlighter) =
-        withProps { withAbstractTextProps { copy(highlighter = highlighter.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.keymap(keymap: Keymap) =
-        withProps { withAbstractTextProps { copy(keymap = keymap.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.navigationFilter(filter: NavigationFilter) =
-        withProps { withAbstractTextProps { copy(navigationFilter = filter.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.selectionColor(color: Color) =
-        withProps { withAbstractTextProps { copy(selectionColor = color.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.selectedTextColor(color: Color) =
-        withProps { withAbstractTextProps { copy(selectedTextColor = color.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.disabledTextColor(color: Color) =
-        withProps { withAbstractTextProps { copy(disabledTextColor = color.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.caretColor(color: Color) =
-        withProps { withAbstractTextProps { copy(caretColor = color.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.editable(editable: Boolean) =
-        withProps { withAbstractTextProps { copy(editable = editable.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.margin(margin: Insets) =
-        withProps { withAbstractTextProps { copy(margin = margin.prop()) } }
-fun <P : SwingAbstractTextComponent.PropsProvider<P>> SwingElement<P>.onCaretMove(onCaretMove: (CaretEvent) -> Unit) =
-        withProps { withAbstractTextProps { copy(onCaretMove = onCaretMove.prop()) } }
+fun SwingRenderBuilder.abstractTextComponent(native: () -> JTextComponent,
+                                             key: Any = AutoKey,
+                                             props: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props(key)) =
+        component({ SwingAbstractTextComponent(native(), it) }, props)
+
+private typealias Provider<P> = SwingAbstractTextComponent.PropsProvider<P>
+fun <P : Provider<P>> SwingElement<P>.withAbstractTextProps(builder: Builder<SwingAbstractTextComponent.Props>) =
+        withProps { withAbstractTextProps(builder) }
+fun <P : Provider<P>> SwingElement<P>.text(text: String?) = withAbstractTextProps { copy(text = text.prop()) }
+fun <P : Provider<P>> SwingElement<P>.caretPosition(position: Int) = withAbstractTextProps { copy(caretPosition = position.prop()) }
+fun <P : Provider<P>> SwingElement<P>.selectionStart(position: Int) = withAbstractTextProps { copy(selectionStart = position.prop()) }
+fun <P : Provider<P>> SwingElement<P>.selectionEnd(position: Int) = withAbstractTextProps { copy(selectionEnd = position.prop()) }
+fun <P : Provider<P>> SwingElement<P>.highlighter(highlighter: Highlighter) = withAbstractTextProps { copy(highlighter = highlighter.prop()) }
+fun <P : Provider<P>> SwingElement<P>.keymap(keymap: Keymap) = withAbstractTextProps { copy(keymap = keymap.prop()) }
+fun <P : Provider<P>> SwingElement<P>.navigationFilter(filter: NavigationFilter) = withAbstractTextProps { copy(navigationFilter = filter.prop()) }
+fun <P : Provider<P>> SwingElement<P>.selectionColor(color: Color) = withAbstractTextProps { copy(selectionColor = color.prop()) }
+fun <P : Provider<P>> SwingElement<P>.selectedTextColor(color: Color) = withAbstractTextProps { copy(selectedTextColor = color.prop()) }
+fun <P : Provider<P>> SwingElement<P>.disabledTextColor(color: Color) = withAbstractTextProps { copy(disabledTextColor = color.prop()) }
+fun <P : Provider<P>> SwingElement<P>.caretColor(color: Color) = withAbstractTextProps { copy(caretColor = color.prop()) }
+fun <P : Provider<P>> SwingElement<P>.editable(editable: Boolean) = withAbstractTextProps { copy(editable = editable.prop()) }
+fun <P : Provider<P>> SwingElement<P>.margin(margin: Insets) = withAbstractTextProps { copy(margin = margin.prop()) }
+fun <P : Provider<P>> SwingElement<P>.onCaretMove(onMove: (CaretEvent) -> Unit) = withAbstractTextProps { copy(onCaretMove = onMove.prop()) }

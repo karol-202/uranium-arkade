@@ -8,14 +8,16 @@ import pl.karol202.uranium.swing.SwingNative
 import pl.karol202.uranium.swing.SwingRenderBuilder
 import javax.swing.JRadioButton
 
-class SwingRadioButton(props: SwingAbstractButton.Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
+class SwingRadioButton(private val native: JRadioButton,
+                       props: SwingAbstractButton.Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
 {
-	private val native = JRadioButton()
-
 	override fun RenderBuilder<SwingNative>.render()
 	{
-		+ abstractButton(native, props)
+		+ abstractButton({ native }, props)
 	}
 }
 
-fun SwingRenderBuilder.radioButton(key: Any = AutoKey) = component(::SwingRadioButton, SwingAbstractButton.props(key))
+fun SwingRenderBuilder.radioButton(native: () -> JRadioButton = ::JRadioButton,
+                                   key: Any = AutoKey,
+                                   props: SwingAbstractButton.Props = SwingAbstractButton.Props(key)) =
+		component({ SwingRadioButton(native(), it) }, props)

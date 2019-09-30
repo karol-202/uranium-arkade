@@ -11,12 +11,15 @@ import pl.karol202.uranium.swing.SwingNativeComponent
 import pl.karol202.uranium.swing.SwingRenderBuilder
 import javax.swing.JTextField
 
-class SwingTextField(props: Props) : SwingAbstractComponent<SwingTextField.Props>(props)
+class SwingTextField(private val native: JTextField,
+                     props: Props) : SwingAbstractComponent<SwingTextField.Props>(props)
 {
-	data class Props(override val abstractTextProps: SwingAbstractTextComponent.Props) : UProps by abstractTextProps,
-	                                                                                     SwingNativeComponent.PropsProvider<Props>,
-	                                                                                     SwingAbstractTextComponent.PropsProvider<Props>,
-	                                                                                     PropsProvider<Props>
+	data class Props(override val key: Any = AutoKey,
+	                 override val abstractTextProps: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props()) :
+			UProps,
+			SwingNativeComponent.PropsProvider<Props>,
+			SwingAbstractTextComponent.PropsProvider<Props>,
+			PropsProvider<Props>
 	{
 		override val swingProps = abstractTextProps.swingProps
 		override val textFieldProps = this
@@ -37,13 +40,13 @@ class SwingTextField(props: Props) : SwingAbstractComponent<SwingTextField.Props
 		fun withTextFieldProps(builder: Builder<Props>): S
 	}
 
-	private val native = JTextField()
-
 	override fun RenderBuilder<SwingNative>.render()
 	{
-		+ abstractTextComponent(native = native, props = props.abstractTextProps)
+		+ abstractTextComponent(native = { native }, props = props.abstractTextProps)
 	}
 }
 
-fun SwingRenderBuilder.textField(key: Any = AutoKey) =
-		component(::SwingTextField, SwingTextField.Props(SwingAbstractTextComponent.props(key)))
+fun SwingRenderBuilder.textField(native: () -> JTextField = ::JTextField,
+                                 key: Any = AutoKey,
+                                 props: SwingTextField.Props = SwingTextField.Props(key)) =
+		component({ SwingTextField(native(), it) }, props)

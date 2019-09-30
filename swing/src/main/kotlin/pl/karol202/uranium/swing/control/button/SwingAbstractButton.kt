@@ -1,5 +1,6 @@
 package pl.karol202.uranium.swing.control.button
 
+import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.Builder
@@ -19,12 +20,8 @@ import javax.swing.Icon
 class SwingAbstractButton(private val native: AbstractButton,
                           props: Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
 {
-	companion object
-	{
-		fun props(key: Any) = Props(SwingNativeComponent.props(key))
-	}
-
-	data class Props(override val swingProps: SwingNativeComponent.Props,
+	data class Props(override val key: Any = AutoKey,
+	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
 	                 val text: Prop<String?> = Prop.NoValue,
 	                 val icon: Prop<Icon?> = Prop.NoValue,
 	                 val pressedIcon: Prop<Icon?> = Prop.NoValue,
@@ -85,7 +82,7 @@ class SwingAbstractButton(private val native: AbstractButton,
 
 	override fun RenderBuilder<SwingNative>.render()
 	{
-		+ nativeComponent(native = native, props = props.swingProps)
+		+ nativeComponent(native = { native }, props = props.swingProps)
 		onUpdate()
 	}
 
@@ -115,12 +112,14 @@ class SwingAbstractButton(private val native: AbstractButton,
 	}
 }
 
+fun SwingRenderBuilder.abstractButton(native: () -> AbstractButton,
+                                      key: Any = AutoKey,
+                                      props: SwingAbstractButton.Props = SwingAbstractButton.Props(key)) =
+		component({ SwingAbstractButton(native(), it) }, props)
+
 private typealias Provider<P> = SwingAbstractButton.PropsProvider<P>
 fun <P : Provider<P>> SwingElement<P>.withAbstractButtonProps(builder: Builder<SwingAbstractButton.Props>) =
 		withProps { withAbstractButtonProps(builder) }
-
-fun SwingRenderBuilder.abstractButton(native: AbstractButton, props: SwingAbstractButton.Props) =
-		component({ SwingAbstractButton(native, it) }, props)
 fun <P : Provider<P>> SwingElement<P>.text(text: String?) = withAbstractButtonProps { copy(text = text.prop()) }
 fun <P : Provider<P>> SwingElement<P>.icon(icon: Icon?) = withAbstractButtonProps { copy(icon = icon.prop()) }
 fun <P : Provider<P>> SwingElement<P>.pressedIcon(icon: Icon?) = withAbstractButtonProps { copy(pressedIcon = icon.prop()) }

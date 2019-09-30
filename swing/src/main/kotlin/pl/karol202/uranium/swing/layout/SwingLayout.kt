@@ -1,5 +1,6 @@
 package pl.karol202.uranium.swing.layout
 
+import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.RenderBuilder
 import pl.karol202.uranium.swing.*
@@ -14,9 +15,11 @@ class SwingLayout(layoutManager: LayoutManager,
 
 	override fun RenderBuilder<SwingNative>.render()
 	{
-		+ nativeComponent(native = native, contextOverride = panelContext, props = props)
+		+ nativeComponent(native = { native }, contextOverride = { panelContext }, props = props)
 	}
 }
 
-fun SwingRenderBuilder.layout(layoutManager: LayoutManager, props: SwingNativeComponent.Props) =
-		component({ SwingLayout(layoutManager, it) }, props)
+fun SwingRenderBuilder.layout(layoutManager: () -> LayoutManager,
+                              key: Any = AutoKey,
+                              props: SwingNativeComponent.Props = SwingNativeComponent.Props(key)) =
+		component({ SwingLayout(layoutManager(), it) }, props)

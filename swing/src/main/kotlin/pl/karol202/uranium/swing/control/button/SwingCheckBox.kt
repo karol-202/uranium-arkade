@@ -8,14 +8,16 @@ import pl.karol202.uranium.swing.SwingNative
 import pl.karol202.uranium.swing.SwingRenderBuilder
 import javax.swing.JCheckBox
 
-class SwingCheckBox(props: SwingAbstractButton.Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
+class SwingCheckBox(private val native: JCheckBox,
+                    props: SwingAbstractButton.Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
 {
-	private val native = JCheckBox()
-
 	override fun RenderBuilder<SwingNative>.render()
 	{
-		+ abstractButton(native, props)
+		+ abstractButton({ native }, props)
 	}
 }
 
-fun SwingRenderBuilder.checkBox(key: Any = AutoKey) = component(::SwingCheckBox, SwingAbstractButton.props(key))
+fun SwingRenderBuilder.checkBox(native: () -> JCheckBox = ::JCheckBox,
+                                key: Any = AutoKey,
+                                props: SwingAbstractButton.Props = SwingAbstractButton.Props(key)) =
+		component({ SwingCheckBox(native(), it) }, props)

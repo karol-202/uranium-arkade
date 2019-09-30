@@ -1,6 +1,6 @@
 package pl.karol202.uranium.swing
 
-import pl.karol202.uranium.core.common.BaseProps
+import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.Builder
@@ -19,12 +19,7 @@ class SwingNativeComponent(private val native: SwingNative,
                            private val contextOverride: SwingContext?,
                            props: Props) : SwingAbstractComponent<SwingNativeComponent.Props>(props)
 {
-	companion object
-	{
-		fun props(key: Any) = Props(BaseProps(key))
-	}
-
-	data class Props(val baseProps: BaseProps,
+	data class Props(override val key: Any = AutoKey,
 	                 val children: List<SwingElement<*>> = emptyList(),
 	                 val componentListener: Prop<ComponentListener> = Prop.NoValue,
 	                 val focusListener: Prop<FocusListener> = Prop.NoValue,
@@ -64,7 +59,7 @@ class SwingNativeComponent(private val native: SwingNative,
 	                 val minimumSize: Prop<Dimension?> = Prop.NoValue,
 	                 val maximumSize: Prop<Dimension?> = Prop.NoValue,
 	                 val preferredSize: Prop<Dimension?> = Prop.NoValue,
-	                 val size: Prop<Dimension> = Prop.NoValue) : UProps by baseProps,
+	                 val size: Prop<Dimension> = Prop.NoValue) : UProps,
 	                                                             PropsProvider<Props>
 	{
 		override val swingProps = this
@@ -169,12 +164,14 @@ class SwingNativeComponent(private val native: SwingNative,
 	}
 }
 
-private typealias Provider<P> = SwingNativeComponent.PropsProvider<P>
-fun <P : Provider<P>> SwingElement<P>.withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
-		withProps { withSwingProps(builder) }
+fun SwingRenderBuilder.nativeComponent(native: () -> SwingNative,
+                                       contextOverride: (() -> SwingContext)? = null,
+                                       key: Any = AutoKey,
+                                       props: SwingNativeComponent.Props = SwingNativeComponent.Props(key)) =
+		component({ SwingNativeComponent(native(), contextOverride?.invoke(), it) }, props)
 
-fun SwingRenderBuilder.nativeComponent(native: SwingNative, contextOverride: SwingContext? = null, props: SwingNativeComponent.Props) =
-		component({ SwingNativeComponent(native, contextOverride, it) }, props)
+private typealias Provider<P> = SwingNativeComponent.PropsProvider<P>
+fun <P : Provider<P>> SwingElement<P>.withSwingProps(builder: Builder<SwingNativeComponent.Props>) = withProps { withSwingProps(builder) }
 fun <P : Provider<P>> SwingElement<P>.componentListener(listener: ComponentListener) = withSwingProps { copy(componentListener = listener.prop()) }
 fun <P : Provider<P>> SwingElement<P>.focusListener(listener: FocusListener) = withSwingProps { copy(focusListener = listener.prop()) }
 fun <P : Provider<P>> SwingElement<P>.hierarchyBoundsListener(listener: HierarchyBoundsListener) = withSwingProps { copy(hierarchyBoundsListener = listener.prop()) }

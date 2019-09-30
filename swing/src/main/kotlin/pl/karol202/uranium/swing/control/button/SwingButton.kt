@@ -8,14 +8,16 @@ import pl.karol202.uranium.swing.SwingNative
 import pl.karol202.uranium.swing.SwingRenderBuilder
 import javax.swing.JButton
 
-class SwingButton(props: SwingAbstractButton.Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
+class SwingButton(private val native: JButton,
+                  props: SwingAbstractButton.Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
 {
-	private val native = JButton()
-
 	override fun RenderBuilder<SwingNative>.render()
 	{
-		+ abstractButton(native, props)
+		+ abstractButton({ native }, props)
 	}
 }
 
-fun SwingRenderBuilder.button(key: Any = AutoKey) = component(::SwingButton, SwingAbstractButton.props(key))
+fun SwingRenderBuilder.button(native: () -> JButton = ::JButton,
+                              key: Any = AutoKey,
+                              props: SwingAbstractButton.Props = SwingAbstractButton.Props(key)) =
+		component({ SwingButton(native(), it) }, props)
