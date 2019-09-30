@@ -45,6 +45,8 @@ class SwingAbstractButton(private val native: AbstractButton,
 	                 val verticalTextPosition: Prop<VerticalAlign> = Prop.NoValue,
 	                 val margin: Prop<Insets?> = Prop.NoValue,
 	                 val multiClickThreshold: Prop<Long> = Prop.NoValue,
+	                 val mnemonic: Prop<Int> = Prop.NoValue,
+	                 val displayedMnemonicIndex: Prop<Int> = Prop.NoValue,
 	                 val onClick: Prop<() -> Unit> = Prop.NoValue,
 	                 val onSelect: Prop<(Boolean) -> Unit> = Prop.NoValue) : UProps by swingProps,
 	                                                                         SwingNativeComponent.PropsProvider<Props>,
@@ -108,6 +110,8 @@ class SwingAbstractButton(private val native: AbstractButton,
 		props.verticalTextPosition.ifPresent { verticalTextPosition = it.code }
 		props.margin.ifPresent { margin = it }
 		props.multiClickThreshold.ifPresent { multiClickThreshhold = it }
+		props.mnemonic.ifPresent { mnemonic = it }
+		props.displayedMnemonicIndex.ifPresent { displayedMnemonicIndex = it }
 	}
 }
 
@@ -139,3 +143,5 @@ fun <P : Provider<P>> SwingElement<P>.margin(margin: Insets?) = withAbstractButt
 fun <P : Provider<P>> SwingElement<P>.multiClickThreshold(threshold: Long) = withAbstractButtonProps { copy(multiClickThreshold = threshold.prop()) }
 fun <P : Provider<P>> SwingElement<P>.onClick(onClick: () -> Unit) = withAbstractButtonProps { copy(onClick = onClick.prop()) }
 fun <P : Provider<P>> SwingElement<P>.onSelect(onSelect: (Boolean) -> Unit) = withAbstractButtonProps { copy(onSelect = onSelect.prop()) }
+fun <P : Provider<P>> SwingElement<P>.mnemonic(mnemonic: Int) = withAbstractButtonProps { copy(mnemonic = mnemonic.prop()) }
+fun <P : Provider<P>> SwingElement<P>.displayedMnemonicIndex(index: Int) = withAbstractButtonProps { copy(displayedMnemonicIndex = index.prop()) }
