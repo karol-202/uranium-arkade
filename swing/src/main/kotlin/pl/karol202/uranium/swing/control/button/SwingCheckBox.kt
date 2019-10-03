@@ -4,8 +4,8 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.Builder
-import pl.karol202.uranium.core.util.Prop
-import pl.karol202.uranium.core.util.prop
+import pl.karol202.uranium.swing.util.Prop
+import pl.karol202.uranium.swing.util.prop
 import pl.karol202.uranium.swing.SwingAbstractComponent
 import pl.karol202.uranium.swing.SwingElement
 import pl.karol202.uranium.swing.SwingNativeComponent

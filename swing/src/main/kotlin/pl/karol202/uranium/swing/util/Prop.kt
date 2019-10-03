@@ -1,4 +1,4 @@
-package pl.karol202.uranium.core.util
+package pl.karol202.uranium.swing.util
 
 sealed class Prop<out T>
 {

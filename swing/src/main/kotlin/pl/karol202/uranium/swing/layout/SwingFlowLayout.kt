@@ -5,6 +5,8 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.*
 import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.util.Prop
+import pl.karol202.uranium.swing.util.prop
 import java.awt.FlowLayout
 
 class SwingFlowLayout(props: Props) : SwingAbstractComponent<SwingFlowLayout.Props>(props)
@@ -25,7 +27,7 @@ class SwingFlowLayout(props: Props) : SwingAbstractComponent<SwingFlowLayout.Pro
 	                 val horizontalGap: Prop<Int> = Prop.NoValue,
 	                 val verticalGap: Prop<Int> = Prop.NoValue) : UProps,
 	                                                              SwingNativeComponent.PropsProvider<Props>,
-                                                                  PropsProvider<Props>
+	                                                              PropsProvider<Props>
 	{
 		override val flowLayoutProps = this
 

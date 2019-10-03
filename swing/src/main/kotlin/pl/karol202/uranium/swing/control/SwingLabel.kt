@@ -4,8 +4,8 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.Builder
-import pl.karol202.uranium.core.util.Prop
-import pl.karol202.uranium.core.util.prop
+import pl.karol202.uranium.swing.util.Prop
+import pl.karol202.uranium.swing.util.prop
 import pl.karol202.uranium.swing.*
 import pl.karol202.uranium.swing.util.HorizontalAlign
 import pl.karol202.uranium.swing.util.VerticalAlign
@@ -26,7 +26,7 @@ class SwingLabel(private val native: JLabel,
 	                 val horizontalTextPosition: Prop<HorizontalAlign> = Prop.NoValue,
 	                 val verticalTextPosition: Prop<VerticalAlign> = Prop.NoValue) : UProps,
 	                                                                                 SwingNativeComponent.PropsProvider<Props>,
-                                                                                     PropsProvider<Props>
+	                                                                                 PropsProvider<Props>
 	{
 		override val labelProps = this
 
