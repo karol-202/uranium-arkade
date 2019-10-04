@@ -8,11 +8,10 @@ import pl.karol202.uranium.swing.SwingStatefulComponent
 import pl.karol202.uranium.swing.control.button.*
 import pl.karol202.uranium.swing.control.label
 import pl.karol202.uranium.swing.control.text
-import pl.karol202.uranium.swing.control.text.onTextChange
-import pl.karol202.uranium.swing.control.text.text
-import pl.karol202.uranium.swing.control.text.textField
+import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
 import pl.karol202.uranium.swing.layout.flowLayout
+import pl.karol202.uranium.swing.util.HorizontalAlign
 import javax.swing.UIManager
 
 fun main()
@@ -30,7 +29,7 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	{
 		+ flowLayout(key = 0) {
 			+ label(key = 0).text("Tekst: ${state.text} Stan: ${state.checked}")
-			+ textField(key = 1).text(state.text).onTextChange { setText(it) }
+			+ textField(key = 1).text(state.text).onTextChange { setText(it) }.horizontalAlign(HorizontalAlign.CENTER).columns(50)
 			+ checkBox(key = 2).text("Checkbox").selected(state.checked).onSelect { setChecked(it) }
 			+ radioButton(key = 3).text("Radio").selected(state.checked).onSelect { setChecked(it) }
 			+ toggleButton(key = 4).text(state.text).selected(state.checked).onClick { setChecked(false) }
