@@ -2,9 +2,9 @@ package pl.karol202.uranium.core.context
 
 interface UContext<N>
 {
-	fun attachNative(nativeComponent: N)
+	fun attachNative(native: N)
 
-	fun detachNative(nativeComponent: N)
+	fun detachNative(native: N)
 }
 
 interface ContextProvider<N>

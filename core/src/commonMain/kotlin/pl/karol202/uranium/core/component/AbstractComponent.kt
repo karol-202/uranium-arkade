@@ -14,13 +14,13 @@ abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 
 	override val context: UContext<N>? get() = parentContext
 
-	override fun attach(parentContext: InvalidateableContext<N>)
+	final override fun attach(parentContext: InvalidateableContext<N>)
 	{
 		this.parentContext = parentContext
 		onAttach(parentContext)
 	}
 
-	override fun detach()
+	final override fun detach()
 	{
 		onDetach(parentContext ?: throw IllegalStateException("Already detached"))
 		parentContext = null
@@ -36,7 +36,9 @@ abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 
 	protected abstract fun RenderBuilder<N>.render()
 
-	override fun modifyPropsInternal(props: P)
+	override fun onUpdate(previousProps: P) { }
+
+	final override fun modifyPropsInternal(props: P)
 	{
 		this.props = props
 	}

@@ -33,23 +33,29 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>) : Detacha
 
 	private fun UElement<N, *>.reuseOrRenderElement(renderer: Renderer<N>) = reuse(renderer) ?: render(renderer)
 
-	private fun UElement<N, *>.render(renderer: Renderer<N>): TreeNode<N, *> = renderer.renderElement(this, component.requireContext())
+	private fun UElement<N, *>.render(renderer: Renderer<N>): TreeNode<N, *> =
+			renderer.renderElement(this, component.requireContext())
 
-	private fun <P : UProps> UElement<N, P>.reuse(renderer: Renderer<N>) = findChildrenWithKey<P>(key)?.updated(this, renderer)
+	private fun <P : UProps> UElement<N, P>.reuse(renderer: Renderer<N>) =
+			findChildrenWithKey<P>(key)?.reused(this, renderer)
 
 	@Suppress("UNCHECKED_CAST")
 	private fun <P : UProps> findChildrenWithKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<N, P>
 
-	private fun updated(element: UElement<N, P>, renderer: Renderer<N>) =
-			if(needsRerender(element)) withNewProps(element).rendered(renderer)
+	private fun reused(element: UElement<N, P>, renderer: Renderer<N>) =
+			if(needsUpdate(element)) keepProps { prevProps -> withNewProps(element).rendered(renderer).updated(prevProps) }
 			else withNewProps(element)
 
 	// Returning false doesn't have to necessarily mean that props haven't changed
-	private fun needsRerender(element: UElement<N, P>) = component.props != element.props
+	private fun needsUpdate(element: UElement<N, P>) = component.props != element.props
+
+	private fun <R> keepProps(block: (P) -> R) = component.props.let(block)
 
 	private fun withNewProps(element: UElement<N, P>) = also { component.modifyPropsInternal(element.props) }
 
 	private fun rendered(renderer: Renderer<N>) = also { render(renderer) }
+
+	private fun updated(previousProps: P) = also { component.onUpdate(previousProps) }
 
 	override fun detach()
 	{
