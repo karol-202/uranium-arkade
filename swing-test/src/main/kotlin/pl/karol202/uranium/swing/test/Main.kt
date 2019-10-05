@@ -3,8 +3,8 @@ package pl.karol202.uranium.swing.test
 import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingRenderBuilder
-import pl.karol202.uranium.swing.SwingStatefulComponent
+import pl.karol202.uranium.swing.util.SwingRenderBuilder
+import pl.karol202.uranium.swing.util.SwingStatefulComponent
 import pl.karol202.uranium.swing.control.button.*
 import pl.karol202.uranium.swing.control.label
 import pl.karol202.uranium.swing.control.text

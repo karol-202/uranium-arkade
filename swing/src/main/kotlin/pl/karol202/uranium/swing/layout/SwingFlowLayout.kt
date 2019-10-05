@@ -3,10 +3,9 @@ package pl.karol202.uranium.swing.layout
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.util.*
-import pl.karol202.uranium.swing.*
-import pl.karol202.uranium.swing.util.Prop
-import pl.karol202.uranium.swing.util.prop
+import pl.karol202.uranium.core.util.render
+import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.util.*
 import java.awt.FlowLayout
 
 class SwingFlowLayout(props: Props) : SwingAbstractComponent<SwingFlowLayout.Props>(props)
@@ -45,7 +44,7 @@ class SwingFlowLayout(props: Props) : SwingAbstractComponent<SwingFlowLayout.Pro
 
 	private val layoutManager = FlowLayout()
 
-	override fun RenderBuilder<SwingNative>.render()
+	override fun SwingRenderBuilder.render()
 	{
 		+ layout(layoutManager = { layoutManager }, props = props.swingProps)
 		onUpdate()

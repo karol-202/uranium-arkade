@@ -10,7 +10,8 @@ abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 	final override var props = props
 		private set
 
-	private var parentContext: InvalidateableContext<N>? = null
+	var parentContext: InvalidateableContext<N>? = null
+		private set
 
 	override val context: UContext<N>? get() = parentContext
 
@@ -42,4 +43,6 @@ abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 	{
 		this.props = props
 	}
+
+	protected fun requireParentContext() = parentContext ?: throw IllegalStateException("Not attached")
 }

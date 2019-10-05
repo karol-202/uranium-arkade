@@ -3,9 +3,6 @@ package pl.karol202.uranium.swing
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.util.Builder
-import pl.karol202.uranium.swing.util.Prop
-import pl.karol202.uranium.swing.util.prop
 import pl.karol202.uranium.swing.util.*
 import java.awt.*
 import java.awt.event.*
@@ -20,6 +17,7 @@ class SwingNativeComponent(private val native: SwingNative,
                            props: Props) : SwingAbstractComponent<SwingNativeComponent.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
+	                 val constraints: Any? = null,
 	                 val children: List<SwingElement<*>> = emptyList(),
 	                 val componentListener: Prop<ComponentListener> = Prop.NoValue,
 	                 val focusListener: Prop<FocusListener> = Prop.NoValue,
@@ -90,51 +88,52 @@ class SwingNativeComponent(private val native: SwingNative,
 	private val ancestorListener = AncestorListenerDelegate { props.ancestorListener.value }
 	private val vetoableChangeListener = VetoableChangeListenerDelegate { props.vetoableChangeListener.value }
 
-	override fun onAttach(parentContext: InvalidateableSwingContext)
-	{
-		native.addComponentListener(componentListener)
-		native.addFocusListener(focusListener)
-		native.addHierarchyBoundsListener(hierarchyBoundsListener)
-		native.addHierarchyListener(hierarchyListener)
-		native.addInputMethodListener(inputMethodListener)
-		native.addKeyListener(keyListener)
-		native.addMouseListener(mouseListener)
-		native.addMouseMotionListener(mouseMotionListener)
-		native.addMouseWheelListener(mouseWheelListener)
-		native.addPropertyChangeListener(propertyChangeListener)
-		native.addContainerListener(containerListener)
-		native.addAncestorListener(ancestorListener)
-		native.addVetoableChangeListener(vetoableChangeListener)
+	override fun onAttach(parentContext: InvalidateableSwingContext) = native.apply {
+		addComponentListener(componentListener)
+		addFocusListener(focusListener)
+		addHierarchyBoundsListener(hierarchyBoundsListener)
+		addHierarchyListener(hierarchyListener)
+		addInputMethodListener(inputMethodListener)
+		addKeyListener(keyListener)
+		addMouseListener(mouseListener)
+		addMouseMotionListener(mouseMotionListener)
+		addMouseWheelListener(mouseWheelListener)
+		addPropertyChangeListener(propertyChangeListener)
+		addContainerListener(containerListener)
+		addAncestorListener(ancestorListener)
+		addVetoableChangeListener(vetoableChangeListener)
 
-		parentContext.attachNative(native)
-	}
+		parentContext.attachNative()
+	}.unit
 
-	override fun onDetach(parentContext: InvalidateableSwingContext)
-	{
-		native.removeComponentListener(componentListener)
-		native.removeFocusListener(focusListener)
-		native.removeHierarchyBoundsListener(hierarchyBoundsListener)
-		native.removeHierarchyListener(hierarchyListener)
-		native.removeInputMethodListener(inputMethodListener)
-		native.removeKeyListener(keyListener)
-		native.removeMouseListener(mouseListener)
-		native.removeMouseMotionListener(mouseMotionListener)
-		native.removeMouseWheelListener(mouseWheelListener)
-		native.removePropertyChangeListener(propertyChangeListener)
-		native.removeContainerListener(containerListener)
-		native.removeAncestorListener(ancestorListener)
-		native.removeVetoableChangeListener(vetoableChangeListener)
+	override fun onDetach(parentContext: InvalidateableSwingContext) = native.apply {
+		removeComponentListener(componentListener)
+		removeFocusListener(focusListener)
+		removeHierarchyBoundsListener(hierarchyBoundsListener)
+		removeHierarchyListener(hierarchyListener)
+		removeInputMethodListener(inputMethodListener)
+		removeKeyListener(keyListener)
+		removeMouseListener(mouseListener)
+		removeMouseMotionListener(mouseMotionListener)
+		removeMouseWheelListener(mouseWheelListener)
+		removePropertyChangeListener(propertyChangeListener)
+		removeContainerListener(containerListener)
+		removeAncestorListener(ancestorListener)
+		removeVetoableChangeListener(vetoableChangeListener)
 
-		parentContext.detachNative(native)
-	}
+		parentContext.detachNative()
+	}.unit
+
+	private fun SwingContext.attachNative() = attachNative(native.constrained(props.constraints))
+
+	private fun SwingContext.detachNative() = detachNative(native.notConstrained())
 
 	override fun SwingRenderBuilder.render()
 	{
 		+ props.children
-		onUpdate()
 	}
 
-	private fun onUpdate() = native.apply {
+	override fun onUpdate(previousProps: Props) = native.apply {
 		props.enabled.ifPresent { isEnabled = it }
 		props.visible.ifPresent { isVisible = it }
 		props.focusable.ifPresent { isFocusable = it }
@@ -161,6 +160,14 @@ class SwingNativeComponent(private val native: SwingNative,
 		props.maximumSize.ifPresent { maximumSize = it }
 		props.preferredSize.ifPresent { preferredSize = it }
 		props.size.ifPresent { size = it }
+
+		if(props.constraints != previousProps.constraints) requireParentContext().reattachNative()
+	}.unit
+
+	private fun SwingContext.reattachNative()
+	{
+		attachNative()
+		detachNative()
 	}
 }
 

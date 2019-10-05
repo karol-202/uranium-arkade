@@ -2,8 +2,11 @@ package pl.karol202.uranium.swing.layout
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.util.RenderBuilder
-import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.SwingContextImpl
+import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.util.SwingAbstractComponent
+import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import java.awt.LayoutManager
 import javax.swing.JPanel
 
@@ -13,7 +16,7 @@ class SwingLayout(layoutManager: LayoutManager,
 	private val native = JPanel(layoutManager)
 	private val panelContext = SwingContextImpl(native)
 
-	override fun RenderBuilder<SwingNative>.render()
+	override fun SwingRenderBuilder.render()
 	{
 		+ nativeComponent(native = { native }, contextOverride = { panelContext }, props = props)
 	}

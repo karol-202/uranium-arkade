@@ -3,13 +3,9 @@ package pl.karol202.uranium.swing.control.text
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.context.InvalidateableContext
-import pl.karol202.uranium.core.util.Builder
-import pl.karol202.uranium.swing.*
-import pl.karol202.uranium.swing.util.CaretListenerDelegate
-import pl.karol202.uranium.swing.util.DocumentChangeListenerDelegate
-import pl.karol202.uranium.swing.util.Prop
-import pl.karol202.uranium.swing.util.prop
+import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.util.*
 import java.awt.Color
 import java.awt.Insets
 import javax.swing.DropMode
@@ -59,14 +55,14 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
     private val caretListener = CaretListenerDelegate { props.onCaretMove.value }
     private val documentListener = DocumentChangeListenerDelegate { props.onTextChange.value }
 
-    override fun onAttach(parentContext: InvalidateableContext<SwingNative>)
+    override fun onAttach(parentContext: InvalidateableSwingContext)
     {
         super.onAttach(parentContext)
         native.addCaretListener(caretListener)
         native.document.addDocumentListener(documentListener)
     }
 
-    override fun onDetach(parentContext: InvalidateableContext<SwingNative>)
+    override fun onDetach(parentContext: InvalidateableSwingContext)
     {
         super.onDetach(parentContext)
         native.removeCaretListener(caretListener)

@@ -2,8 +2,8 @@ package pl.karol202.uranium.swing.control.button
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingAbstractComponent
-import pl.karol202.uranium.swing.SwingRenderBuilder
+import pl.karol202.uranium.swing.util.SwingAbstractComponent
+import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import javax.swing.JButton
 
 class SwingButton(private val native: JButton,

@@ -6,10 +6,3 @@ interface UContext<N>
 
 	fun detachNative(native: N)
 }
-
-interface ContextProvider<N>
-{
-	val context: UContext<N>?
-
-	fun requireContext() = context ?: throw NullPointerException("No context")
-}

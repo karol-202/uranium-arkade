@@ -3,10 +3,8 @@ package pl.karol202.uranium.swing.control.button
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.util.Builder
-import pl.karol202.uranium.swing.util.Prop
-import pl.karol202.uranium.swing.util.prop
-import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.util.*
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
 import javax.swing.JToggleButton

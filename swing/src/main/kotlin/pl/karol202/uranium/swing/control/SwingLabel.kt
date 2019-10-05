@@ -3,12 +3,9 @@ package pl.karol202.uranium.swing.control
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.util.Builder
-import pl.karol202.uranium.swing.util.Prop
-import pl.karol202.uranium.swing.util.prop
-import pl.karol202.uranium.swing.*
-import pl.karol202.uranium.swing.util.HorizontalAlign
-import pl.karol202.uranium.swing.util.VerticalAlign
+import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.util.*
 import javax.swing.Icon
 import javax.swing.JLabel
 
