@@ -4,8 +4,8 @@ import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.swing.control.button.*
-import pl.karol202.uranium.swing.control.label
-import pl.karol202.uranium.swing.control.text
+import pl.karol202.uranium.swing.control.label.label
+import pl.karol202.uranium.swing.control.label.text
 import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
 import pl.karol202.uranium.swing.layout.border.*
