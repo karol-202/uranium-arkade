@@ -11,7 +11,7 @@ import pl.karol202.uranium.swing.constraints
 import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout.*
 
-class SwingBorderLayoutCompass(props: Props) : SwingAbstractComponent<SwingBorderLayoutCompass.Props>(props)
+class SwingBorderLayoutCompass(initialProps: Props) : SwingAbstractComponent<SwingBorderLayoutCompass.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val borderLayoutBaseProps: SwingBorderLayoutBase.Props = SwingBorderLayoutBase.Props(),

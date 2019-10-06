@@ -10,7 +10,7 @@ import javax.swing.Icon
 import javax.swing.JLabel
 
 class SwingLabel(private val native: JLabel,
-                 props: Props) : SwingAbstractComponent<SwingLabel.Props>(props)
+                 initialProps: Props) : SwingAbstractComponent<SwingLabel.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),

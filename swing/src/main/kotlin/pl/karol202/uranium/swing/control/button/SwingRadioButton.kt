@@ -8,7 +8,7 @@ import pl.karol202.uranium.swing.util.SwingRenderScope
 import javax.swing.JRadioButton
 
 class SwingRadioButton(private val native: JRadioButton,
-                       props: SwingToggleButton.Props) : SwingAbstractComponent<SwingToggleButton.Props>(props)
+                       initialProps: SwingToggleButton.Props) : SwingAbstractComponent<SwingToggleButton.Props>(initialProps)
 {
 	override fun SwingRenderBuilder.render()
 	{

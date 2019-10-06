@@ -10,7 +10,7 @@ import java.awt.event.ItemListener
 import javax.swing.JToggleButton
 
 class SwingToggleButton(private val native: JToggleButton,
-                        props: Props) : SwingAbstractComponent<SwingToggleButton.Props>(props)
+                        initialProps: Props) : SwingAbstractComponent<SwingToggleButton.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val abstractButtonProps: SwingAbstractButton.Props = SwingAbstractButton.Props(),

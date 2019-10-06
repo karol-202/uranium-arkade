@@ -22,7 +22,7 @@ class Renderer<N>
 
 	private fun UComponent<N, *>.toNode() = TreeNode(this)
 
-	private fun UComponent<N, *>.invalidated() = findComponentNode(this)?.rendered() // ?: no rendered yet
+	private fun UComponent<N, *>.invalidated() = findComponentNode(this)?.rendered() // ?: not rendered yet
 
 	private fun TreeNode<N, *>.rendered() = also { render(this@Renderer) }
 

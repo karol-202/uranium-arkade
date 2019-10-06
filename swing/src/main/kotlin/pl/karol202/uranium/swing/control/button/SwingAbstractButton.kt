@@ -12,7 +12,7 @@ import javax.swing.AbstractButton
 import javax.swing.Icon
 
 class SwingAbstractButton(private val native: AbstractButton,
-                          props: Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
+                          initialProps: Props) : SwingAbstractComponent<SwingAbstractButton.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),

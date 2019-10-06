@@ -12,7 +12,7 @@ import javax.swing.DropMode
 import javax.swing.text.*
 
 class SwingAbstractTextComponent(private val native: JTextComponent,
-                                 props: Props) : SwingAbstractComponent<SwingAbstractTextComponent.Props>(props)
+                                 initialProps: Props) : SwingAbstractComponent<SwingAbstractTextComponent.Props>(initialProps)
 {
     data class Props(override val key: Any = AutoKey,
                      override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),

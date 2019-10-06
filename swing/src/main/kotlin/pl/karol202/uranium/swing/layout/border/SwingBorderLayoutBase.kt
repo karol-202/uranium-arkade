@@ -8,7 +8,7 @@ import pl.karol202.uranium.swing.layout.layout
 import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout
 
-class SwingBorderLayoutBase(props: Props) : SwingAbstractComponent<SwingBorderLayoutBase.Props>(props)
+class SwingBorderLayoutBase(initialProps: Props) : SwingAbstractComponent<SwingBorderLayoutBase.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),

@@ -8,7 +8,7 @@ import pl.karol202.uranium.swing.util.*
 import javax.swing.JCheckBox
 
 class SwingCheckBox(private val native: JCheckBox,
-                    props: Props) : SwingAbstractComponent<SwingCheckBox.Props>(props)
+                    initialProps: Props) : SwingAbstractComponent<SwingCheckBox.Props>(initialProps)
 {
 	data class Props(override val key: Any,
 	                 override val toggleButtonProps: SwingToggleButton.Props = SwingToggleButton.Props(),

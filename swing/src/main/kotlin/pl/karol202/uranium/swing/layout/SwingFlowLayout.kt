@@ -8,7 +8,7 @@ import pl.karol202.uranium.swing.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.FlowLayout
 
-class SwingFlowLayout(props: Props) : SwingAbstractComponent<SwingFlowLayout.Props>(props)
+class SwingFlowLayout(initialProps: Props) : SwingAbstractComponent<SwingFlowLayout.Props>(initialProps)
 {
 	enum class Align(val code: Int)
 	{

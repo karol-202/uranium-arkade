@@ -8,7 +8,7 @@ import pl.karol202.uranium.swing.util.SwingRenderScope
 import javax.swing.JButton
 
 class SwingButton(private val native: JButton,
-                  props: SwingAbstractButton.Props) : SwingAbstractComponent<SwingAbstractButton.Props>(props)
+                  initialProps: SwingAbstractButton.Props) : SwingAbstractComponent<SwingAbstractButton.Props>(initialProps)
 {
 	override fun SwingRenderBuilder.render()
 	{

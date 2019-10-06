@@ -8,7 +8,7 @@ import pl.karol202.uranium.swing.util.*
 import javax.swing.JTextField
 
 class SwingTextField(private val native: JTextField,
-                     props: Props) : SwingAbstractComponent<SwingTextField.Props>(props)
+                     initialProps: Props) : SwingAbstractComponent<SwingTextField.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val abstractTextProps: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props(),
