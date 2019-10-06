@@ -34,7 +34,9 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>) : Detacha
 	private fun UElement<N, *>.reuseOrRenderElement(renderer: Renderer<N>) = reuse(renderer) ?: render(renderer)
 
 	private fun UElement<N, *>.render(renderer: Renderer<N>): TreeNode<N, *> =
-			renderer.renderElement(this, component.requireContext())
+			renderer.renderElement(this, component.requireContext()).updatedInitially()
+
+	private fun updatedInitially() = updated(component.props)
 
 	private fun <P : UProps> UElement<N, P>.reuse(renderer: Renderer<N>) =
 			findChildrenWithKey<P>(key)?.reused(this, renderer)

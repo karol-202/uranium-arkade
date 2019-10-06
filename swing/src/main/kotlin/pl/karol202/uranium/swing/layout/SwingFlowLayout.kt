@@ -47,25 +47,23 @@ class SwingFlowLayout(props: Props) : SwingAbstractComponent<SwingFlowLayout.Pro
 	override fun SwingRenderBuilder.render()
 	{
 		+ layout(layoutManager = { layoutManager }, props = props.swingProps)
-		onUpdate()
 	}
 
-	private fun onUpdate() = layoutManager.apply {
+	override fun onUpdate(previousProps: Props) = layoutManager.apply {
 		props.align.ifPresent { alignment = it.code }
 		props.alignOnBaseline.ifPresent { alignOnBaseline = it }
 		props.horizontalGap.ifPresent { hgap = it }
 		props.verticalGap.ifPresent { vgap = it }
-	}
+	}.unit
 }
 
-private typealias SFLProvider<P> = SwingFlowLayout.PropsProvider<P>
-fun <P : SFLProvider<P>> SwingElement<P>.withFlowLayoutProps(builder: Builder<SwingFlowLayout.Props>) =
-		withProps { withFlowLayoutProps(builder) }
-
-fun SwingRenderBuilder.flowLayout(key: Any = AutoKey,
-                                  props: SwingFlowLayout.Props = SwingFlowLayout.Props(key),
-                                  block: SwingRenderBuilder.() -> Unit = {}) =
+fun SwingRenderScope.flowLayout(key: Any = AutoKey,
+                                props: SwingFlowLayout.Props = SwingFlowLayout.Props(key),
+                                block: SwingRenderBuilder.() -> Unit = {}) =
 		component(::SwingFlowLayout, props).content(block)
+
+private typealias SFLProvider<P> = SwingFlowLayout.PropsProvider<P>
+fun <P : SFLProvider<P>> SwingElement<P>.withFlowLayoutProps(builder: Builder<SwingFlowLayout.Props>) = withProps { withFlowLayoutProps(builder) }
 fun <P : SFLProvider<P>> SwingElement<P>.align(align: SwingFlowLayout.Align) = withFlowLayoutProps { copy(align = align.prop()) }
 fun <P : SFLProvider<P>> SwingElement<P>.alignOnBaseline(align: Boolean) = withFlowLayoutProps { copy(alignOnBaseline = align.prop()) }
 fun <P : SFLProvider<P>> SwingElement<P>.horizontalGap(gap: Int) = withFlowLayoutProps { copy(horizontalGap = gap.prop()) }

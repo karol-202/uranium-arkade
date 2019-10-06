@@ -3,8 +3,6 @@ package pl.karol202.uranium.swing.test
 import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.util.SwingRenderBuilder
-import pl.karol202.uranium.swing.util.SwingStatefulComponent
 import pl.karol202.uranium.swing.control.button.*
 import pl.karol202.uranium.swing.control.label
 import pl.karol202.uranium.swing.control.text
@@ -12,12 +10,15 @@ import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
 import pl.karol202.uranium.swing.layout.flowLayout
 import pl.karol202.uranium.swing.util.HorizontalAlign
+import pl.karol202.uranium.swing.util.SwingRenderBuilder
+import pl.karol202.uranium.swing.util.SwingRenderScope
+import pl.karol202.uranium.swing.util.SwingStatefulComponent
 import javax.swing.UIManager
 
 fun main()
 {
 	UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel")
-	SwingFrame.withRoot { + counter(0) }.withTitle("Uranium test").withSize(640, 480).show()
+	SwingFrame.withRoot { counter(0) }.withTitle("Uranium test").withSize(640, 480).show()
 }
 
 class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, CounterComponent.State>(props, State())
@@ -43,4 +44,4 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	private fun setChecked(checked: Boolean) = setState(state.copy(checked = checked))
 }
 
-fun SwingRenderBuilder.counter(key: Any) = component(::CounterComponent, BasicProps(key))
+fun SwingRenderScope.counter(key: Any) = component(::CounterComponent, BasicProps(key))

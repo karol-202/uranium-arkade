@@ -45,11 +45,15 @@ class SwingCheckBox(private val native: JCheckBox,
 	{
 		+ toggleButton(native = { native }, props = props.toggleButtonProps)
 	}
+
+	override fun onUpdate(previousProps: Props) = native.apply {
+		props.borderPaintedFlat.ifPresent { isBorderPaintedFlat = it }
+	}.unit
 }
 
-fun SwingRenderBuilder.checkBox(native: () -> JCheckBox = ::JCheckBox,
-                                key: Any = AutoKey,
-                                props: SwingCheckBox.Props = SwingCheckBox.Props(key)) =
+fun SwingRenderScope.checkBox(native: () -> JCheckBox = ::JCheckBox,
+                              key: Any = AutoKey,
+                              props: SwingCheckBox.Props = SwingCheckBox.Props(key)) =
 		component({ SwingCheckBox(native(), it) }, props)
 
 private typealias SCBProvider<P> = SwingCheckBox.PropsProvider<P>

@@ -3,9 +3,9 @@ package pl.karol202.uranium.swing.control.button
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.nativeComponent
 import pl.karol202.uranium.swing.util.*
-import pl.karol202.uranium.swing.util.Builder
 import java.awt.Insets
 import java.awt.event.ActionListener
 import javax.swing.AbstractButton
@@ -73,10 +73,9 @@ class SwingAbstractButton(private val native: AbstractButton,
 	override fun SwingRenderBuilder.render()
 	{
 		+ nativeComponent(native = { native }, props = props.swingProps)
-		onUpdate()
 	}
 
-	private fun onUpdate() = native.apply {
+	override fun onUpdate(previousProps: Props) = native.apply {
 		props.text.ifPresent { text = it }
 		props.icon.ifPresent { icon = it }
 		props.pressedIcon.ifPresent { pressedIcon = it }
@@ -99,12 +98,12 @@ class SwingAbstractButton(private val native: AbstractButton,
 		props.multiClickThreshold.ifPresent { multiClickThreshhold = it }
 		props.mnemonic.ifPresent { mnemonic = it }
 		props.displayedMnemonicIndex.ifPresent { displayedMnemonicIndex = it }
-	}
+	}.unit
 }
 
-fun SwingRenderBuilder.abstractButton(native: () -> AbstractButton,
-                                      key: Any = AutoKey,
-                                      props: SwingAbstractButton.Props = SwingAbstractButton.Props(key)) =
+fun SwingRenderScope.abstractButton(native: () -> AbstractButton,
+                                    key: Any = AutoKey,
+                                    props: SwingAbstractButton.Props = SwingAbstractButton.Props(key)) =
 		component({ SwingAbstractButton(native(), it) }, props)
 
 private typealias SABProvider<P> = SwingAbstractButton.PropsProvider<P>

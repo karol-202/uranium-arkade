@@ -4,6 +4,7 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.swing.util.SwingAbstractComponent
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
+import pl.karol202.uranium.swing.util.SwingRenderScope
 import javax.swing.JRadioButton
 
 class SwingRadioButton(private val native: JRadioButton,
@@ -15,7 +16,7 @@ class SwingRadioButton(private val native: JRadioButton,
 	}
 }
 
-fun SwingRenderBuilder.radioButton(native: () -> JRadioButton = ::JRadioButton,
-                                   key: Any = AutoKey,
-                                   props: SwingToggleButton.Props = SwingToggleButton.Props(key)) =
+fun SwingRenderScope.radioButton(native: () -> JRadioButton = ::JRadioButton,
+                                 key: Any = AutoKey,
+                                 props: SwingToggleButton.Props = SwingToggleButton.Props(key)) =
 		component({ SwingRadioButton(native(), it) }, props)

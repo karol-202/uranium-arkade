@@ -1,11 +1,12 @@
 package pl.karol202.uranium.swing.frame
 
 import pl.karol202.uranium.swing.util.SwingElement
-import pl.karol202.uranium.swing.util.SwingRenderBuilder
+import pl.karol202.uranium.swing.util.SwingEmptyRenderScope
+import pl.karol202.uranium.swing.util.SwingRenderScope
 import java.awt.Dimension
 import javax.swing.JFrame
 
-class SwingFrameBuilder internal constructor(private val rootSupplier: SwingRenderBuilder.() -> SwingElement<*>)
+class SwingFrameBuilder internal constructor(private val rootSupplier: SwingRenderScope.() -> SwingElement<*>)
 {
 	private var defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 	private var isVisible = true
@@ -26,7 +27,7 @@ class SwingFrameBuilder internal constructor(private val rootSupplier: SwingRend
 
 	fun build() = object : SwingFrame()
 	{
-		override val SwingRenderBuilder.rootElement get() = rootSupplier()
+		override fun createRootElement() = SwingEmptyRenderScope.rootSupplier()
 
 		override fun JFrame.initFrame()
 		{

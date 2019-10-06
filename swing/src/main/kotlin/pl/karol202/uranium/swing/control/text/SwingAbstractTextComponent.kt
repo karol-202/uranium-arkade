@@ -72,10 +72,9 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
     override fun SwingRenderBuilder.render()
     {
         + nativeComponent(native = { native }, props = props.swingProps)
-        onUpdate()
     }
 
-    private fun onUpdate() = native.apply {
+	override fun onUpdate(previousProps: Props) = native.apply {
         props.text.ifPresent { if(it != text) text = it }
         props.caret.ifPresent { caret = it }
         props.highlighter.ifPresent { highlighter = it }
@@ -88,12 +87,12 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
         props.editable.ifPresent { isEditable = it }
         props.dragEnabled.ifPresent { dragEnabled = it }
         props.dropMode.ifPresent { dropMode = it }
-    }
+    }.unit
 }
 
-fun SwingRenderBuilder.abstractTextComponent(native: () -> JTextComponent,
-                                             key: Any = AutoKey,
-                                             props: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props(key)) =
+fun SwingRenderScope.abstractTextComponent(native: () -> JTextComponent,
+                                           key: Any = AutoKey,
+                                           props: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props(key)) =
         component({ SwingAbstractTextComponent(native(), it) }, props)
 
 private typealias SATCProvider<P> = SwingAbstractTextComponent.PropsProvider<P>

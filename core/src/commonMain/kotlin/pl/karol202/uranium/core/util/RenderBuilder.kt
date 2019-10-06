@@ -2,7 +2,9 @@ package pl.karol202.uranium.core.util
 
 import pl.karol202.uranium.core.element.UElement
 
-class RenderBuilder<N>
+interface RenderScope<N>
+
+class RenderBuilder<N> : RenderScope<N>
 {
 	var elements = emptyList<UElement<N, *>>()
 		private set

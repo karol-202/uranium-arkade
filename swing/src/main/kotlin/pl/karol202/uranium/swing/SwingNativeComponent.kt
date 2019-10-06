@@ -171,14 +171,15 @@ class SwingNativeComponent(private val native: SwingNative,
 	}
 }
 
-fun SwingRenderBuilder.nativeComponent(native: () -> SwingNative,
-                                       contextOverride: (() -> SwingContext)? = null,
-                                       key: Any = AutoKey,
-                                       props: SwingNativeComponent.Props = SwingNativeComponent.Props(key)) =
+fun SwingRenderScope.nativeComponent(native: () -> SwingNative,
+                                     contextOverride: (() -> SwingContext)? = null,
+                                     key: Any = AutoKey,
+                                     props: SwingNativeComponent.Props = SwingNativeComponent.Props(key)) =
 		component({ SwingNativeComponent(native(), contextOverride?.invoke(), it) }, props)
 
-private typealias SNCProvider<P> = SwingNativeComponent.PropsProvider<P>
+internal typealias SNCProvider<P> = SwingNativeComponent.PropsProvider<P>
 fun <P : SNCProvider<P>> SwingElement<P>.withSwingProps(builder: Builder<SwingNativeComponent.Props>) = withProps { withSwingProps(builder) }
+internal fun <P : SNCProvider<P>> SwingElement<P>.constraints(constraints: Any?) = withSwingProps { copy(constraints = constraints) }
 fun <P : SNCProvider<P>> SwingElement<P>.componentListener(listener: ComponentListener) = withSwingProps { copy(componentListener = listener.prop()) }
 fun <P : SNCProvider<P>> SwingElement<P>.focusListener(listener: FocusListener) = withSwingProps { copy(focusListener = listener.prop()) }
 fun <P : SNCProvider<P>> SwingElement<P>.hierarchyBoundsListener(listener: HierarchyBoundsListener) = withSwingProps { copy(hierarchyBoundsListener = listener.prop()) }

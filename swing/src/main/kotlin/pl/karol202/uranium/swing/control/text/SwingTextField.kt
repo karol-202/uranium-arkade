@@ -41,19 +41,18 @@ class SwingTextField(private val native: JTextField,
 	override fun SwingRenderBuilder.render()
 	{
 		+ abstractTextComponent(native = { native }, props = props.abstractTextProps)
-		onUpdate()
 	}
 
-	private fun onUpdate() = native.apply {
+	override fun onUpdate(previousProps: Props) = native.apply {
 		props.columns.ifPresent { columns = it }
 		props.horizontalAlign.ifPresent { horizontalAlignment = it.code }
 		props.scrollOffset.ifPresent { scrollOffset = it }
-	}
+	}.unit
 }
 
-fun SwingRenderBuilder.textField(native: () -> JTextField = ::JTextField,
-                                 key: Any = AutoKey,
-                                 props: SwingTextField.Props = SwingTextField.Props(key)) =
+fun SwingRenderScope.textField(native: () -> JTextField = ::JTextField,
+                               key: Any = AutoKey,
+                               props: SwingTextField.Props = SwingTextField.Props(key)) =
 		component({ SwingTextField(native(), it) }, props)
 
 private typealias STCProvider<P> = SwingTextField.PropsProvider<P>
