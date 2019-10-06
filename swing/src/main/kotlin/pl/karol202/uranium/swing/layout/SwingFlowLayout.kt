@@ -20,17 +20,22 @@ class SwingFlowLayout(initialProps: Props) : SwingAbstractComponent<SwingFlowLay
 	}
 
 	data class Props(override val key: Any = AutoKey,
-	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+	                 override val layoutProps: SwingLayout.Props = SwingLayout.Props(),
 	                 val align: Prop<Align> = Prop.NoValue,
 	                 val alignOnBaseline: Prop<Boolean> = Prop.NoValue,
 	                 val horizontalGap: Prop<Int> = Prop.NoValue,
 	                 val verticalGap: Prop<Int> = Prop.NoValue) : UProps,
 	                                                              SwingNativeComponent.PropsProvider<Props>,
+                                                                  SwingLayout.PropsProvider<Props>,
 	                                                              PropsProvider<Props>
 	{
+		override val swingProps = layoutProps.swingProps
 		override val flowLayoutProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) = copy(swingProps = swingProps.builder())
+		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+				copy(layoutProps = layoutProps.withSwingProps(builder))
+
+		override fun withLayoutProps(builder: Builder<SwingLayout.Props>) = copy(layoutProps = layoutProps.builder())
 
 		override fun withFlowLayoutProps(builder: Builder<Props>) = builder()
 	}
@@ -46,7 +51,7 @@ class SwingFlowLayout(initialProps: Props) : SwingAbstractComponent<SwingFlowLay
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ layout(layoutManager = { layoutManager }, props = props.swingProps)
+		+ layout(props = props.layoutProps).layoutManager(layoutManager)
 	}
 
 	override fun onUpdate(previousProps: Props) = layoutManager.apply {

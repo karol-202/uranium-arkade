@@ -53,7 +53,7 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
     }
 
     private val caretListener = CaretListenerDelegate { props.onCaretMove.value }
-    private val documentListener = DocumentChangeListenerDelegate { props.onTextChange.value }
+    private val documentListener = TextChangeListener { if(it != props.text.value) props.onTextChange.value?.invoke(it) }
 
     override fun onAttach(parentContext: InvalidateableSwingContext)
     {
@@ -75,7 +75,7 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
     }
 
 	override fun onUpdate(previousProps: Props) = native.apply {
-        props.text.ifPresent { if(it != text) text = it }
+        props.text.ifPresent { text = it }
         props.caret.ifPresent { caret = it }
         props.highlighter.ifPresent { highlighter = it }
         props.keymap.ifPresent { keymap = it }
