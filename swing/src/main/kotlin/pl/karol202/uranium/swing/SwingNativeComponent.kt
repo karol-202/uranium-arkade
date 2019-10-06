@@ -13,12 +13,12 @@ import javax.swing.border.Border
 import javax.swing.event.AncestorListener
 
 class SwingNativeComponent(private val native: SwingNative,
-                           private val contextOverride: SwingContext?,
-                           props: Props) : SwingAbstractComponent<SwingNativeComponent.Props>(props)
+                           initialProps: Props) : SwingAbstractComponent<SwingNativeComponent.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
-	                 val constraints: Any? = null,
 	                 val children: List<SwingElement<*>> = emptyList(),
+	                 val context: Prop<SwingContext> = Prop.NoValue,
+	                 val constraints: Prop<Any?> = Prop.NoValue,
 	                 val componentListener: Prop<ComponentListener> = Prop.NoValue,
 	                 val focusListener: Prop<FocusListener> = Prop.NoValue,
 	                 val hierarchyBoundsListener: Prop<HierarchyBoundsListener> = Prop.NoValue,
@@ -72,7 +72,7 @@ class SwingNativeComponent(private val native: SwingNative,
 		fun withSwingProps(builder: Builder<Props>): S
 	}
 
-	override val context get() = contextOverride ?: super.context
+	override val context get() = props.context.value ?: super.context
 
 	private val componentListener = ComponentListenerDelegate { props.componentListener.value }
 	private val focusListener = FocusListenerDelegate { props.focusListener.value }
@@ -124,7 +124,7 @@ class SwingNativeComponent(private val native: SwingNative,
 		parentContext.detachNative()
 	}.unit
 
-	private fun SwingContext.attachNative() = attachNative(native.constrained(props.constraints))
+	private fun SwingContext.attachNative() = attachNative(native.constrained(props.constraints.value))
 
 	private fun SwingContext.detachNative() = detachNative(native.notConstrained())
 
@@ -161,25 +161,25 @@ class SwingNativeComponent(private val native: SwingNative,
 		props.preferredSize.ifPresent { preferredSize = it }
 		props.size.ifPresent { size = it }
 
-		if(props.constraints != previousProps.constraints) requireParentContext().reattachNative()
+		if(props.constraints.value != previousProps.constraints.value) requireParentContext().reattachNative()
 	}.unit
 
 	private fun SwingContext.reattachNative()
 	{
-		attachNative()
 		detachNative()
+		attachNative()
 	}
 }
 
 fun SwingRenderScope.nativeComponent(native: () -> SwingNative,
-                                     contextOverride: (() -> SwingContext)? = null,
                                      key: Any = AutoKey,
                                      props: SwingNativeComponent.Props = SwingNativeComponent.Props(key)) =
-		component({ SwingNativeComponent(native(), contextOverride?.invoke(), it) }, props)
+		component({ SwingNativeComponent(native(), it) }, props)
 
 internal typealias SNCProvider<P> = SwingNativeComponent.PropsProvider<P>
 fun <P : SNCProvider<P>> SwingElement<P>.withSwingProps(builder: Builder<SwingNativeComponent.Props>) = withProps { withSwingProps(builder) }
-internal fun <P : SNCProvider<P>> SwingElement<P>.constraints(constraints: Any?) = withSwingProps { copy(constraints = constraints) }
+internal fun <P : SNCProvider<P>> SwingElement<P>.context(context: SwingContext) = withSwingProps { copy(context = context.prop()) }
+internal fun <P : SNCProvider<P>> SwingElement<P>.constraints(constraints: Any?) = withSwingProps { copy(constraints = constraints.prop()) }
 fun <P : SNCProvider<P>> SwingElement<P>.componentListener(listener: ComponentListener) = withSwingProps { copy(componentListener = listener.prop()) }
 fun <P : SNCProvider<P>> SwingElement<P>.focusListener(listener: FocusListener) = withSwingProps { copy(focusListener = listener.prop()) }
 fun <P : SNCProvider<P>> SwingElement<P>.hierarchyBoundsListener(listener: HierarchyBoundsListener) = withSwingProps { copy(hierarchyBoundsListener = listener.prop()) }

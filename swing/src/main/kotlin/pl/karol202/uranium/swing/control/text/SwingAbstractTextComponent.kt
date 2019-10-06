@@ -75,7 +75,7 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
     }
 
 	override fun onUpdate(previousProps: Props) = native.apply {
-        props.text.ifPresent { text = it }
+        props.text.ifPresent { if(it != text) text = it }
         props.caret.ifPresent { caret = it }
         props.highlighter.ifPresent { highlighter = it }
         props.keymap.ifPresent { keymap = it }

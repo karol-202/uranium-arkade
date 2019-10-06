@@ -4,11 +4,13 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.layout.LayoutData
 import pl.karol202.uranium.swing.layout.SwingLayout
 import pl.karol202.uranium.swing.layout.layout
-import pl.karol202.uranium.swing.layout.layoutManager
+import pl.karol202.uranium.swing.layout.layoutData
 import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout
+import java.awt.LayoutManager
 
 class SwingBorderLayoutBase(initialProps: Props) : SwingAbstractComponent<SwingBorderLayoutBase.Props>(initialProps)
 {
@@ -38,17 +40,20 @@ class SwingBorderLayoutBase(initialProps: Props) : SwingAbstractComponent<SwingB
 		fun withBorderLayoutBaseProps(builder: Builder<Props>): S
 	}
 
-	private val layoutManager = BorderLayout()
+	data class Data(private val props: Props) : LayoutData<BorderLayout>
+	{
+		override fun createLayout(container: SwingContainer): BorderLayout = updateLayout(container, BorderLayout())
+
+		override fun updateLayout(container: SwingContainer, layout: LayoutManager) = (layout as? BorderLayout)?.apply {
+			props.horizontalGap.ifPresent { hgap = it }
+			props.verticalGap.ifPresent { vgap = it }
+		} ?: createLayout(container)
+	}
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ layout(props = props.layoutProps).layoutManager(layoutManager)
+		+ layout(props = props.layoutProps).layoutData(Data(props))
 	}
-
-	override fun onUpdate(previousProps: Props) = layoutManager.apply {
-		props.horizontalGap.ifPresent { hgap = it }
-		props.verticalGap.ifPresent { vgap = it }
-	}.unit
 }
 
 fun SwingRenderScope.borderLayoutBase(key: Any = AutoKey,

@@ -1,12 +1,17 @@
-package pl.karol202.uranium.swing.layout
+package pl.karol202.uranium.swing.layout.flow
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.util.render
 import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.layout.LayoutData
+import pl.karol202.uranium.swing.layout.SwingLayout
+import pl.karol202.uranium.swing.layout.layout
+import pl.karol202.uranium.swing.layout.layoutData
 import pl.karol202.uranium.swing.util.*
 import java.awt.FlowLayout
+import java.awt.LayoutManager
 
 class SwingFlowLayout(initialProps: Props) : SwingAbstractComponent<SwingFlowLayout.Props>(initialProps)
 {
@@ -25,9 +30,7 @@ class SwingFlowLayout(initialProps: Props) : SwingAbstractComponent<SwingFlowLay
 	                 val alignOnBaseline: Prop<Boolean> = Prop.NoValue,
 	                 val horizontalGap: Prop<Int> = Prop.NoValue,
 	                 val verticalGap: Prop<Int> = Prop.NoValue) : UProps,
-	                                                              SwingNativeComponent.PropsProvider<Props>,
-                                                                  SwingLayout.PropsProvider<Props>,
-	                                                              PropsProvider<Props>
+	                                                              SwingNativeComponent.PropsProvider<Props>, SwingLayout.PropsProvider<Props>, PropsProvider<Props>
 	{
 		override val swingProps = layoutProps.swingProps
 		override val flowLayoutProps = this
@@ -47,19 +50,22 @@ class SwingFlowLayout(initialProps: Props) : SwingAbstractComponent<SwingFlowLay
 		fun withFlowLayoutProps(builder: Builder<Props>): S
 	}
 
-	private val layoutManager = FlowLayout()
+	data class Data(private val props: Props) : LayoutData<FlowLayout>
+	{
+		override fun createLayout(container: SwingContainer): FlowLayout = updateLayout(container, FlowLayout())
+
+		override fun updateLayout(container: SwingContainer, layout: LayoutManager) = (layout as? FlowLayout)?.apply {
+			props.align.ifPresent { alignment = it.code }
+			props.alignOnBaseline.ifPresent { alignOnBaseline = it }
+			props.horizontalGap.ifPresent { hgap = it }
+			props.verticalGap.ifPresent { vgap = it }
+		} ?: createLayout(container)
+	}
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ layout(props = props.layoutProps).layoutManager(layoutManager)
+		+ layout(props = props.layoutProps).layoutData(Data(props))
 	}
-
-	override fun onUpdate(previousProps: Props) = layoutManager.apply {
-		props.align.ifPresent { alignment = it.code }
-		props.alignOnBaseline.ifPresent { alignOnBaseline = it }
-		props.horizontalGap.ifPresent { hgap = it }
-		props.verticalGap.ifPresent { vgap = it }
-	}.unit
 }
 
 fun SwingRenderScope.flowLayout(key: Any = AutoKey,

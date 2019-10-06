@@ -28,7 +28,7 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ borderLayoutPage().verticalGap(50)
+		+ borderLayoutPage(key = 0).verticalGap(state.text.toIntOrNull() ?: 0)
 				.pageStart { label(key = 0).text("Tekst: ${state.text} Stan: ${state.checked}") }
 				.center { textField(key = 1).text(state.text).onTextChange { setText(it) }.horizontalAlign(HorizontalAlign.CENTER).columns(50) }
 				.lineStart { checkBox(key = 2).text("Checkbox").selected(state.checked).onSelect { setChecked(it) } }
