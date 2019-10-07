@@ -40,8 +40,6 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 		}
 	}
 
-	//private fun increment() = setState(state.copy(counter = state.counter + 1))
-
 	private fun setText(text: String) = setState(state.copy(text = text))
 
 	private fun setChecked(checked: Boolean) = setState(state.copy(checked = checked))
