@@ -15,15 +15,6 @@ import java.awt.LayoutManager
 
 class SwingFlowLayout(initialProps: Props) : SwingAbstractComponent<SwingFlowLayout.Props>(initialProps)
 {
-	enum class Align(val code: Int)
-	{
-		LEFT(FlowLayout.LEFT),
-		CENTER(FlowLayout.CENTER),
-		RIGHT(FlowLayout.RIGHT),
-		LEADING(FlowLayout.LEADING),
-		TRAILING(FlowLayout.TRAILING)
-	}
-
 	data class Props(override val key: Any = AutoKey,
 	                 override val layoutProps: SwingLayout.Props = SwingLayout.Props(),
 	                 val align: Prop<Align> = Prop.NoValue,
@@ -75,7 +66,7 @@ fun SwingRenderScope.flowLayout(key: Any = AutoKey,
 
 private typealias SFLProvider<P> = SwingFlowLayout.PropsProvider<P>
 fun <P : SFLProvider<P>> SwingElement<P>.withFlowLayoutProps(builder: Builder<SwingFlowLayout.Props>) = withProps { withFlowLayoutProps(builder) }
-fun <P : SFLProvider<P>> SwingElement<P>.align(align: SwingFlowLayout.Align) = withFlowLayoutProps { copy(align = align.prop()) }
+fun <P : SFLProvider<P>> SwingElement<P>.align(align: Align) = withFlowLayoutProps { copy(align = align.prop()) }
 fun <P : SFLProvider<P>> SwingElement<P>.alignOnBaseline(align: Boolean) = withFlowLayoutProps { copy(alignOnBaseline = align.prop()) }
 fun <P : SFLProvider<P>> SwingElement<P>.horizontalGap(gap: Int) = withFlowLayoutProps { copy(horizontalGap = gap.prop()) }
 fun <P : SFLProvider<P>> SwingElement<P>.verticalGap(gap: Int) = withFlowLayoutProps { copy(verticalGap = gap.prop()) }
