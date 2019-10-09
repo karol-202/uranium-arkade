@@ -8,8 +8,10 @@ import pl.karol202.uranium.swing.control.label.label
 import pl.karol202.uranium.swing.control.label.text
 import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
-import pl.karol202.uranium.swing.layout.grid.contentColumns
-import pl.karol202.uranium.swing.layout.grid.gridLayout
+import pl.karol202.uranium.swing.layout.gridbag.Fill
+import pl.karol202.uranium.swing.layout.gridbag.Weights
+import pl.karol202.uranium.swing.layout.gridbag.cell
+import pl.karol202.uranium.swing.layout.gridbag.gridBagLayout
 import pl.karol202.uranium.swing.util.HorizontalAlign
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import pl.karol202.uranium.swing.util.SwingRenderScope
@@ -29,19 +31,22 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ gridLayout().contentColumns {
-			column {
-				+ label(key = 0).text("Tekst: ${state.text} Stan: ${state.checked}")
-				+ textField(key = 1).text(state.text).onTextChange { setText(it) }.horizontalAlign(HorizontalAlign.CENTER)
+		+ gridBagLayout {
+			+ cell(0, 0) {
+				label(key = 0).text("Tekst: ${state.text} Stan: ${state.checked}")
+			}
+			+ cell(1, 0, weights = Weights(1.0, 0.0), fill = Fill.HORIZONTAL) {
+				textField(key = 1).text(state.text).onTextChange { setText(it) }.horizontalAlign(HorizontalAlign.CENTER)
 						.columns(50)
 			}
-			column {
-				+ checkBox(key = 2).text("Checkbox").selected(state.checked).onSelect { setChecked(it) }
-				+ radioButton(key = 3).text("Radio").selected(state.checked).onSelect { setChecked(it) }
+			+ cell(2, 0) {
+				checkBox(key = 2).text("Checkbox").selected(state.checked).onSelect { setChecked(it) }
 			}
-			column {
-				+ toggleButton(key = 4).text(state.text).selected(state.checked).onClick { setChecked(false) }
-				+ label(key = 5).text("Placeholder")
+			+ cell(3, 0) {
+				radioButton(key = 3).text("Radio").selected(state.checked).onSelect { setChecked(it) }
+			}
+			+ cell(4, 0) {
+				toggleButton(key = 4).text(state.text).selected(state.checked).onClick { setChecked(false) }
 			}
 		}
 	}

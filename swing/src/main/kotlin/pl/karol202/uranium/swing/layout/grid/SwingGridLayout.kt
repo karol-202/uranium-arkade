@@ -21,11 +21,10 @@ class SwingGridLayout(props: Props) : SwingAbstractComponent<SwingGridLayout.Pro
 	                 val rows: Prop<Int> = Prop.NoValue,
 	                 val columns: Prop<Int> = Prop.NoValue,
 	                 val horizontalGap: Prop<Int> = Prop.NoValue,
-	                 val verticalGap: Prop<Int> = Prop.NoValue) :
-			UProps,
-			SwingNativeComponent.PropsProvider<Props>,
-			SwingLayout.PropsProvider<Props>,
-			PropsProvider<Props>
+	                 val verticalGap: Prop<Int> = Prop.NoValue) : UProps,
+	                                                              SwingNativeComponent.PropsProvider<Props>,
+	                                                              SwingLayout.PropsProvider<Props>,
+	                                                              PropsProvider<Props>
 	{
 		override val swingProps = layoutProps.swingProps
 		override val gridLayoutProps = this

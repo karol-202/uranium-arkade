@@ -2,10 +2,8 @@ package pl.karol202.uranium.core.util
 
 import pl.karol202.uranium.core.element.UElement
 
-interface RenderScope<N>
-
 @RenderDsl
-class RenderBuilder<N> : RenderScope<N>
+open class RenderBuilderBase<N>
 {
 	var elements = emptyList<UElement<N, *>>()
 		private set
@@ -13,12 +11,10 @@ class RenderBuilder<N> : RenderScope<N>
 	val size get() = elements.size
 
 	operator fun UElement<N, *>.unaryPlus() = also {
-		this@RenderBuilder.elements += it
+		this@RenderBuilderBase.elements += it
 	}
 
 	operator fun List<UElement<N, *>>.unaryPlus() = also {
-		this@RenderBuilder.elements += it
+		this@RenderBuilderBase.elements += it
 	}
 }
-
-fun <N> (RenderBuilder<N>.() -> Unit).render() = RenderBuilder<N>().also(this).elements

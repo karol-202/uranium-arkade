@@ -1,5 +1,9 @@
 package pl.karol202.uranium.swing.util
 
-import java.awt.Insets
-
-fun insets(top: Int = 0, left: Int = 0, bottom: Int = 0, right: Int = 0) = Insets(top, left, bottom, right)
+data class Insets(val left: Int = 0,
+                  val top: Int = 0,
+                  val right: Int = 0,
+                  val bottom: Int = 0)
+{
+	fun toAWTInsets() = java.awt.Insets(left, top, right, bottom)
+}

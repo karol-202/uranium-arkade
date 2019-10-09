@@ -7,6 +7,7 @@ import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.internal.Renderer
 import pl.karol202.uranium.core.util.RenderBuilder
+import pl.karol202.uranium.core.util.RenderBuilderBase
 import pl.karol202.uranium.core.util.RenderScope
 import pl.karol202.uranium.swing.SwingNativeWrapper
 import java.awt.Container
@@ -25,6 +26,8 @@ typealias SwingStatefulComponent<P, S> = StatefulComponent<SwingNativeWrapper, P
 typealias SwingRenderScope = RenderScope<SwingNativeWrapper>
 
 object SwingEmptyRenderScope : RenderScope<SwingNativeWrapper>
+
+typealias SwingRenderBuilderBase = RenderBuilderBase<SwingNativeWrapper>
 
 typealias SwingRenderBuilder = RenderBuilder<SwingNativeWrapper>
 
