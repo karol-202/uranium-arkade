@@ -41,7 +41,6 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>) : Detacha
 	private fun <P : UProps> UElement<N, P>.reuse(renderer: Renderer<N>) =
 			findChildrenWithKey<P>(key)?.reused(this, renderer)
 
-	@Suppress("UNCHECKED_CAST")
 	private fun <P : UProps> findChildrenWithKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<N, P>
 
 	private fun reused(element: UElement<N, P>, renderer: Renderer<N>) =

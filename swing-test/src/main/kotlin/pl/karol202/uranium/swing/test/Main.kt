@@ -4,10 +4,14 @@ import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.swing.control.button.*
+import pl.karol202.uranium.swing.control.combobox.comboBox
+import pl.karol202.uranium.swing.control.combobox.items
+import pl.karol202.uranium.swing.control.combobox.renderer
 import pl.karol202.uranium.swing.control.label.label
 import pl.karol202.uranium.swing.control.label.text
 import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
+import pl.karol202.uranium.swing.layout.flow.flowLayout
 import pl.karol202.uranium.swing.layout.gridbag.Fill
 import pl.karol202.uranium.swing.layout.gridbag.Weights
 import pl.karol202.uranium.swing.layout.gridbag.cell
@@ -47,6 +51,13 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 			}
 			+ cell(4, 0) {
 				toggleButton(key = 4).text(state.text).selected(state.checked).onClick { setChecked(false) }
+			}
+			+ cell(4, 1, weights = Weights(1.0, 0.0)) {
+				comboBox<String>(key = 5).items(listOf("Kot", "Pies", "Koń")).renderer {
+					flowLayout {
+						+ label().text("Zwierz: ${it.item}")
+					}
+				}
 			}
 		}
 	}

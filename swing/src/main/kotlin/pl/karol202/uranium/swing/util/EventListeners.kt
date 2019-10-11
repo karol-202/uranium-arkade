@@ -103,3 +103,19 @@ class TextChangeListener(private val onTextChange: (String) -> Unit): DocumentLi
 
 	private fun DocumentEvent.getText() = document.getText(0, document.length)
 }
+
+class ItemSelectListener(private val onItemSelect: (Any) -> Unit): ItemListener
+{
+	override fun itemStateChanged(e: ItemEvent) = onItemSelect(e.item)
+}
+
+class PopupListenerDelegate(private val popupShowListenerSupplier: () -> (() -> Unit)?,
+                            private val popupHideListenerSupplier: () -> (() -> Unit)?,
+                            private val popupCancelListenerSupplier: () -> (() -> Unit)?): PopupMenuListener
+{
+	override fun popupMenuWillBecomeVisible(e: PopupMenuEvent?) = popupShowListenerSupplier()?.invoke() ?: Unit
+
+	override fun popupMenuWillBecomeInvisible(e: PopupMenuEvent?) = popupHideListenerSupplier()?.invoke() ?: Unit
+
+	override fun popupMenuCanceled(e: PopupMenuEvent?) = popupCancelListenerSupplier()?.invoke() ?: Unit
+}

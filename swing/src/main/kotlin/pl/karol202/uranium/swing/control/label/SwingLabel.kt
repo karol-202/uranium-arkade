@@ -61,13 +61,13 @@ fun SwingRenderScope.label(native: () -> JLabel = ::JLabel,
                            props: SwingLabel.Props = SwingLabel.Props(key)) =
 		component({ SwingLabel(native(), it) }, props)
 
-private typealias Provider<P> = SwingLabel.PropsProvider<P>
-fun <P : Provider<P>> SwingElement<P>.withLabelProps(builder: Builder<SwingLabel.Props>) = withProps { withLabelProps(builder) }
-fun <P : Provider<P>> SwingElement<P>.text(text: String?) = withLabelProps { copy(text = text.prop()) }
-fun <P : Provider<P>> SwingElement<P>.icon(icon: Icon?) = withLabelProps { copy(icon = icon.prop()) }
-fun <P : Provider<P>> SwingElement<P>.disabledIcon(icon: Icon?) = withLabelProps { copy(disabledIcon = icon.prop()) }
-fun <P : Provider<P>> SwingElement<P>.iconTextGap(gap: Int) = withLabelProps { copy(iconTextGap = gap.prop()) }
-fun <P : Provider<P>> SwingElement<P>.horizontalAlign(align: HorizontalAlign) = withLabelProps { copy(horizontalAlign = align.prop()) }
-fun <P : Provider<P>> SwingElement<P>.verticalAlign(align: VerticalAlign) = withLabelProps { copy(verticalAlign = align.prop()) }
-fun <P : Provider<P>> SwingElement<P>.horizontalTextPosition(position: HorizontalAlign) = withLabelProps { copy(horizontalTextPosition = position.prop()) }
-fun <P : Provider<P>> SwingElement<P>.verticalTextPosition(position: VerticalAlign) = withLabelProps { copy(verticalTextPosition = position.prop()) }
+private typealias SLProvider<P> = SwingLabel.PropsProvider<P>
+fun <P : SLProvider<P>> SwingElement<P>.withLabelProps(builder: Builder<SwingLabel.Props>) = withProps { withLabelProps(builder) }
+fun <P : SLProvider<P>> SwingElement<P>.text(text: String?) = withLabelProps { copy(text = text.prop()) }
+fun <P : SLProvider<P>> SwingElement<P>.icon(icon: Icon?) = withLabelProps { copy(icon = icon.prop()) }
+fun <P : SLProvider<P>> SwingElement<P>.disabledIcon(icon: Icon?) = withLabelProps { copy(disabledIcon = icon.prop()) }
+fun <P : SLProvider<P>> SwingElement<P>.iconTextGap(gap: Int) = withLabelProps { copy(iconTextGap = gap.prop()) }
+fun <P : SLProvider<P>> SwingElement<P>.horizontalAlign(align: HorizontalAlign) = withLabelProps { copy(horizontalAlign = align.prop()) }
+fun <P : SLProvider<P>> SwingElement<P>.verticalAlign(align: VerticalAlign) = withLabelProps { copy(verticalAlign = align.prop()) }
+fun <P : SLProvider<P>> SwingElement<P>.horizontalTextPosition(position: HorizontalAlign) = withLabelProps { copy(horizontalTextPosition = position.prop()) }
+fun <P : SLProvider<P>> SwingElement<P>.verticalTextPosition(position: VerticalAlign) = withLabelProps { copy(verticalTextPosition = position.prop()) }
