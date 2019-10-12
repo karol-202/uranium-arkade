@@ -7,6 +7,7 @@ import pl.karol202.uranium.swing.control.button.*
 import pl.karol202.uranium.swing.control.combobox.*
 import pl.karol202.uranium.swing.control.label.label
 import pl.karol202.uranium.swing.control.label.text
+import pl.karol202.uranium.swing.control.progress.*
 import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
 import pl.karol202.uranium.swing.layout.gridbag.Fill
@@ -59,6 +60,9 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 						props.onEdit(it)
 					}
 				}
+			}
+			+ cell(3, 1, fill = Fill.HORIZONTAL) {
+				progressBar(key = 6).minimum(0).maximum(200).value(80).stringPainted(true)
 			}
 		}
 	}
