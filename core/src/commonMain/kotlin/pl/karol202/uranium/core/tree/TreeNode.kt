@@ -17,12 +17,15 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 
 	init
 	{
-		attached(context).rendered().updated()
+		attach(context)
+		render()
+		update()
 	}
 
-	private fun attached(context: UContext<N>) = also { component.attach(context.invalidateable { rendered() }) }
+	private fun attach(context: UContext<N>) = component.attach(context.invalidateable { render() })
 
-	private fun rendered() = also {
+	private fun render()
+	{
 		val newElements = component.render()
 		val newKeys = newElements.map { it.key }
 		detachOldChildren(newKeys)
@@ -33,29 +36,35 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 
 	private fun updateChildren(newElements: List<UElement<N, *>>)
 	{
-		children = newElements.map { it.reuseOrRenderChild() }
+		children = newElements.map { reuseOrRenderChild(it) }
 	}
 
-	private fun UElement<N, *>.reuseOrRenderChild() = reuseChild() ?: renderChild()
+	private fun reuseOrRenderChild(element: UElement<N, *>) = reuseChild(element) ?: renderChild(element)
 
-	private fun UElement<N, *>.renderChild() = renderToNode(component.requireContext())
+	private fun renderChild(element: UElement<N, *>) = element.renderToNode(component.requireContext())
 
-	private fun <P : UProps> UElement<N, P>.reuseChild() = findChildByKey<P>(key)?.reused(this)
+	private fun <P : UProps> reuseChild(element: UElement<N, P>) = findChildByKey<P>(key)?.apply { reuse(element) }
 
 	private fun <P : UProps> findChildByKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<N, P>
 
-	fun reused(element: UElement<N, P>) =
-			if(needsUpdate(element)) keepProps { prevProps -> withNewProps(element).rendered().updated(prevProps) }
-			else withNewProps(element)
+	fun reuse(element: UElement<N, P>)
+	{
+		if(needsUpdate(element)) keepProps { prevProps ->
+			setProps(element)
+			render()
+			update(prevProps)
+		}
+		else setProps(element)
+	}
 
 	// Returning false doesn't have to necessarily mean that props haven't changed
 	private fun needsUpdate(newElement: UElement<N, P>) = component.props != newElement.props
 
 	private fun <R> keepProps(block: (P) -> R) = component.props.let(block)
 
-	private fun withNewProps(newElement: UElement<N, P>) = also { component.modifyPropsInternal(newElement.props) }
+	private fun setProps(newElement: UElement<N, P>) = component.modifyPropsInternal(newElement.props)
 
-	private fun updated(previousProps: P = component.props) = also { component.onUpdate(previousProps) }
+	private fun update(previousProps: P = component.props) = component.onUpdate(previousProps)
 
 	override fun detach()
 	{
