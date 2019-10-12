@@ -93,13 +93,14 @@ class CaretListenerDelegate(private val listenerSupplier: () -> ((dot: Int, mark
 	override fun caretUpdate(e: CaretEvent) = listenerSupplier()?.invoke(e.dot, e.mark) ?: Unit
 }
 
-class TextChangeListener(private val onTextChange: (String) -> Unit): DocumentListener
+// For security reasons (JPasswordField), getText() will not get called unless listenerSupplier returns true
+class TextChangeListenerDelegate(private val listenerSupplier: () -> ((String) -> Unit)?): DocumentListener
 {
-	override fun changedUpdate(e: DocumentEvent) = onTextChange(e.getText())
+	override fun changedUpdate(e: DocumentEvent) = listenerSupplier()?.invoke(e.getText()) ?: Unit
 
-	override fun insertUpdate(e: DocumentEvent) = onTextChange(e.getText())
+	override fun insertUpdate(e: DocumentEvent) = listenerSupplier()?.invoke(e.getText()) ?: Unit
 
-	override fun removeUpdate(e: DocumentEvent) = onTextChange(e.getText())
+	override fun removeUpdate(e: DocumentEvent) = listenerSupplier()?.invoke(e.getText()) ?: Unit
 
 	private fun DocumentEvent.getText() = document.getText(0, document.length)
 }

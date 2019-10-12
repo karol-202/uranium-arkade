@@ -53,7 +53,9 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
     }
 
     private val caretListener = CaretListenerDelegate { props.onCaretMove.value }
-    private val documentListener = TextChangeListener { if(it != props.text.value) props.onTextChange.value?.invoke(it) }
+    private val documentListener = TextChangeListenerDelegate { props.onTextChange.value?.let { onTextChange ->
+        { if(it != props.text.value) onTextChange(it) } }
+    }
 
     override fun onAttach(parentContext: SwingInvalidateableContext)
     {
