@@ -26,7 +26,8 @@ class ListComboBoxModel<E>(items: List<E>) : ComboBoxModel<E>
 
 	override fun setSelectedItem(item: Any?)
 	{
-		selectedIndex = items.indexOf(item).takeIf { it != -1 } ?: throw IllegalArgumentException("No such item")
+		selectedIndex = items.indexOf(item).takeIf { it != -1 }
+		fireContentChange()
 	}
 
 	private fun fireContentChange() = listeners.forEach { it.contentsChanged(contentEvent) }

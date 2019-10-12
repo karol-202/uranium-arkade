@@ -4,14 +4,11 @@ import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.swing.control.button.*
-import pl.karol202.uranium.swing.control.combobox.comboBox
-import pl.karol202.uranium.swing.control.combobox.items
-import pl.karol202.uranium.swing.control.combobox.renderer
+import pl.karol202.uranium.swing.control.combobox.*
 import pl.karol202.uranium.swing.control.label.label
 import pl.karol202.uranium.swing.control.label.text
 import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
-import pl.karol202.uranium.swing.layout.flow.flowLayout
 import pl.karol202.uranium.swing.layout.gridbag.Fill
 import pl.karol202.uranium.swing.layout.gridbag.Weights
 import pl.karol202.uranium.swing.layout.gridbag.cell
@@ -31,7 +28,8 @@ fun main()
 class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, CounterComponent.State>(props, State())
 {
 	data class State(val text: String = "start",
-	                 val checked: Boolean = false) : UState
+	                 val checked: Boolean = false,
+	                 val items: List<String> = listOf("Kot", "Pies", "Koń")) : UState
 
 	override fun SwingRenderBuilder.render()
 	{
@@ -53,9 +51,12 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 				toggleButton(key = 4).text(state.text).selected(state.checked).onClick { setChecked(false) }
 			}
 			+ cell(4, 1, weights = Weights(1.0, 0.0)) {
-				comboBox<String>(key = 5).items(listOf("Kot", "Pies", "Koń")).renderer {
-					flowLayout {
-						+ label().text("Zwierz: ${it.item}")
+				comboBox<String>(key = 5).items(state.items).renderer { props ->
+					label().text(props.item?.let { "Zwierz: $it" } ?: "Brak")
+				}.editable(true).editor { props ->
+					textField().text(props.item).onApply {
+						addItem(it)
+						props.onEdit(it)
 					}
 				}
 			}
@@ -65,6 +66,8 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	private fun setText(text: String) = setState { copy(text = text) }
 
 	private fun setChecked(checked: Boolean) = setState { copy(checked = checked) }
+
+	private fun addItem(item: String) = setState { copy(items = items + item) }
 }
 
 fun SwingRenderScope.counter(key: Any) = component(::CounterComponent, BasicProps(key))

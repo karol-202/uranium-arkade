@@ -3,8 +3,11 @@ package pl.karol202.uranium.swing.control.text
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.util.*
+import java.awt.event.ActionListener
 import javax.swing.JTextField
 
 class SwingTextField(private val native: JTextField,
@@ -14,10 +17,11 @@ class SwingTextField(private val native: JTextField,
 	                 override val abstractTextProps: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props(),
 	                 val columns: Prop<Int> = Prop.NoValue,
 	                 val horizontalAlign: Prop<HorizontalAlign> = Prop.NoValue,
-	                 val scrollOffset: Prop<Int> = Prop.NoValue) : UProps,
-	                                                               SwingNativeComponent.PropsProvider<Props>,
-	                                                               SwingAbstractTextComponent.PropsProvider<Props>,
-	                                                               PropsProvider<Props>
+	                 val scrollOffset: Prop<Int> = Prop.NoValue,
+	                 val onApply: Prop<(String) -> Unit> = Prop.NoValue) : UProps,
+	                                                                       SwingNativeComponent.PropsProvider<Props>,
+	                                                                       SwingAbstractTextComponent.PropsProvider<Props>,
+	                                                                       PropsProvider<Props>
 	{
 		override val swingProps = abstractTextProps.swingProps
 		override val textFieldProps = this
@@ -36,6 +40,18 @@ class SwingTextField(private val native: JTextField,
 		val textFieldProps: Props
 
 		fun withTextFieldProps(builder: Builder<Props>): S
+	}
+
+	private val actionListener = ActionListener { props.onApply.value?.invoke(native.text) }
+
+	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	{
+		native.addActionListener(actionListener)
+	}
+
+	override fun onDetach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	{
+		native.removeActionListener(actionListener)
 	}
 
 	override fun SwingRenderBuilder.render()
@@ -60,3 +76,4 @@ fun <P : STCProvider<P>> SwingElement<P>.withTextFieldProps(builder: Builder<Swi
 fun <P : STCProvider<P>> SwingElement<P>.columns(columns: Int) = withTextFieldProps { copy(columns = columns.prop()) }
 fun <P : STCProvider<P>> SwingElement<P>.horizontalAlign(align: HorizontalAlign) = withTextFieldProps { copy(horizontalAlign = align.prop()) }
 fun <P : STCProvider<P>> SwingElement<P>.scrollOffset(offset: Int) = withTextFieldProps { copy(scrollOffset = offset.prop()) }
+fun <P : STCProvider<P>> SwingElement<P>.onApply(onApply: (String) -> Unit) = withTextFieldProps { copy(onApply = onApply.prop()) }
