@@ -58,13 +58,13 @@ class SwingAbstractButton(private val native: AbstractButton,
 
 	private val actionListener = ActionListener { props.onClick.value?.invoke() }
 
-	override fun onAttach(parentContext: InvalidateableSwingContext)
+	override fun onAttach(parentContext: SwingInvalidateableContext)
 	{
 		super.onAttach(parentContext)
 		native.addActionListener(actionListener)
 	}
 
-	override fun onDetach(parentContext: InvalidateableSwingContext)
+	override fun onDetach(parentContext: SwingInvalidateableContext)
 	{
 		super.onDetach(parentContext)
 		native.removeActionListener(actionListener)

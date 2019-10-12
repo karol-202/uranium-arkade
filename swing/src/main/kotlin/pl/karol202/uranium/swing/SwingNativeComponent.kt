@@ -88,7 +88,7 @@ class SwingNativeComponent(private val native: SwingNative,
 	private val ancestorListener = AncestorListenerDelegate { props.ancestorListener.value }
 	private val vetoableChangeListener = VetoableChangeListenerDelegate { props.vetoableChangeListener.value }
 
-	override fun onAttach(parentContext: InvalidateableSwingContext) = native.apply {
+	override fun onAttach(parentContext: SwingInvalidateableContext) = native.apply {
 		addComponentListener(componentListener)
 		addFocusListener(focusListener)
 		addHierarchyBoundsListener(hierarchyBoundsListener)
@@ -106,7 +106,7 @@ class SwingNativeComponent(private val native: SwingNative,
 		parentContext.attachNative()
 	}.unit
 
-	override fun onDetach(parentContext: InvalidateableSwingContext) = native.apply {
+	override fun onDetach(parentContext: SwingInvalidateableContext) = native.apply {
 		removeComponentListener(componentListener)
 		removeFocusListener(focusListener)
 		removeHierarchyBoundsListener(hierarchyBoundsListener)
