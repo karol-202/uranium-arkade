@@ -8,6 +8,7 @@ import pl.karol202.uranium.swing.control.combobox.*
 import pl.karol202.uranium.swing.control.label.label
 import pl.karol202.uranium.swing.control.label.text
 import pl.karol202.uranium.swing.control.progress.*
+import pl.karol202.uranium.swing.control.slider.*
 import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
 import pl.karol202.uranium.swing.layout.gridbag.Fill
@@ -18,11 +19,10 @@ import pl.karol202.uranium.swing.util.HorizontalAlign
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import pl.karol202.uranium.swing.util.SwingRenderScope
 import pl.karol202.uranium.swing.util.SwingStatefulComponent
-import javax.swing.UIManager
 
 fun main()
 {
-	UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel")
+	//UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel")
 	SwingFrame.withRoot { counter(0) }.withTitle("Uranium test").withSize(640, 480).show()
 }
 
@@ -63,6 +63,10 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 			}
 			+ cell(3, 1, fill = Fill.HORIZONTAL) {
 				progressBar(key = 6).minimum(0).maximum(200).value(80).stringPainted(true)
+			}
+			+ cell(0, 1, fill = Fill.HORIZONTAL) {
+				slider(key = 7).minimum(50).maximum(100).value(50).labelsPainted(true).inverted(true)
+						.labelTable(SliderLabelTable.valueMap(50 to "100", 70 to "80", 72 to "78", 90 to "60", 100 to "50")).trackPainted(false)
 			}
 		}
 	}
