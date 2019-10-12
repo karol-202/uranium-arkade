@@ -43,7 +43,7 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 
 	private fun renderChild(element: UElement<N, *>) = element.renderToNode(component.requireContext())
 
-	private fun <P : UProps> reuseChild(element: UElement<N, P>) = findChildByKey<P>(key)?.apply { reuse(element) }
+	private fun <P : UProps> reuseChild(element: UElement<N, P>) = findChildByKey<P>(element.key)?.apply { reuse(element) }
 
 	private fun <P : UProps> findChildByKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<N, P>
 

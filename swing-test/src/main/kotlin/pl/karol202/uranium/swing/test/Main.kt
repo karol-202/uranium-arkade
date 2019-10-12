@@ -62,9 +62,9 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 		}
 	}
 
-	private fun setText(text: String) = setState(state.copy(text = text))
+	private fun setText(text: String) = setState { copy(text = text) }
 
-	private fun setChecked(checked: Boolean) = setState(state.copy(checked = checked))
+	private fun setChecked(checked: Boolean) = setState { copy(checked = checked) }
 }
 
 fun SwingRenderScope.counter(key: Any) = component(::CounterComponent, BasicProps(key))

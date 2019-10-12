@@ -8,6 +8,4 @@ class SwingContextImpl(private val container: SwingContainer) : SwingContext
 	override fun attachNative(native: SwingNativeWrapper) = container.add(native.component, native.constraints)
 
 	override fun detachNative(native: SwingNativeWrapper) = container.remove(native.component)
-
-	fun clear() = container.removeAll()
 }
