@@ -3,7 +3,7 @@ package pl.karol202.uranium.swing.layout.flow
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.util.render
+import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.swing.SwingNativeComponent
 import pl.karol202.uranium.swing.layout.LayoutData
 import pl.karol202.uranium.swing.layout.SwingLayout

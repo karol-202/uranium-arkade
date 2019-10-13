@@ -7,7 +7,7 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.context.ContextProvider
 import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.core.element.UElement
-import pl.karol202.uranium.core.util.RenderScope
+import pl.karol202.uranium.core.render.RenderScope
 
 interface UComponent<N, P : UProps> : Attachable<InvalidateableContext<N>>,
                                       Detachable,

@@ -3,7 +3,7 @@ package pl.karol202.uranium.core.component
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.core.context.UContext
-import pl.karol202.uranium.core.util.RenderBuilder
+import pl.karol202.uranium.core.render.RenderBuilder
 
 abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 {

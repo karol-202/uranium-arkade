@@ -1,6 +1,6 @@
 package pl.karol202.uranium.swing.layout.grid
 
-import pl.karol202.uranium.core.util.RenderDsl
+import pl.karol202.uranium.core.render.RenderDsl
 import pl.karol202.uranium.swing.util.SwingElement
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
 

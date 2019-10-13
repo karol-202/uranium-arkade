@@ -1,4 +1,4 @@
-package pl.karol202.uranium.core.util
+package pl.karol202.uranium.core.render
 
 interface RenderScope<N>
 

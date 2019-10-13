@@ -3,7 +3,7 @@ package pl.karol202.uranium.swing
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.util.RenderBuilder
+import pl.karol202.uranium.core.render.RenderBuilder
 import pl.karol202.uranium.swing.util.SwingAbstractComponent
 import pl.karol202.uranium.swing.util.SwingElement
 import pl.karol202.uranium.swing.util.SwingEmptyRenderScope
