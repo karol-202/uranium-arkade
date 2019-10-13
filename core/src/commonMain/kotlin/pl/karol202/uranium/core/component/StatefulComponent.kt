@@ -11,7 +11,7 @@ abstract class StatefulComponent<N, P : UProps, S : UState>(props: P,
 	var state = state
 		set(value)
 		{
-			//if(value == field) return
+			if(value == field) return
 			field = value
 			invalidate()
 		}
