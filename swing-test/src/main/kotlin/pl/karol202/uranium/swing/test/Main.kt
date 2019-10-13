@@ -7,7 +7,10 @@ import pl.karol202.uranium.swing.control.button.*
 import pl.karol202.uranium.swing.control.combobox.*
 import pl.karol202.uranium.swing.control.label.label
 import pl.karol202.uranium.swing.control.label.text
-import pl.karol202.uranium.swing.control.progress.*
+import pl.karol202.uranium.swing.control.progress.maximum
+import pl.karol202.uranium.swing.control.progress.minimum
+import pl.karol202.uranium.swing.control.progress.progressBar
+import pl.karol202.uranium.swing.control.progress.value
 import pl.karol202.uranium.swing.control.slider.*
 import pl.karol202.uranium.swing.control.text.columns
 import pl.karol202.uranium.swing.control.text.onTextChange
@@ -34,13 +37,14 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	data class State(val text: String = "start",
 	                 val checked: Boolean = false,
 	                 val items: List<String> = listOf("Kot", "Pies", "Koń"),
-	                 val selectedItem: String? = null) : UState
+	                 val selectedItem: String? = null,
+	                 val sliderValue: Int = 0) : UState
 
 	override fun SwingRenderBuilder.render()
 	{
 		+ gridBagLayout {
 			+ cell(0, 0) {
-				label(key = 0).text("Tekst: ${state.text} Stan: ${state.checked}")
+				label(key = 0).text("Tekst: ${state.text} Stan: ${state.checked} Slider: ${state.sliderValue}")
 			}
 			+ cell(1, 0, weights = Weights(1.0, 0.0), fill = Fill.HORIZONTAL) {
 				textField(key = 1).text(state.text).onTextChange { setText(it) }.columns(50)
@@ -66,11 +70,10 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 				}.selectedItem(state.selectedItem).onSelect { setSelectedItem(it) }
 			}
 			+ cell(3, 1, fill = Fill.HORIZONTAL) {
-				progressBar(key = 6).minimum(0).maximum(200).value(80).stringPainted(true)
+				progressBar(key = 6).minimum(0).maximum(200).value((state.sliderValue - 50) * 4)
 			}
 			+ cell(0, 1, fill = Fill.HORIZONTAL) {
-				slider(key = 7).minimum(50).maximum(100).value(50).labelsPainted(true).inverted(true)
-						.labelTable(SliderLabelTable.valueMap(50 to "100", 70 to "80", 72 to "78", 90 to "60", 100 to "50")).trackPainted(false)
+				slider(key = 7).minimum(50).maximum(100).value(state.sliderValue).onChange { setSliderValue(it) }
 			}
 		}
 	}
@@ -82,6 +85,8 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	private fun addItem(item: String) = setState { copy(items = items + item) }
 
 	private fun setSelectedItem(item: String) = setState { copy(selectedItem = item) }
+
+	private fun setSliderValue(value: Int) = setState { copy(sliderValue = value) }
 }
 
 fun SwingRenderScope.counter(key: Any) = component(::CounterComponent, BasicProps(key))

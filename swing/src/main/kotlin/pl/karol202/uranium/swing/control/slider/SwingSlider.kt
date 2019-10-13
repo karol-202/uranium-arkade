@@ -3,10 +3,13 @@ package pl.karol202.uranium.swing.control.slider
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JSlider
+import javax.swing.event.ChangeListener
 
 class SwingSlider(private val native: JSlider,
                   initialProps: Props) : SwingAbstractComponent<SwingSlider.Props>(initialProps)
@@ -26,9 +29,10 @@ class SwingSlider(private val native: JSlider,
 	                 val snapToTicks: Prop<Boolean> = Prop.NoValue,
 	                 val valueIsAdjusting: Prop<Boolean> = Prop.NoValue,
 	                 val orientation: Prop<Orientation> = Prop.NoValue,
-	                 val labelTable: Prop<SliderLabelTable?> = Prop.NoValue) : UProps,
-	                                                                           SwingNativeComponent.PropsProvider<Props>,
-	                                                                           PropsProvider<Props>
+	                 val labelTable: Prop<SliderLabelTable?> = Prop.NoValue,
+	                 val onChange: Prop<(Int) -> Unit> = Prop.NoValue) : UProps,
+	                                                                     SwingNativeComponent.PropsProvider<Props>,
+	                                                                     PropsProvider<Props>
 	{
 		override val sliderProps = this
 
@@ -45,15 +49,27 @@ class SwingSlider(private val native: JSlider,
 		fun withSliderBarProps(builder: Builder<Props>): S
 	}
 
+	private val changeListener = ChangeListener { onChange() }
+
+	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	{
+		native.addChangeListener(changeListener)
+	}
+
+	override fun onDetach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	{
+		native.removeChangeListener(changeListener)
+	}
+
 	override fun SwingRenderBuilder.render()
 	{
 		+ nativeComponent(native = { native }, props = props.swingProps)
 	}
 
 	override fun onUpdate(previousProps: Props?) = native.apply {
-		props.value.ifPresent { value = it }
-		props.minimum.ifPresent { minimum = it }
-		props.maximum.ifPresent { maximum = it }
+		props.value.ifPresent { if(it != value) value = it }
+		props.minimum.ifPresent { if(it != minimum) minimum = it }
+		props.maximum.ifPresent { if(it != maximum) maximum = it }
 		props.majorTickSpacing.ifPresent { majorTickSpacing = it }
 		props.minorTickSpacing.ifPresent { minorTickSpacing = it }
 		props.extent.ifPresent { extent = it }
@@ -66,6 +82,13 @@ class SwingSlider(private val native: JSlider,
 		props.orientation.ifPresent { orientation = it.code }
 		props.labelTable.ifPresent { labelTable = it?.createLabelTable(this) }
 	}.unit
+
+	private fun onChange()
+	{
+		if(native.value == props.value.value) return
+		props.onChange.value?.invoke(native.value)
+		invalidate()
+	}
 }
 
 fun SwingRenderScope.slider(native: () -> JSlider = ::JSlider,
@@ -104,3 +127,5 @@ fun <P : SSProvider<P>> SwingElement<P>.orientation(orientation: Orientation) =
 		withSliderBarProps { copy(orientation = orientation.prop()) }
 fun <P : SSProvider<P>> SwingElement<P>.labelTable(table: SliderLabelTable?) =
 		withSliderBarProps { copy(labelTable = table.prop()) }
+fun <P : SSProvider<P>> SwingElement<P>.onChange(listener: (Int) -> Unit) =
+		withSliderBarProps { copy(onChange = listener.prop()) }
