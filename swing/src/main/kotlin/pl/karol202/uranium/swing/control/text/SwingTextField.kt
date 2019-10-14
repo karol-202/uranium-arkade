@@ -60,7 +60,7 @@ class SwingTextField(private val native: JTextField,
 		+ abstractTextComponent(native = { native }, props = props.abstractTextProps)
 	}
 
-	override fun onUpdate(previousProps: Props) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.apply {
 		props.columns.ifPresent { columns = it }
 		props.horizontalAlign.ifPresent { horizontalAlignment = it.code }
 		props.scrollOffset.ifPresent { scrollOffset = it }

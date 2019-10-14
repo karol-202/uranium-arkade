@@ -73,7 +73,7 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 		+ nativeComponent(native = { native }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props<E>)
+	override fun onUpdate(previousProps: Props<E>?)
 	{
 		props.items.ifPresent { model.items = it }
 		props.renderer.ifPresent { native.renderer = getRenderer(it) }

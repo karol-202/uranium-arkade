@@ -44,7 +44,7 @@ class SwingLabel(private val native: JLabel,
 		+ nativeComponent(native = { native }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.apply {
 		props.text.ifPresent { text = it }
 		props.icon.ifPresent { icon = it }
 		props.disabledIcon.ifPresent { disabledIcon = it }

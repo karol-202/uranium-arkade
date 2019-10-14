@@ -37,7 +37,7 @@ abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 
 	protected abstract fun RenderBuilder<N>.render()
 
-	override fun onUpdate(previousProps: P) { }
+	override fun onUpdate(previousProps: P?) { }
 
 	final override fun modifyPropsInternal(props: P)
 	{

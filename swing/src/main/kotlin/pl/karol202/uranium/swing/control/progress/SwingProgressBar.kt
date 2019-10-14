@@ -44,7 +44,7 @@ class SwingProgressBar(private val native: JProgressBar,
 		+ nativeComponent(native = { native }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.apply {
 		props.value.ifPresent { value = it }
 		props.minimum.ifPresent { minimum = it }
 		props.maximum.ifPresent { maximum = it }

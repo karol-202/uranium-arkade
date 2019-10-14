@@ -43,7 +43,7 @@ class SwingLayout(initialProps: Props) : SwingAbstractComponent<SwingLayout.Prop
 		+ nativeComponent(native = { native }, props = props.swingProps).context(panelContext)
 	}
 
-	override fun onUpdate(previousProps: Props)
+	override fun onUpdate(previousProps: Props?)
 	{
 		props.layoutData.ifPresent { native.layout = it.updateLayout(native, native.layout) }
 	}

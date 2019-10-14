@@ -133,7 +133,7 @@ class SwingNativeComponent(private val native: SwingNative,
 		+ props.children
 	}
 
-	override fun onUpdate(previousProps: Props) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.apply {
 		props.enabled.ifPresent { isEnabled = it }
 		props.visible.ifPresent { isVisible = it }
 		props.focusable.ifPresent { isFocusable = it }
@@ -161,7 +161,7 @@ class SwingNativeComponent(private val native: SwingNative,
 		props.preferredSize.ifPresent { preferredSize = it }
 		props.size.ifPresent { size = it }
 
-		if(props.constraints.value != previousProps.constraints.value) requireParentContext().reattachNative()
+		previousProps?.let { if(props.constraints.value != it.constraints.value) requireParentContext().reattachNative() }
 	}.unit
 
 	private fun SwingContext.reattachNative()

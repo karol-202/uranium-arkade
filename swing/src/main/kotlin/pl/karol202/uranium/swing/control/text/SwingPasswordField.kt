@@ -45,6 +45,11 @@ class SwingPasswordField(private val native: JPasswordField,
 		fun withPasswordFieldProps(builder: Builder<Props>): S
 	}
 
+	companion object
+	{
+		const val PASSWORD_VISIBLE_CHAR = 0
+	}
+
 	private val actionListener = ActionListener { props.onPasswordApply.value?.invoke(native.password) }
 
 	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
@@ -62,8 +67,8 @@ class SwingPasswordField(private val native: JPasswordField,
 		+ textField(native = { native }, props = props.textFieldProps)
 	}
 
-	override fun onUpdate(previousProps: Props) = native.apply {
-		props.echoChar.ifPresent { echoChar = it ?: 0.toChar() }
+	override fun onUpdate(previousProps: Props?) = native.apply {
+		props.echoChar.ifPresent { echoChar = it ?: PASSWORD_VISIBLE_CHAR.toChar() }
 	}.unit
 }
 

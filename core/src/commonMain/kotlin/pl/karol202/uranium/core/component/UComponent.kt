@@ -14,7 +14,7 @@ interface UComponent<N, P : UProps> : ContextProvider<N>,
 
 	fun render(): List<UElement<N, *>>
 
-	fun onUpdate(previousProps: P)
+	fun onUpdate(previousProps: P?)
 
 	fun modifyPropsInternal(props: P)
 
