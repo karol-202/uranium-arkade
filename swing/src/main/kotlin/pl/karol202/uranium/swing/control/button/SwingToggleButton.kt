@@ -38,7 +38,7 @@ class SwingToggleButton(private val native: JToggleButton,
 		fun withToggleButtonProps(builder: Builder<Props>): S
 	}
 
-	private val itemListener = ItemListener { props.onSelect.value?.invoke(it.stateChange == ItemEvent.SELECTED) }
+	private val itemListener = ItemListener { onSelect(it.stateChange == ItemEvent.SELECTED) }
 
 	override fun onAttach(parentContext: SwingInvalidateableContext)
 	{
@@ -55,6 +55,12 @@ class SwingToggleButton(private val native: JToggleButton,
 	override fun SwingRenderBuilder.render()
 	{
 		+ abstractButton(native = { native }, props = props.abstractButtonProps)
+	}
+
+	private fun onSelect(selected: Boolean)
+	{
+		props.onSelect.value?.invoke(selected)
+		invalidate()
 	}
 }
 

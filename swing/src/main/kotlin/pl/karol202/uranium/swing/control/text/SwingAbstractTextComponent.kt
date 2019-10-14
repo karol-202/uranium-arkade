@@ -9,6 +9,7 @@ import pl.karol202.uranium.swing.util.*
 import java.awt.Color
 import java.awt.Insets
 import javax.swing.DropMode
+import javax.swing.event.CaretListener
 import javax.swing.text.*
 
 class SwingAbstractTextComponent(private val native: JTextComponent,
@@ -52,10 +53,10 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
         fun withAbstractTextProps(builder: Builder<Props>): S
     }
 
-    private val caretListener = CaretListenerDelegate { props.onCaretMove.value }
-    private val documentListener = TextChangeListenerDelegate { props.onTextChange.value?.let { onTextChange ->
-        { if(it != props.text.value) onTextChange(it) } }
-    }
+    private val caretListener = CaretListener { onCaretMove(dot = it.dot, mark = it.mark) }
+    private val documentListener = TextChangeListenerDelegate { if(!ignoreTextChanges) onTextChange() else null }
+
+    private var ignoreTextChanges = false
 
     override fun onAttach(parentContext: SwingInvalidateableContext)
     {
@@ -77,7 +78,9 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
     }
 
 	override fun onUpdate(previousProps: Props?) = native.apply {
-        props.text.ifPresent { if(it != text) text = it }
+        ignoreTextChanges {
+            props.text.ifPresent { if(it != text) text = it }
+        }
         props.caret.ifPresent { caret = it }
         props.highlighter.ifPresent { highlighter = it }
         props.keymap.ifPresent { keymap = it }
@@ -90,6 +93,24 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
         props.dragEnabled.ifPresent { dragEnabled = it }
         props.dropMode.ifPresent { dropMode = it }
     }.unit
+
+    private fun ignoreTextChanges(block: () -> Unit)
+    {
+        ignoreTextChanges = true
+        block()
+        ignoreTextChanges = false
+    }
+
+    private fun onCaretMove(dot: Int, mark: Int)
+    {
+        props.onCaretMove.value?.invoke(dot, mark)
+    }
+
+    // For security reasons (JPasswordField), native.text mustn't be called unless onTextChange is specified
+    private fun onTextChange(): ((String) -> Unit)? =
+            props.onTextChange.value?.let { onTextChange ->
+                { value: String -> if(value != props.text.value) onTextChange(value) }
+            }.also { invalidate() }
 }
 
 fun SwingRenderScope.abstractTextComponent(native: () -> JTextComponent,

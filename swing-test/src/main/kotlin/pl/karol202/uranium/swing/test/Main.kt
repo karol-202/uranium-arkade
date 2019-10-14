@@ -15,7 +15,6 @@ import pl.karol202.uranium.swing.layout.gridbag.Fill
 import pl.karol202.uranium.swing.layout.gridbag.Weights
 import pl.karol202.uranium.swing.layout.gridbag.cell
 import pl.karol202.uranium.swing.layout.gridbag.gridBagLayout
-import pl.karol202.uranium.swing.util.HorizontalAlign
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import pl.karol202.uranium.swing.util.SwingRenderScope
 import pl.karol202.uranium.swing.util.SwingStatefulComponent
@@ -40,8 +39,7 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 				label(key = 0).text("Tekst: ${state.text} Stan: ${state.checked}")
 			}
 			+ cell(1, 0, weights = Weights(1.0, 0.0), fill = Fill.HORIZONTAL) {
-				textField(key = 1).text(state.text).onTextChange { setText(it) }.horizontalAlign(HorizontalAlign.CENTER)
-						.columns(50)
+				textField(key = 1).text(state.text).onTextChange { setText(it) }.columns(50)
 			}
 			+ cell(2, 0) {
 				checkBox(key = 2).text("Checkbox").selected(state.checked).onSelect { setChecked(it) }

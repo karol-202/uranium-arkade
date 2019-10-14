@@ -56,7 +56,7 @@ class SwingAbstractButton(private val native: AbstractButton,
 		fun withAbstractButtonProps(builder: Builder<Props>): S
 	}
 
-	private val actionListener = ActionListener { props.onClick.value?.invoke() }
+	private val actionListener = ActionListener { onClick() }
 
 	override fun onAttach(parentContext: SwingInvalidateableContext)
 	{
@@ -99,6 +99,12 @@ class SwingAbstractButton(private val native: AbstractButton,
 		props.mnemonic.ifPresent { mnemonic = it }
 		props.displayedMnemonicIndex.ifPresent { displayedMnemonicIndex = it }
 	}.unit
+
+	private fun onClick()
+	{
+		props.onClick.value?.invoke()
+		invalidate()
+	}
 }
 
 fun SwingRenderScope.abstractButton(native: () -> AbstractButton,

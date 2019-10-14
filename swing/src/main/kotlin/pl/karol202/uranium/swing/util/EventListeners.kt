@@ -88,11 +88,6 @@ class VetoableChangeListenerDelegate(private val listenerSupplier: () -> Vetoabl
 	override fun vetoableChange(e: PropertyChangeEvent?) = listenerSupplier()?.vetoableChange(e) ?: Unit
 }
 
-class CaretListenerDelegate(private val listenerSupplier: () -> ((dot: Int, mark: Int) -> Unit)?) : CaretListener
-{
-	override fun caretUpdate(e: CaretEvent) = listenerSupplier()?.invoke(e.dot, e.mark) ?: Unit
-}
-
 // For security reasons (JPasswordField), getText() will not get called unless listenerSupplier returns true
 class TextChangeListenerDelegate(private val listenerSupplier: () -> ((String) -> Unit)?): DocumentListener
 {
@@ -103,11 +98,6 @@ class TextChangeListenerDelegate(private val listenerSupplier: () -> ((String) -
 	override fun removeUpdate(e: DocumentEvent) = listenerSupplier()?.invoke(e.getText()) ?: Unit
 
 	private fun DocumentEvent.getText() = document.getText(0, document.length)
-}
-
-class ItemSelectListener(private val onItemSelect: (Any) -> Unit): ItemListener
-{
-	override fun itemStateChanged(e: ItemEvent) = onItemSelect(e.item)
 }
 
 class PopupListenerDelegate(private val popupShowListenerSupplier: () -> (() -> Unit)?,

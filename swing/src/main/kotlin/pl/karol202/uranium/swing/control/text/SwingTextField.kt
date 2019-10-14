@@ -42,8 +42,7 @@ class SwingTextField(private val native: JTextField,
 		fun withTextFieldProps(builder: Builder<Props>): S
 	}
 
-	// For security reasons (JPasswordField), native.text mustn't be called unless onApply is specified
-	private val actionListener = ActionListener { props.onApply.value?.invoke(native.text) }
+	private val actionListener = ActionListener { onApply() }
 
 	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
 	{
@@ -65,6 +64,13 @@ class SwingTextField(private val native: JTextField,
 		props.horizontalAlign.ifPresent { horizontalAlignment = it.code }
 		props.scrollOffset.ifPresent { scrollOffset = it }
 	}.unit
+
+	private fun onApply()
+	{
+		// For security reasons (JPasswordField), native.text mustn't be called unless onApply is specified
+		props.onApply.value?.invoke(native.text)
+		invalidate()
+	}
 }
 
 fun SwingRenderScope.textField(native: () -> JTextField = ::JTextField,

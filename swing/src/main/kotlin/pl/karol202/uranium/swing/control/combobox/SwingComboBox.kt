@@ -8,6 +8,7 @@ import pl.karol202.uranium.swing.SwingNativeComponent
 import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.nativeComponent
 import pl.karol202.uranium.swing.util.*
+import java.awt.event.ItemListener
 import javax.swing.JComboBox
 
 class SwingComboBox<E>(private val native: JComboBox<E>,
@@ -45,7 +46,7 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 		fun withComboBoxProps(builder: Builder<Props<E>>): S
 	}
 
-	private val itemListener = ItemSelectListener { props.onSelect.value?.invoke(it as E) }
+	private val itemListener = ItemListener { onSelect(it.item as E) }
 	private val popupListener = PopupListenerDelegate({ props.onPopupShow.value },
 	                                                  { props.onPopupHide.value },
 	                                                  { props.onPopupCancel.value })
@@ -90,6 +91,12 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 
 	private fun getEditor(renderFunction: SwingRenderScope.(CustomComboBoxEditor.Props<E>) -> SwingElement<*>) =
 			editor?.also { it.renderFunction = renderFunction } ?: CustomComboBoxEditor(renderFunction).also { editor = it }
+
+	private fun onSelect(value: E)
+	{
+		props.onSelect.value?.invoke(value)
+		invalidate()
+	}
 }
 
 fun <E> SwingRenderScope.comboBox(native: () -> JComboBox<E> = ::JComboBox,
