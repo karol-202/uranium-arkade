@@ -23,7 +23,7 @@ abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 
 	final override fun detach()
 	{
-		onDetach(parentContext ?: throw IllegalStateException("Already detached"))
+		onDetach(requireParentContext())
 		parentContext = null
 	}
 
@@ -31,7 +31,7 @@ abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 
 	protected open fun onDetach(parentContext: InvalidateableContext<N>) { }
 
-	protected fun invalidate() = parentContext?.invalidate()
+	protected fun invalidate() = requireParentContext().invalidate()
 
 	final override fun render() = RenderBuilder<N>().also { it.render() }.elements
 

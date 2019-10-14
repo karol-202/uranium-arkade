@@ -1,6 +1,6 @@
 package pl.karol202.uranium.swing.control.combobox
 
-import pl.karol202.uranium.core.tree.renderToNode
+import pl.karol202.uranium.core.schedule.renderWithQueueScheduler
 import pl.karol202.uranium.swing.SwingContextImpl
 import pl.karol202.uranium.swing.SwingSingleWrapper
 import pl.karol202.uranium.swing.singleWrapper
@@ -20,7 +20,6 @@ class CustomComboBoxRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) 
 	                    val hasFocus: Boolean)
 
 	private val nativeContainer = JPanel()
-	private val context = SwingContextImpl(nativeContainer)
 	private var rootNode: SwingTreeNode<SwingSingleWrapper.Props>? = null
 
 	override fun getListCellRendererComponent(list: JList<out E>?, value: E?, index: Int, selected: Boolean, focus: Boolean): JPanel
@@ -30,9 +29,14 @@ class CustomComboBoxRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) 
 		return nativeContainer
 	}
 
-	private fun reuse(props: Props<E>) = rootNode?.reuse(renderRootElement(props))
+	private fun reuse(props: Props<E>) = rootNode?.scheduleReuse(renderRootElement(props))
 
-	private fun render(props: Props<E>) = renderRootElement(props).renderToNode(context).also { rootNode = it }
+	private fun render(props: Props<E>)
+	{
+		rootNode = renderRootElement(props).renderWithQueueScheduler(createContext())
+	}
 
 	private fun renderRootElement(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }
+
+	private fun createContext() = SwingContextImpl(nativeContainer)
 }

@@ -1,6 +1,6 @@
 package pl.karol202.uranium.swing.frame
 
-import pl.karol202.uranium.core.tree.renderToNode
+import pl.karol202.uranium.core.schedule.renderWithQueueScheduler
 import pl.karol202.uranium.swing.SwingContextImpl
 import pl.karol202.uranium.swing.util.SwingElement
 import pl.karol202.uranium.swing.util.SwingRenderScope
@@ -21,7 +21,7 @@ abstract class SwingFrame
 		frame.initFrame()
 	}
 
-	private fun render() = createRootElement().renderToNode(createContext())
+	private fun render() = createRootElement().renderWithQueueScheduler(createContext())
 
 	private fun createContext() = SwingContextImpl(frame)
 

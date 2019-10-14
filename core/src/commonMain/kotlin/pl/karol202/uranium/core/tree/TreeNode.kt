@@ -1,28 +1,35 @@
 package pl.karol202.uranium.core.tree
 
-import pl.karol202.uranium.core.common.Detachable
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
 import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.context.invalidateable
 import pl.karol202.uranium.core.element.UElement
 
-fun <N, P : UProps> UElement<N, P>.renderToNode(context: UContext<N>) = TreeNode(createComponent(), context)
+fun <N, P : UProps> UElement<N, P>.createNode(context: UContext<N>, renderScheduler: RenderScheduler<N>) =
+		TreeNode(createComponent(), context, renderScheduler)
 
 class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
-                              context: UContext<N>) : Detachable
+                              private val context: UContext<N>,
+                              private val scheduler: RenderScheduler<N>)
 {
 	private val key get() = component.key
 	private var children = emptyList<TreeNode<N, *>>()
 
-	init
+	fun scheduleInit() = scheduler.submit(this::init)
+
+	fun scheduleReuse(element: UElement<N, P>) = scheduler.submit { reuse(element) }
+
+	private fun init()
 	{
-		attach(context)
+		attach()
 		render()
 		update()
 	}
 
-	private fun attach(context: UContext<N>) = component.attach(context.invalidateable { render() })
+	private fun attach() = component.attach(context.invalidateable(this::scheduleRender))
+
+	private fun scheduleRender() = scheduler.submit(this::render)
 
 	private fun render()
 	{
@@ -41,13 +48,15 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 
 	private fun reuseOrRenderChild(element: UElement<N, *>) = reuseChild(element) ?: renderChild(element)
 
-	private fun renderChild(element: UElement<N, *>) = element.renderToNode(component.requireContext())
+	private fun renderChild(element: UElement<N, *>) = createChild(element).apply { init() }
+
+	private fun createChild(element: UElement<N, *>) = element.createNode(component.requireContext(), scheduler)
 
 	private fun <P : UProps> reuseChild(element: UElement<N, P>) = findChildByKey<P>(element.key)?.apply { reuse(element) }
 
 	private fun <P : UProps> findChildByKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<N, P>
 
-	fun reuse(element: UElement<N, P>)
+	private fun reuse(element: UElement<N, P>)
 	{
 		if(needsUpdate(element)) keepProps { prevProps ->
 			setProps(element)
@@ -66,7 +75,7 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 
 	private fun update(previousProps: P = component.props) = component.onUpdate(previousProps)
 
-	override fun detach()
+	private fun detach()
 	{
 		detachChildren()
 		component.detach()
