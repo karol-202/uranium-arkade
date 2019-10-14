@@ -20,6 +20,8 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 
 	fun scheduleReuse(element: UElement<N, P>) = scheduler.submit { reuse(element) }
 
+	private fun scheduleRender() = scheduler.submit(this::render)
+
 	private fun init()
 	{
 		attach()
@@ -28,8 +30,6 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 	}
 
 	private fun attach() = component.attach(context.invalidateable(this::scheduleRender))
-
-	private fun scheduleRender() = scheduler.submit(this::render)
 
 	private fun render()
 	{
@@ -61,7 +61,7 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 		if(needsUpdate(element)) keepProps { prevProps ->
 			setProps(element)
 			render()
-			update(prevProps)
+			update(prevProps) // TODO Execute update on rerender ?
 		}
 		else setProps(element)
 	}

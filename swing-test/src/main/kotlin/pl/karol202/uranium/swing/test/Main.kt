@@ -19,10 +19,10 @@ import pl.karol202.uranium.swing.util.HorizontalAlign
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import pl.karol202.uranium.swing.util.SwingRenderScope
 import pl.karol202.uranium.swing.util.SwingStatefulComponent
+import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
-fun main()
-{
+fun main() = SwingUtilities.invokeLater {
 	UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel")
 	SwingFrame.withRoot { counter(0) }.withTitle("Uranium test").withSize(640, 480).show()
 }

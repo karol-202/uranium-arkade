@@ -12,12 +12,17 @@ import pl.karol202.uranium.core.tree.createNode
 import kotlin.coroutines.CoroutineContext
 
 fun <N, P : UProps> UElement<N, P>.renderWithQueueScheduler(context: UContext<N>,
-                                                coroutineContext: CoroutineContext = Dispatchers.Default) =
+                                                            coroutineContext: CoroutineContext = Dispatchers.Main) =
 		createNode(context, QueueRenderScheduler(CoroutineScope(coroutineContext))).apply { scheduleInit() }
 
 class QueueRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<N>
 {
-	private val scheduleChannel = Channel<() -> Unit>(Channel.UNLIMITED)
+	companion object
+	{
+		const val MAX_BUFFER_SIZE = 64
+	}
+
+	private val scheduleChannel = Channel<() -> Unit>(MAX_BUFFER_SIZE)
 
 	init
 	{
@@ -31,6 +36,6 @@ class QueueRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<
 
 	override fun submit(render: () -> Unit)
 	{
-		scheduleChannel.offer(render)
+		if(!scheduleChannel.offer(render)) throw RuntimeException("Too many scheduled renders (probably an infinite loop)")
 	}
 }

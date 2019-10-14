@@ -9,6 +9,7 @@ dependencies {
 
 	implementation(kotlin("stdlib-jdk8"))
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.3.2")
 }
 
 tasks.withType<KotlinCompile> {
