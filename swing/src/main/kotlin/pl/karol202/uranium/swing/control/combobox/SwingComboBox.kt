@@ -8,6 +8,7 @@ import pl.karol202.uranium.swing.SwingNativeComponent
 import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.nativeComponent
 import pl.karol202.uranium.swing.util.*
+import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
 import javax.swing.JComboBox
 
@@ -17,6 +18,7 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 	data class Props<E>(override val key: Any = AutoKey,
 	                    override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
 	                    val items: Prop<List<E>> = Prop.NoValue,
+	                    val selectedItem: Prop<E?> = Prop.NoValue,
 	                    val renderer: Prop<SwingRenderScope.(CustomComboBoxRenderer.Props<E>) -> SwingElement<*>> = Prop.NoValue,
 	                    val editor: Prop<SwingRenderScope.(CustomComboBoxEditor.Props<E>) -> SwingElement<*>> = Prop.NoValue,
 	                    val editable: Prop<Boolean> = Prop.NoValue,
@@ -46,7 +48,7 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 		fun withComboBoxProps(builder: Builder<Props<E>>): S
 	}
 
-	private val itemListener = ItemListener { onSelect(it.item as E) }
+	private val itemListener = ItemListener { if(it.stateChange == ItemEvent.SELECTED) onSelect(it.item as E) }
 	private val popupListener = PopupListenerDelegate({ props.onPopupShow.value },
 	                                                  { props.onPopupHide.value },
 	                                                  { props.onPopupCancel.value })
@@ -77,6 +79,7 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 	override fun onUpdate(previousProps: Props<E>?)
 	{
 		props.items.ifPresent { model.items = it }
+		props.selectedItem.ifPresent { model.selectedItem = it }
 		props.renderer.ifPresent { native.renderer = getRenderer(it) }
 		props.editor.ifPresent { native.editor = getEditor(it) }
 		props.editable.ifPresent { native.isEditable = it }
@@ -109,6 +112,8 @@ fun <P : SCBProvider<P, E>, E> SwingElement<P>.withComboBoxProps(builder: Builde
 		withProps { withComboBoxProps(builder) }
 fun <P : SCBProvider<P, E>, E> SwingElement<P>.items(items: List<E>) =
 		withComboBoxProps { copy(items = items.prop()) }
+fun <P : SCBProvider<P, E>, E> SwingElement<P>.selectedItem(item: E?) =
+		withComboBoxProps { copy(selectedItem = item.prop()) }
 fun <P : SCBProvider<P, E>, E> SwingElement<P>.renderer(renderer: SwingRenderScope.(CustomComboBoxRenderer.Props<E>) -> SwingElement<*>) =
 		withComboBoxProps { copy(renderer = renderer.prop()) }
 fun <P : SCBProvider<P, E>, E> SwingElement<P>.editor(editor: SwingRenderScope.(CustomComboBoxEditor.Props<E>) -> SwingElement<*>) =

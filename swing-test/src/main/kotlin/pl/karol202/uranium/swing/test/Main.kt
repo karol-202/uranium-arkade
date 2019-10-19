@@ -33,7 +33,8 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 {
 	data class State(val text: String = "start",
 	                 val checked: Boolean = false,
-	                 val items: List<String> = listOf("Kot", "Pies", "Koń")) : UState
+	                 val items: List<String> = listOf("Kot", "Pies", "Koń"),
+	                 val selectedItem: String? = null) : UState
 
 	override fun SwingRenderBuilder.render()
 	{
@@ -60,8 +61,9 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 					editorComponent(initialValue = props.item, onApply = {
 						addItem(it)
 						props.onEdit(it)
+						setSelectedItem(it)
 					})
-				}
+				}.selectedItem(state.selectedItem).onSelect { setSelectedItem(it) }
 			}
 			+ cell(3, 1, fill = Fill.HORIZONTAL) {
 				progressBar(key = 6).minimum(0).maximum(200).value(80).stringPainted(true)
@@ -78,6 +80,8 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	private fun setChecked(checked: Boolean) = setState { copy(checked = checked) }
 
 	private fun addItem(item: String) = setState { copy(items = items + item) }
+
+	private fun setSelectedItem(item: String) = setState { copy(selectedItem = item) }
 }
 
 fun SwingRenderScope.counter(key: Any) = component(::CounterComponent, BasicProps(key))
