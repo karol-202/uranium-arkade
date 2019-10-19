@@ -5,10 +5,12 @@ import pl.karol202.uranium.core.component.StatefulComponent
 import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.element.UElement
-import pl.karol202.uranium.core.tree.TreeNode
 import pl.karol202.uranium.core.render.RenderBuilder
 import pl.karol202.uranium.core.render.RenderBuilderBase
 import pl.karol202.uranium.core.render.RenderScope
+import pl.karol202.uranium.core.schedule.BlockingRenderScheduler
+import pl.karol202.uranium.core.schedule.SuspendRenderScheduler
+import pl.karol202.uranium.core.tree.TreeNode
 import pl.karol202.uranium.swing.SwingNativeWrapper
 import java.awt.Container
 import javax.swing.JComponent
@@ -36,5 +38,9 @@ typealias SwingContext = UContext<SwingNativeWrapper>
 typealias SwingInvalidateableContext = InvalidateableContext<SwingNativeWrapper>
 
 typealias SwingTreeNode<P> = TreeNode<SwingNativeWrapper, P>
+
+typealias SwingSuspendRenderScheduler = SuspendRenderScheduler<SwingNativeWrapper>
+
+typealias SwingBlockingRenderScheduler = BlockingRenderScheduler<SwingNativeWrapper>
 
 internal typealias Builder<T> = T.() -> T

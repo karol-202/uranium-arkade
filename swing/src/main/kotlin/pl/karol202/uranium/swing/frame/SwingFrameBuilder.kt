@@ -27,7 +27,7 @@ class SwingFrameBuilder internal constructor(private val rootSupplier: SwingRend
 
 	fun build() = object : SwingFrame()
 	{
-		override fun createRootElement() = SwingEmptyRenderScope.rootSupplier()
+		override fun renderRoot() = SwingEmptyRenderScope.rootSupplier()
 
 		override fun JFrame.initFrame()
 		{

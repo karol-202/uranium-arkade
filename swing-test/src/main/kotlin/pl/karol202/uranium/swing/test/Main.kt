@@ -1,5 +1,7 @@
 package pl.karol202.uranium.swing.test
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
@@ -18,10 +20,10 @@ import pl.karol202.uranium.swing.layout.gridbag.gridBagLayout
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import pl.karol202.uranium.swing.util.SwingRenderScope
 import pl.karol202.uranium.swing.util.SwingStatefulComponent
-import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
-fun main() = SwingUtilities.invokeLater {
+fun main()
+{
 	UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel")
 	SwingFrame.withRoot { counter(0) }.withTitle("Uranium test").withSize(640, 480).show()
 }
@@ -50,7 +52,7 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 			+ cell(4, 0) {
 				toggleButton(key = 4).text(state.text).selected(state.checked).onClick { setChecked(false) }
 			}
-			+ cell(4, 1, weights = Weights(1.0, 0.0)) {
+			cell(4, 1, weights = Weights(1.0, 0.0)) {
 				comboBox<String>(key = 5).items(state.items).renderer { props ->
 					label().text(props.item?.let { "Zwierz: $it" } ?: "Brak")
 				}.editable(true).editor { props ->

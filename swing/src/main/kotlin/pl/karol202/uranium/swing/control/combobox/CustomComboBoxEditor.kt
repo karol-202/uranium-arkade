@@ -1,13 +1,15 @@
 package pl.karol202.uranium.swing.control.combobox
 
-import pl.karol202.uranium.core.schedule.renderWithQueueScheduler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import pl.karol202.uranium.core.schedule.SuspendRenderScheduler
+import pl.karol202.uranium.core.schedule.renderToNode
+import pl.karol202.uranium.core.schedule.renderWithQueueSchedulerAndWait
 import pl.karol202.uranium.swing.SwingContextImpl
 import pl.karol202.uranium.swing.SwingSingleWrapper
 import pl.karol202.uranium.swing.singleWrapper
-import pl.karol202.uranium.swing.util.SwingElement
-import pl.karol202.uranium.swing.util.SwingEmptyRenderScope
-import pl.karol202.uranium.swing.util.SwingRenderScope
-import pl.karol202.uranium.swing.util.SwingTreeNode
+import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
@@ -27,6 +29,7 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 	private val listeners = mutableListOf<ActionListener>()
 	private val nativeContainer = JPanel(BorderLayout())
 	private var rootNode: SwingTreeNode<SwingSingleWrapper.Props>? = null
+	private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
 	private var item: E? = null
 
@@ -40,15 +43,17 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 	override fun setItem(rawItem: Any?)
 	{
 		this.item = rawItem as? E
-		val props = Props(item) { onEdit(it) }
-		reuse(props) ?: render(props)
+		reuseOrRenderBlocking(Props(item) { onEdit(it) })
 	}
 
-	private fun reuse(props: Props<E>) = rootNode?.scheduleReuse(renderRootElement(props))
+	private fun reuseOrRenderBlocking(props: Props<E>) = runBlocking { reuse(props) ?: render(props) }
 
-	private fun render(props: Props<E>)
+	private suspend fun reuse(props: Props<E>) = rootNode?.scheduleReuse(renderRootElement(props))
+
+	private suspend fun render(props: Props<E>)
 	{
-		rootNode = renderRootElement(props).renderWithQueueScheduler(createContext())
+		rootNode = SwingSuspendRenderScheduler(coroutineScope).renderToNode()
+		rootNode = renderRootElement(props).renderWithQueueSchedulerAndWait(createContext())
 	}
 
 	private fun renderRootElement(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }

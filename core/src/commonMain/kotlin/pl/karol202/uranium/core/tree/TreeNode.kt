@@ -5,6 +5,7 @@ import pl.karol202.uranium.core.component.UComponent
 import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.context.invalidateable
 import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.schedule.RenderScheduler
 
 fun <N, P : UProps> UElement<N, P>.createNode(context: UContext<N>, renderScheduler: RenderScheduler<N>) =
 		TreeNode(createComponent(), context, renderScheduler)
@@ -16,17 +17,13 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 	private val key get() = component.key
 	private var children = emptyList<TreeNode<N, *>>()
 
-	fun scheduleInit() = scheduler.submit(this::init)
-
-	fun scheduleReuse(element: UElement<N, P>) = scheduler.submit { reuse(element) }
-
-	private fun init()
+	fun init()
 	{
 		attach()
 		invalidate()
 	}
 
-	private fun attach() = component.attach(context.invalidateable(this::scheduleInvalidate))
+	private fun attach() = component.attach(context.invalidateable { scheduleInvalidate() })
 
 	private fun scheduleInvalidate() = scheduler.submit(this::invalidate)
 
@@ -61,7 +58,7 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 
 	private fun <P : UProps> findChildByKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<N, P>
 
-	private fun reuse(element: UElement<N, P>)
+	fun reuse(element: UElement<N, P>)
 	{
 		if(needsUpdate(element)) keepProps { prevProps ->
 			setProps(element)
