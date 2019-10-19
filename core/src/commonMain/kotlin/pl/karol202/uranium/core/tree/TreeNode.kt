@@ -17,10 +17,19 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 	private val key get() = component.key
 	private var children = emptyList<TreeNode<N, *>>()
 
-	fun init()
+	fun scheduleInit() = scheduler.submit { init() }
+
+	suspend fun scheduleInitAndWait() = scheduler.submitAndWait { init() }
+
+	fun scheduleReuse(element: UElement<N, P>) = scheduler.submit { reuse(element) }
+
+	suspend fun scheduleReuseAndWait(element: UElement<N, P>) = scheduler.submitAndWait { reuse(element) }
+
+	private fun init()
 	{
 		attach()
-		invalidate()
+		render()
+		update()
 	}
 
 	private fun attach() = component.attach(context.invalidateable { scheduleInvalidate() })
@@ -30,7 +39,7 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 	private fun invalidate()
 	{
 		render()
-		update()
+		update(component.props)
 	}
 
 	private fun render()
@@ -58,7 +67,7 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 
 	private fun <P : UProps> findChildByKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<N, P>
 
-	fun reuse(element: UElement<N, P>)
+	private fun reuse(element: UElement<N, P>)
 	{
 		if(needsUpdate(element)) keepProps { prevProps ->
 			setProps(element)

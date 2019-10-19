@@ -2,7 +2,7 @@ package pl.karol202.uranium.core.schedule
 
 import kotlinx.coroutines.CoroutineScope
 
-class BlockingRenderScheduler<N>(coroutineScope: CoroutineScope) : BaseRenderScheduler<N>(coroutineScope)
+class BlockingRenderScheduler<N>(coroutineScope: CoroutineScope) : AbstractRenderScheduler<N>(coroutineScope)
 {
-	fun submitAndWait(function: () -> Unit) = Request(function).execute()
+	override suspend fun submitAndWait(function: () -> Unit) = Request(function).execute()
 }

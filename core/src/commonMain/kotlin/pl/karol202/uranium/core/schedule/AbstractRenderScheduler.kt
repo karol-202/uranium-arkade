@@ -6,7 +6,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
-open class BaseRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<N>
+abstract class AbstractRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<N>
 {
 	companion object
 	{

@@ -5,7 +5,10 @@ plugins {
 	application
 }
 
-application.mainClassName = "pl.karol202.uranium.swing.test.MainKt"
+application {
+	mainClassName = "pl.karol202.uranium.swing.test.MainKt"
+	applicationDefaultJvmArgs = listOf("-Dsun.awt.disablegrab=true")
+}
 
 dependencies {
 	implementation(project(":swing"))

@@ -3,9 +3,7 @@ package pl.karol202.uranium.swing.control.combobox
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import pl.karol202.uranium.core.schedule.SuspendRenderScheduler
-import pl.karol202.uranium.core.schedule.renderToNode
-import pl.karol202.uranium.core.schedule.renderWithQueueSchedulerAndWait
+import pl.karol202.uranium.core.schedule.renderToNodeAndWait
 import pl.karol202.uranium.swing.SwingContextImpl
 import pl.karol202.uranium.swing.SwingSingleWrapper
 import pl.karol202.uranium.swing.singleWrapper
@@ -30,6 +28,7 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 	private val nativeContainer = JPanel(BorderLayout())
 	private var rootNode: SwingTreeNode<SwingSingleWrapper.Props>? = null
 	private val coroutineScope = CoroutineScope(Dispatchers.Main)
+	private val scheduler = SwingBlockingRenderScheduler(coroutineScope)
 
 	private var item: E? = null
 
@@ -48,12 +47,11 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 
 	private fun reuseOrRenderBlocking(props: Props<E>) = runBlocking { reuse(props) ?: render(props) }
 
-	private suspend fun reuse(props: Props<E>) = rootNode?.scheduleReuse(renderRootElement(props))
+	private suspend fun reuse(props: Props<E>) = rootNode?.scheduleReuseAndWait(renderRootElement(props))
 
 	private suspend fun render(props: Props<E>)
 	{
-		rootNode = SwingSuspendRenderScheduler(coroutineScope).renderToNode()
-		rootNode = renderRootElement(props).renderWithQueueSchedulerAndWait(createContext())
+		rootNode = scheduler.renderToNodeAndWait(renderRootElement(props), createContext())
 	}
 
 	private fun renderRootElement(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }

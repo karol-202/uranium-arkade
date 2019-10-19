@@ -1,7 +1,5 @@
 package pl.karol202.uranium.swing.test
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
@@ -11,7 +9,10 @@ import pl.karol202.uranium.swing.control.label.label
 import pl.karol202.uranium.swing.control.label.text
 import pl.karol202.uranium.swing.control.progress.*
 import pl.karol202.uranium.swing.control.slider.*
-import pl.karol202.uranium.swing.control.text.*
+import pl.karol202.uranium.swing.control.text.columns
+import pl.karol202.uranium.swing.control.text.onTextChange
+import pl.karol202.uranium.swing.control.text.text
+import pl.karol202.uranium.swing.control.text.textField
 import pl.karol202.uranium.swing.frame.SwingFrame
 import pl.karol202.uranium.swing.layout.gridbag.Fill
 import pl.karol202.uranium.swing.layout.gridbag.Weights
@@ -52,14 +53,14 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 			+ cell(4, 0) {
 				toggleButton(key = 4).text(state.text).selected(state.checked).onClick { setChecked(false) }
 			}
-			cell(4, 1, weights = Weights(1.0, 0.0)) {
+			+ cell(4, 1, weights = Weights(1.0, 0.0)) {
 				comboBox<String>(key = 5).items(state.items).renderer { props ->
 					label().text(props.item?.let { "Zwierz: $it" } ?: "Brak")
 				}.editable(true).editor { props ->
-					textField().text(props.item).onApply {
+					editorComponent(initialValue = props.item, onApply = {
 						addItem(it)
 						props.onEdit(it)
-					}
+					})
 				}
 			}
 			+ cell(3, 1, fill = Fill.HORIZONTAL) {

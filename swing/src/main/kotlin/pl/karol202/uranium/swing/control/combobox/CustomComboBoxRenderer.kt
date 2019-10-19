@@ -2,7 +2,8 @@ package pl.karol202.uranium.swing.control.combobox
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import pl.karol202.uranium.core.schedule.renderToNode
+import kotlinx.coroutines.runBlocking
+import pl.karol202.uranium.core.schedule.renderToNodeAndWait
 import pl.karol202.uranium.swing.SwingContextImpl
 import pl.karol202.uranium.swing.SwingSingleWrapper
 import pl.karol202.uranium.swing.singleWrapper
@@ -21,17 +22,18 @@ class CustomComboBoxRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) 
 	private val nativeContainer = JPanel()
 	private var rootNode: SwingTreeNode<SwingSingleWrapper.Props>? = null
 	private val coroutineScope = CoroutineScope(Dispatchers.Main)
+	private val scheduler = SwingBlockingRenderScheduler(coroutineScope)
 
 	override fun getListCellRendererComponent(list: JList<out E>?, value: E?, index: Int, selected: Boolean, focus: Boolean) =
 			nativeContainer.also { reuseOrRender(Props(value, index, selected, focus)) }
 
-	private fun reuseOrRender(props: Props<E>) = reuse(props) ?: render(props)
+	private fun reuseOrRender(props: Props<E>) = runBlocking { reuse(props) ?: render(props) }
 
-	private fun reuse(props: Props<E>) = rootNode?.reuse(renderRootElement(props))
+	private suspend fun reuse(props: Props<E>) = rootNode?.scheduleReuseAndWait(renderRootElement(props))
 
-	private fun render(props: Props<E>)
+	private suspend fun render(props: Props<E>)
 	{
-		rootNode = SwingBlockingRenderScheduler(coroutineScope).renderToNode(renderRootElement(props), createContext())
+		rootNode = scheduler.renderToNodeAndWait(renderRootElement(props), createContext())
 	}
 
 	private fun renderRootElement(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }
