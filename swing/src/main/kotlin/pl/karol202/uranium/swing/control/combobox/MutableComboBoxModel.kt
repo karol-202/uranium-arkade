@@ -4,7 +4,7 @@ import javax.swing.ComboBoxModel
 import javax.swing.event.ListDataEvent
 import javax.swing.event.ListDataListener
 
-class ListComboBoxModel<E>(items: List<E>) : ComboBoxModel<E>
+class MutableComboBoxModel<E>(items: List<E>) : ComboBoxModel<E>
 {
 	private val contentEvent = ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, 0)
 

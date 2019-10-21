@@ -2,7 +2,7 @@ package pl.karol202.uranium.swing.layout.flow
 
 import java.awt.FlowLayout
 
-enum class Align(val code: Int)
+enum class FlowAlign(val code: Int)
 {
 	LEFT(FlowLayout.LEFT),
 	CENTER(FlowLayout.CENTER),

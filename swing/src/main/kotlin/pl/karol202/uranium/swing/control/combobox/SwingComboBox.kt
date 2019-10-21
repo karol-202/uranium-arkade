@@ -54,7 +54,7 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 	                                                  { props.onPopupHide.value },
 	                                                  { props.onPopupCancel.value })
 
-	private val model = ListComboBoxModel(props.items.value ?: emptyList())
+	private val model = MutableComboBoxModel(props.items.value ?: emptyList())
 
 	private var renderer: CustomListCellRenderer<E>? = null
 	private var editor: CustomComboBoxEditor<E>? = null

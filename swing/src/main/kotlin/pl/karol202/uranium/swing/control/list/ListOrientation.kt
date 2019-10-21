@@ -2,7 +2,7 @@ package pl.karol202.uranium.swing.control.list
 
 import javax.swing.JList
 
-enum class Orientation(val code: Int)
+enum class ListOrientation(val code: Int)
 {
 	VERTICAL(JList.VERTICAL),
 	HORIZONTAL_WRAP(JList.HORIZONTAL_WRAP),

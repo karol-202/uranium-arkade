@@ -19,11 +19,7 @@ import pl.karol202.uranium.swing.control.text.onTextChange
 import pl.karol202.uranium.swing.control.text.text
 import pl.karol202.uranium.swing.control.text.textField
 import pl.karol202.uranium.swing.frame.SwingFrame
-import pl.karol202.uranium.swing.layout.gridbag.Fill
-import pl.karol202.uranium.swing.layout.gridbag.Weights
-import pl.karol202.uranium.swing.layout.gridbag.cell
-import pl.karol202.uranium.swing.layout.gridbag.gridBagLayout
-import pl.karol202.uranium.swing.util.Insets
+import pl.karol202.uranium.swing.layout.gridbag.*
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import pl.karol202.uranium.swing.util.SwingRenderScope
 import pl.karol202.uranium.swing.util.SwingStatefulComponent
@@ -50,7 +46,7 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 			+ cell(0, 0) {
 				label(key = 0).text("Tekst: ${state.text} Stan: ${state.checked} Slider: ${state.sliderValue}")
 			}
-			+ cell(1, 0, weights = Weights(1.0, 0.0), fill = Fill.HORIZONTAL) {
+			+ cell(1, 0, weights = weights(1.0, 0.0), fill = GridBagFill.HORIZONTAL) {
 				textField(key = 1).text(state.text).onTextChange { setText(it) }.columns(50)
 			}
 			+ cell(2, 0) {
@@ -62,7 +58,7 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 			+ cell(4, 0) {
 				toggleButton(key = 4).text(state.text).selected(state.checked).onClick { setChecked(false) }
 			}
-			+ cell(4, 1, weights = Weights(1.0, 0.0)) {
+			+ cell(4, 1, weights = weights(1.0, 0.0)) {
 				comboBox<String>(key = 5).items(state.items).renderer { props ->
 					label().text(props.item?.let { "Zwierz: $it" } ?: "Brak")
 				}.editable(true).editor { props ->
@@ -73,18 +69,18 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 					})
 				}.selectedItem(state.selectedItem).onSelect { setSelectedItem(it) }
 			}
-			+ cell(0, 1, fill = Fill.HORIZONTAL) {
+			+ cell(0, 1, fill = GridBagFill.HORIZONTAL) {
 				slider(key = 7).minimum(50).maximum(100).value(state.sliderValue).onChange { setSliderValue(it) }
 			}
-			+ cell(2, 1, fill = Fill.HORIZONTAL, insets = Insets(8, 8, 8, 8)) {
-				list<String>(key = 8).items(state.items).selectionMode(SelectionMode.MULTIPLE_INTERNAL_SELECTION)
+			+ cell(2, 1, fill = GridBagFill.HORIZONTAL, insets = insets(8, 8, 8, 8)) {
+				list<String>(key = 8).items(state.items).selectionMode(ListSelectionMode.MULTIPLE_INTERNAL_SELECTION)
 						.selectedItems(state.selectedListItems).onSelect { setSelectedListItems(it) }
 						.renderer {
 							val prefix = if(it.selected) "> " else ""
 							label().text("$prefix${it.item}").alignmentX(1f)
 						}
 			}
-			+ cell(3, 1, fill = Fill.HORIZONTAL) {
+			+ cell(3, 1, fill = GridBagFill.HORIZONTAL) {
 				progressBar(key = 6).minimum(0).maximum(200).value((state.sliderValue - 50) * 4)
 			}
 		}

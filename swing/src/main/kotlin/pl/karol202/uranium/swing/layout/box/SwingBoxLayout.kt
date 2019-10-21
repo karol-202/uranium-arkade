@@ -19,10 +19,10 @@ class SwingBoxLayout(props: Props) : SwingAbstractComponent<SwingBoxLayout.Props
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val layoutProps: SwingLayout.Props = SwingLayout.Props(),
-	                 val axis: Axis) : UProps,
-	                                   SwingNativeComponent.PropsProvider<Props>,
-	                                   SwingLayout.PropsProvider<Props>,
-	                                   PropsProvider<Props>
+	                 val axis: BoxAxis) : UProps,
+	                                      SwingNativeComponent.PropsProvider<Props>,
+	                                      SwingLayout.PropsProvider<Props>,
+	                                      PropsProvider<Props>
 	{
 		override val swingProps = layoutProps.swingProps
 		override val boxLayoutProps = this
@@ -57,7 +57,7 @@ class SwingBoxLayout(props: Props) : SwingAbstractComponent<SwingBoxLayout.Props
 }
 
 fun SwingRenderScope.boxLayout(key: Any = AutoKey,
-                               axis: Axis,
+                               axis: BoxAxis,
                                props: SwingBoxLayout.Props = SwingBoxLayout.Props(key = key, axis = axis),
                                block: SwingRenderBuilder.() -> Unit) =
 		component(::SwingBoxLayout, props).content(block)

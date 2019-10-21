@@ -2,7 +2,7 @@ package pl.karol202.uranium.swing.layout.gridbag
 
 import java.awt.GridBagConstraints
 
-enum class Anchor(val code: Int)
+enum class GridBagAnchor(val code: Int)
 {
 	CENTER(GridBagConstraints.CENTER),
 
