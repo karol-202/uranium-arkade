@@ -27,7 +27,6 @@ class SwingSlider(private val native: JSlider,
 	                 val ticksPainted: Prop<Boolean> = Prop.NoValue,
 	                 val trackPainted: Prop<Boolean> = Prop.NoValue,
 	                 val snapToTicks: Prop<Boolean> = Prop.NoValue,
-	                 val valueIsAdjusting: Prop<Boolean> = Prop.NoValue,
 	                 val orientation: Prop<Orientation> = Prop.NoValue,
 	                 val labelTable: Prop<SliderLabelTable?> = Prop.NoValue,
 	                 val onChange: Prop<(Int) -> Unit> = Prop.NoValue) : UProps,
@@ -78,7 +77,6 @@ class SwingSlider(private val native: JSlider,
 		props.ticksPainted.ifPresent { paintTicks = it }
 		props.trackPainted.ifPresent { paintTrack = it }
 		props.snapToTicks.ifPresent { snapToTicks = it }
-		props.valueIsAdjusting.ifPresent { valueIsAdjusting = it }
 		props.orientation.ifPresent { orientation = it.code }
 		props.labelTable.ifPresent { labelTable = it?.createLabelTable(this) }
 	}.unit
@@ -121,8 +119,6 @@ fun <P : SSProvider<P>> SwingElement<P>.trackPainted(track: Boolean) =
 		withSliderBarProps { copy(trackPainted = track.prop()) }
 fun <P : SSProvider<P>> SwingElement<P>.snapToTicks(snap: Boolean) =
 		withSliderBarProps { copy(snapToTicks = snap.prop()) }
-fun <P : SSProvider<P>> SwingElement<P>.valueIsAdjusting(adjusting: Boolean) =
-		withSliderBarProps { copy(valueIsAdjusting = adjusting.prop()) }
 fun <P : SSProvider<P>> SwingElement<P>.orientation(orientation: Orientation) =
 		withSliderBarProps { copy(orientation = orientation.prop()) }
 fun <P : SSProvider<P>> SwingElement<P>.labelTable(table: SliderLabelTable?) =
