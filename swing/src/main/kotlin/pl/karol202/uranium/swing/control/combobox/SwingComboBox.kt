@@ -6,6 +6,7 @@ import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.swing.SwingNativeComponent
 import pl.karol202.uranium.swing.SwingNativeWrapper
+import pl.karol202.uranium.swing.control.list.CustomListCellRenderer
 import pl.karol202.uranium.swing.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ItemEvent
@@ -19,7 +20,7 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 	                    override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
 	                    val items: Prop<List<E>> = Prop.NoValue,
 	                    val selectedItem: Prop<E?> = Prop.NoValue,
-	                    val renderer: Prop<SwingRenderScope.(CustomComboBoxRenderer.Props<E>) -> SwingElement<*>> = Prop.NoValue,
+	                    val renderer: Prop<SwingRenderScope.(CustomListCellRenderer.Props<E>) -> SwingElement<*>> = Prop.NoValue,
 	                    val editor: Prop<SwingRenderScope.(CustomComboBoxEditor.Props<E>) -> SwingElement<*>> = Prop.NoValue,
 	                    val editable: Prop<Boolean> = Prop.NoValue,
 	                    val popupVisible: Prop<Boolean> = Prop.NoValue,
@@ -55,7 +56,7 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 
 	private val model = ListComboBoxModel(props.items.value ?: emptyList())
 
-	private var renderer: CustomComboBoxRenderer<E>? = null
+	private var renderer: CustomListCellRenderer<E>? = null
 	private var editor: CustomComboBoxEditor<E>? = null
 
 	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
@@ -89,8 +90,8 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 		props.prototypeDisplayValue.ifPresent { native.prototypeDisplayValue = it }
 	}
 
-	private fun getRenderer(renderFunction: SwingRenderScope.(CustomComboBoxRenderer.Props<E>) -> SwingElement<*>) =
-			renderer?.also { it.renderFunction = renderFunction } ?: CustomComboBoxRenderer(renderFunction).also { renderer = it }
+	private fun getRenderer(renderFunction: SwingRenderScope.(CustomListCellRenderer.Props<E>) -> SwingElement<*>) =
+			renderer?.also { it.renderFunction = renderFunction } ?: CustomListCellRenderer(renderFunction).also { renderer = it }
 
 	private fun getEditor(renderFunction: SwingRenderScope.(CustomComboBoxEditor.Props<E>) -> SwingElement<*>) =
 			editor?.also { it.renderFunction = renderFunction } ?: CustomComboBoxEditor(renderFunction).also { editor = it }
@@ -114,7 +115,7 @@ fun <P : SCBProvider<P, E>, E> SwingElement<P>.items(items: List<E>) =
 		withComboBoxProps { copy(items = items.prop()) }
 fun <P : SCBProvider<P, E>, E> SwingElement<P>.selectedItem(item: E?) =
 		withComboBoxProps { copy(selectedItem = item.prop()) }
-fun <P : SCBProvider<P, E>, E> SwingElement<P>.renderer(renderer: SwingRenderScope.(CustomComboBoxRenderer.Props<E>) -> SwingElement<*>) =
+fun <P : SCBProvider<P, E>, E> SwingElement<P>.renderer(renderer: SwingRenderScope.(CustomListCellRenderer.Props<E>) -> SwingElement<*>) =
 		withComboBoxProps { copy(renderer = renderer.prop()) }
 fun <P : SCBProvider<P, E>, E> SwingElement<P>.editor(editor: SwingRenderScope.(CustomComboBoxEditor.Props<E>) -> SwingElement<*>) =
 		withComboBoxProps { copy(editor = editor.prop()) }

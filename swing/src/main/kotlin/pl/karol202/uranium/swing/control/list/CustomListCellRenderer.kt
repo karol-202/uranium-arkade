@@ -1,4 +1,4 @@
-package pl.karol202.uranium.swing.control.combobox
+package pl.karol202.uranium.swing.control.list
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +12,7 @@ import javax.swing.JList
 import javax.swing.JPanel
 import javax.swing.ListCellRenderer
 
-class CustomComboBoxRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) -> SwingElement<*>) : ListCellRenderer<E>
+class CustomListCellRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) -> SwingElement<*>) : ListCellRenderer<E>
 {
 	data class Props<E>(val item: E?,
 	                    val index: Int,

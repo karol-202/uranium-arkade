@@ -21,6 +21,7 @@ class SwingList<E>(private val native: JList<E>,
 	                    override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
 	                    val items: Prop<List<E>> = Prop.NoValue,
 	                    val selectedItems: Prop<List<E>> = Prop.NoValue,
+	                    val renderer: Prop<SwingRenderScope.(CustomListCellRenderer.Props<E>) -> SwingElement<*>> = Prop.NoValue,
 	                    val dragEnabled: Prop<Boolean> = Prop.NoValue,
 	                    val fixedCellWidth: Prop<Int> = Prop.NoValue,
 	                    val fixedCellHeight: Prop<Int> = Prop.NoValue,
@@ -31,8 +32,8 @@ class SwingList<E>(private val native: JList<E>,
 	                    val selectionBackground: Prop<Color?> = Prop.NoValue,
 	                    val selectionForeground: Prop<Color?> = Prop.NoValue,
 	                    val onSelect: Prop<(List<E>) -> Unit> = Prop.NoValue) : UProps,
-	                                                                          SwingNativeComponent.PropsProvider<Props<E>>,
-	                                                                          PropsProvider<Props<E>, E>
+	                                                                            SwingNativeComponent.PropsProvider<Props<E>>,
+	                                                                            PropsProvider<Props<E>, E>
 	{
 		override val listProps = this
 
@@ -52,6 +53,7 @@ class SwingList<E>(private val native: JList<E>,
 	private val listSelectionListener = ListSelectionListener { onSelect() }
 
 	private val mutableModel = MutableListModel(props.items.value ?: emptyList())
+	private var renderer: CustomListCellRenderer<E>? = null
 
 	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
 	{
@@ -72,6 +74,7 @@ class SwingList<E>(private val native: JList<E>,
 	override fun onUpdate(previousProps: Props<E>?) = native.apply {
 		props.items.ifPresent { mutableModel.items = it }
 		props.selectedItems.ifPresent { setSelectedItems(it) }
+		props.renderer.ifPresent { native.cellRenderer = getRenderer(it) }
 		props.dragEnabled.ifPresent { dragEnabled = it }
 		props.fixedCellWidth.ifPresent { fixedCellWidth = it }
 		props.fixedCellHeight.ifPresent { fixedCellHeight = it }
@@ -90,6 +93,9 @@ class SwingList<E>(private val native: JList<E>,
 	}
 
 	private fun ListModel<E>.indexOf(item: E) = (0 until size).firstOrNull { getElementAt(it) == item }
+
+	private fun getRenderer(renderFunction: SwingRenderScope.(CustomListCellRenderer.Props<E>) -> SwingElement<*>) =
+			renderer?.also { it.renderFunction = renderFunction } ?: CustomListCellRenderer(renderFunction).also { renderer = it }
 
 	private fun onSelect()
 	{
@@ -110,6 +116,8 @@ fun <P : SCBProvider<P, E>, E> SwingElement<P>.items(items: List<E>) =
 		withListProps { copy(items = items.prop()) }
 fun <P : SCBProvider<P, E>, E> SwingElement<P>.selectedItems(items: List<E>) =
 		withListProps { copy(selectedItems = items.prop()) }
+fun <P : SCBProvider<P, E>, E> SwingElement<P>.renderer(renderer: SwingRenderScope.(CustomListCellRenderer.Props<E>) -> SwingElement<*>) =
+		withListProps { copy(renderer = renderer.prop()) }
 fun <P : SCBProvider<P, E>, E> SwingElement<P>.dragEnabled(enabled: Boolean) =
 		withListProps { copy(dragEnabled = enabled.prop()) }
 fun <P : SCBProvider<P, E>, E> SwingElement<P>.fixedCellWidth(width: Int) =

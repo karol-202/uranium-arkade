@@ -3,6 +3,7 @@ package pl.karol202.uranium.swing.test
 import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.swing.alignmentX
 import pl.karol202.uranium.swing.control.button.*
 import pl.karol202.uranium.swing.control.combobox.*
 import pl.karol202.uranium.swing.control.label.label
@@ -78,6 +79,10 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 			+ cell(2, 1, fill = Fill.HORIZONTAL, insets = Insets(8, 8, 8, 8)) {
 				list<String>(key = 8).items(state.items).selectionMode(SelectionMode.MULTIPLE_INTERNAL_SELECTION)
 						.selectedItems(state.selectedListItems).onSelect { setSelectedListItems(it) }
+						.renderer {
+							val prefix = if(it.selected) "> " else ""
+							label().text("$prefix${it.item}").alignmentX(1f)
+						}
 			}
 			+ cell(3, 1, fill = Fill.HORIZONTAL) {
 				progressBar(key = 6).minimum(0).maximum(200).value((state.sliderValue - 50) * 4)
