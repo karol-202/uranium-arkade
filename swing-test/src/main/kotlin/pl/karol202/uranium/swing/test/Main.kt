@@ -77,7 +77,7 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 			}
 			+ cell(2, 1, fill = Fill.HORIZONTAL, insets = Insets(8, 8, 8, 8)) {
 				list<String>(key = 8).items(state.items).selectionMode(SelectionMode.MULTIPLE_INTERNAL_SELECTION)
-						.selectedItems(state.selectedListItems)
+						.selectedItems(state.selectedListItems).onSelect { setSelectedListItems(it) }
 			}
 			+ cell(3, 1, fill = Fill.HORIZONTAL) {
 				progressBar(key = 6).minimum(0).maximum(200).value((state.sliderValue - 50) * 4)
@@ -94,6 +94,8 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	private fun setSelectedItem(item: String) = setState { copy(selectedItem = item) }
 
 	private fun setSliderValue(value: Int) = setState { copy(sliderValue = value) }
+
+	private fun setSelectedListItems(items: List<String>) = setState { copy(selectedListItems = items) }
 }
 
 fun SwingRenderScope.counter(key: Any) = component(::CounterComponent, BasicProps(key))

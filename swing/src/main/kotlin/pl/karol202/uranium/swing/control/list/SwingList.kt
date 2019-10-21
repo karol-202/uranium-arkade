@@ -85,7 +85,8 @@ class SwingList<E>(private val native: JList<E>,
 
 	private fun JList<E>.setSelectedItems(selectedItems: List<E>)
 	{
-		selectedIndices = selectedItems.mapNotNull { model.indexOf(it) }.toIntArray()
+		val newIndices = selectedItems.mapNotNull { model.indexOf(it) }.toIntArray()
+		if(!newIndices.contentEquals(selectedIndices)) selectedIndices = newIndices
 	}
 
 	private fun ListModel<E>.indexOf(item: E) = (0 until size).firstOrNull { getElementAt(it) == item }
