@@ -7,6 +7,7 @@ import pl.karol202.uranium.swing.control.button.*
 import pl.karol202.uranium.swing.control.combobox.*
 import pl.karol202.uranium.swing.control.label.label
 import pl.karol202.uranium.swing.control.label.text
+import pl.karol202.uranium.swing.control.list.*
 import pl.karol202.uranium.swing.control.progress.maximum
 import pl.karol202.uranium.swing.control.progress.minimum
 import pl.karol202.uranium.swing.control.progress.progressBar
@@ -21,6 +22,7 @@ import pl.karol202.uranium.swing.layout.gridbag.Fill
 import pl.karol202.uranium.swing.layout.gridbag.Weights
 import pl.karol202.uranium.swing.layout.gridbag.cell
 import pl.karol202.uranium.swing.layout.gridbag.gridBagLayout
+import pl.karol202.uranium.swing.util.Insets
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import pl.karol202.uranium.swing.util.SwingRenderScope
 import pl.karol202.uranium.swing.util.SwingStatefulComponent
@@ -38,7 +40,8 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	                 val checked: Boolean = false,
 	                 val items: List<String> = listOf("Kot", "Pies", "Koń"),
 	                 val selectedItem: String? = null,
-	                 val sliderValue: Int = 0) : UState
+	                 val sliderValue: Int = 0,
+	                 val selectedListItems: List<String> = listOf("Koń")) : UState
 
 	override fun SwingRenderBuilder.render()
 	{
@@ -69,11 +72,15 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 					})
 				}.selectedItem(state.selectedItem).onSelect { setSelectedItem(it) }
 			}
-			+ cell(3, 1, fill = Fill.HORIZONTAL) {
-				progressBar(key = 6).minimum(0).maximum(200).value((state.sliderValue - 50) * 4)
-			}
 			+ cell(0, 1, fill = Fill.HORIZONTAL) {
 				slider(key = 7).minimum(50).maximum(100).value(state.sliderValue).onChange { setSliderValue(it) }
+			}
+			+ cell(2, 1, fill = Fill.HORIZONTAL, insets = Insets(8, 8, 8, 8)) {
+				list<String>(key = 8).items(state.items).selectionMode(SelectionMode.MULTIPLE_INTERNAL_SELECTION)
+						.selectedItems(state.selectedListItems)
+			}
+			+ cell(3, 1, fill = Fill.HORIZONTAL) {
+				progressBar(key = 6).minimum(0).maximum(200).value((state.sliderValue - 50) * 4)
 			}
 		}
 	}

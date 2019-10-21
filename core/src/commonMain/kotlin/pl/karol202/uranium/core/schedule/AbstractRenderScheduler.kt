@@ -44,8 +44,7 @@ abstract class AbstractRenderScheduler<N>(coroutineScope: CoroutineScope) : Rend
 	}
 
 	protected fun submitAndReturnJob(function: () -> Unit) = Request(function).let { request ->
-		val submitted = scheduleChannel.offer(request)
-		if(!submitted) throw RuntimeException("Too many scheduled renders (probably an infinite loop)")
+		scheduleChannel.offer(request) || throw RuntimeException("Too many scheduled renders (probably an infinite loop)")
 		request.asJob()
 	}
 }
