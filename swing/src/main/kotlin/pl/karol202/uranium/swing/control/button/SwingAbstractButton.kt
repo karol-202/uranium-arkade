@@ -58,15 +58,13 @@ class SwingAbstractButton(private val native: AbstractButton,
 
 	private val actionListener = ActionListener { onClick() }
 
-	override fun onAttach(parentContext: SwingInvalidateableContext)
+	override fun onCreate()
 	{
-		super.onAttach(parentContext)
 		native.addActionListener(actionListener)
 	}
 
-	override fun onDetach(parentContext: SwingInvalidateableContext)
+	override fun onDestroy()
 	{
-		super.onDetach(parentContext)
 		native.removeActionListener(actionListener)
 	}
 
@@ -75,7 +73,7 @@ class SwingAbstractButton(private val native: AbstractButton,
 		+ nativeComponent(native = { native }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.update {
 		props.text.ifPresent { text = it }
 		props.icon.ifPresent { icon = it }
 		props.pressedIcon.ifPresent { pressedIcon = it }
@@ -98,7 +96,7 @@ class SwingAbstractButton(private val native: AbstractButton,
 		props.multiClickThreshold.ifPresent { multiClickThreshhold = it }
 		props.mnemonic.ifPresent { mnemonic = it }
 		props.displayedMnemonicIndex.ifPresent { displayedMnemonicIndex = it }
-	}.unit
+	}
 
 	private fun onClick()
 	{

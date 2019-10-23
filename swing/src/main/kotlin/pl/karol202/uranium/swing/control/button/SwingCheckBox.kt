@@ -46,9 +46,9 @@ class SwingCheckBox(private val native: JCheckBox,
 		+ toggleButton(native = { native }, props = props.toggleButtonProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.update {
 		props.borderPaintedFlat.ifPresent { isBorderPaintedFlat = it }
-	}.unit
+	}
 }
 
 fun SwingRenderScope.checkBox(native: () -> JCheckBox = ::JCheckBox,

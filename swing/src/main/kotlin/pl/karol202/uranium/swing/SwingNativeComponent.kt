@@ -88,7 +88,7 @@ class SwingNativeComponent(private val native: SwingNative,
 	private val ancestorListener = AncestorListenerDelegate { props.ancestorListener.value }
 	private val vetoableChangeListener = VetoableChangeListenerDelegate { props.vetoableChangeListener.value }
 
-	override fun onAttach(parentContext: SwingInvalidateableContext) = native.apply {
+	override fun onCreate() = native.update {
 		addComponentListener(componentListener)
 		addFocusListener(focusListener)
 		addHierarchyBoundsListener(hierarchyBoundsListener)
@@ -102,11 +102,9 @@ class SwingNativeComponent(private val native: SwingNative,
 		addContainerListener(containerListener)
 		addAncestorListener(ancestorListener)
 		addVetoableChangeListener(vetoableChangeListener)
+	}
 
-		parentContext.attachNative()
-	}.unit
-
-	override fun onDetach(parentContext: SwingInvalidateableContext) = native.apply {
+	override fun onDestroy() = native.update {
 		removeComponentListener(componentListener)
 		removeFocusListener(focusListener)
 		removeHierarchyBoundsListener(hierarchyBoundsListener)
@@ -120,20 +118,34 @@ class SwingNativeComponent(private val native: SwingNative,
 		removeContainerListener(containerListener)
 		removeAncestorListener(ancestorListener)
 		removeVetoableChangeListener(vetoableChangeListener)
+	}
 
+	override fun onAttach(parentContext: SwingInvalidateableContext)
+	{
+		parentContext.attachNative()
+	}
+
+	override fun onDetach(parentContext: SwingInvalidateableContext)
+	{
 		parentContext.detachNative()
-	}.unit
+	}
 
 	private fun SwingContext.attachNative() = attachNative(native.constrained(props.constraints.value))
 
 	private fun SwingContext.detachNative() = detachNative(native.notConstrained())
+
+	private fun SwingContext.reattachNative()
+	{
+		detachNative()
+		attachNative()
+	}
 
 	override fun SwingRenderBuilder.render()
 	{
 		+ props.children
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.update {
 		props.enabled.ifPresent { isEnabled = it }
 		props.visible.ifPresent { isVisible = it }
 		props.focusable.ifPresent { isFocusable = it }
@@ -161,13 +173,7 @@ class SwingNativeComponent(private val native: SwingNative,
 		props.preferredSize.ifPresent { preferredSize = it }
 		props.size.ifPresent { size = it }
 
-		previousProps?.let { if(props.constraints.value != it.constraints.value) requireParentContext().reattachNative() }
-	}.unit
-
-	private fun SwingContext.reattachNative()
-	{
-		detachNative()
-		attachNative()
+		if(previousProps != null && previousProps.constraints.value != props.constraints.value) requireParentContext().reattachNative()
 	}
 }
 

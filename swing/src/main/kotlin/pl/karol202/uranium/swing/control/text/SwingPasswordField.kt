@@ -3,9 +3,7 @@ package pl.karol202.uranium.swing.control.text
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ActionListener
 import javax.swing.JPasswordField
@@ -52,12 +50,12 @@ class SwingPasswordField(private val native: JPasswordField,
 
 	private val actionListener = ActionListener { props.onPasswordApply.value?.invoke(native.password) }
 
-	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onCreate()
 	{
 		native.addActionListener(actionListener)
 	}
 
-	override fun onDetach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onDestroy()
 	{
 		native.removeActionListener(actionListener)
 	}
@@ -67,9 +65,9 @@ class SwingPasswordField(private val native: JPasswordField,
 		+ textField(native = { native }, props = props.textFieldProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.update {
 		props.echoChar.ifPresent { echoChar = it ?: PASSWORD_VISIBLE_CHAR.toChar() }
-	}.unit
+	}
 }
 
 fun SwingRenderScope.passwordField(native: () -> JPasswordField = ::JPasswordField,

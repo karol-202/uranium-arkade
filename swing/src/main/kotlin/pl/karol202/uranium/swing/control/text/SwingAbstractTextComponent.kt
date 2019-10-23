@@ -58,16 +58,14 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
 
     private var ignoreTextChanges = false
 
-    override fun onAttach(parentContext: SwingInvalidateableContext)
+    override fun onCreate()
     {
-        super.onAttach(parentContext)
         native.addCaretListener(caretListener)
         native.document.addDocumentListener(documentListener)
     }
 
-    override fun onDetach(parentContext: SwingInvalidateableContext)
+    override fun onDestroy()
     {
-        super.onDetach(parentContext)
         native.removeCaretListener(caretListener)
         native.document.removeDocumentListener(documentListener)
     }
@@ -77,7 +75,7 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
         + nativeComponent(native = { native }, props = props.swingProps)
     }
 
-	override fun onUpdate(previousProps: Props?) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.update {
         ignoreTextChanges {
             props.text.ifPresent { if(it != text) text = it }
         }
@@ -92,7 +90,7 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
         props.editable.ifPresent { isEditable = it }
         props.dragEnabled.ifPresent { dragEnabled = it }
         props.dropMode.ifPresent { dropMode = it }
-    }.unit
+    }
 
     private fun ignoreTextChanges(block: () -> Unit)
     {

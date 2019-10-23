@@ -3,9 +3,7 @@ package pl.karol202.uranium.swing.control.slider
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JSlider
@@ -50,12 +48,12 @@ class SwingSlider(private val native: JSlider,
 
 	private val changeListener = ChangeListener { onChange() }
 
-	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onCreate()
 	{
 		native.addChangeListener(changeListener)
 	}
 
-	override fun onDetach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onDestroy()
 	{
 		native.removeChangeListener(changeListener)
 	}
@@ -65,7 +63,7 @@ class SwingSlider(private val native: JSlider,
 		+ nativeComponent(native = { native }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.update {
 		props.value.ifPresent { if(it != value) value = it }
 		props.minimum.ifPresent { if(it != minimum) minimum = it }
 		props.maximum.ifPresent { if(it != maximum) maximum = it }
@@ -79,7 +77,7 @@ class SwingSlider(private val native: JSlider,
 		props.snapToTicks.ifPresent { snapToTicks = it }
 		props.orientation.ifPresent { orientation = it.code }
 		props.labelTable.ifPresent { labelTable = it?.createLabelTable(this) }
-	}.unit
+	}
 
 	private fun onChange()
 	{

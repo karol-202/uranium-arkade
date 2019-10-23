@@ -3,9 +3,7 @@ package pl.karol202.uranium.swing.control.text
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ActionListener
 import javax.swing.JTextField
@@ -44,12 +42,12 @@ class SwingTextField(private val native: JTextField,
 
 	private val actionListener = ActionListener { onApply() }
 
-	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onCreate()
 	{
 		native.addActionListener(actionListener)
 	}
 
-	override fun onDetach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onDestroy()
 	{
 		native.removeActionListener(actionListener)
 	}
@@ -59,11 +57,11 @@ class SwingTextField(private val native: JTextField,
 		+ abstractTextComponent(native = { native }, props = props.abstractTextProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.update {
 		props.columns.ifPresent { columns = it }
 		props.horizontalAlign.ifPresent { horizontalAlignment = it.code }
 		props.scrollOffset.ifPresent { scrollOffset = it }
-	}.unit
+	}
 
 	private fun onApply()
 	{

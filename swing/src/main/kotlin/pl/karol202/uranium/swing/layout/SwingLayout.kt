@@ -3,8 +3,10 @@ package pl.karol202.uranium.swing.layout
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.context.InvalidateableContext
-import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.SwingContextImpl
+import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.context
+import pl.karol202.uranium.swing.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JPanel
 
@@ -33,7 +35,7 @@ class SwingLayout(initialProps: Props) : SwingAbstractComponent<SwingLayout.Prop
 	private val native = JPanel()
 	private val panelContext = SwingContextImpl(native)
 
-	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onCreate()
 	{
 		props.layoutData.ifPresent { native.layout = it.createLayout(native) }
 	}

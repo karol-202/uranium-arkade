@@ -7,6 +7,8 @@ import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.context.invalidateable
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.schedule.RenderScheduler
+import pl.karol202.uranium.core.tree.NodeOperation.*
+import pl.karol202.uranium.core.util.addAtIndex
 import kotlin.reflect.KClass
 
 fun <N, P : UProps> UElement<N, P>.createNode(context: UContext<N>, renderScheduler: RenderScheduler<N>) =
@@ -30,10 +32,13 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 
 	private fun init()
 	{
+		onCreate()
 		attach()
 		render()
 		update()
 	}
+
+	private fun onCreate() = component.onCreate()
 
 	private fun attach() = component.attach(context.invalidateable { scheduleInvalidate() })
 
@@ -47,28 +52,21 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 
 	private fun render()
 	{
-		val newElements = component.render()
-		val newKeys = newElements.map { it.key }
-		detachOldChildren(newKeys)
-		updateChildren(newElements)
+		children = dispatchDiff(children, component.render()).fold(children) { children, op -> op.applyTo(children) }
 	}
 
-	private fun detachOldChildren(newKeys: List<Any>) = children.filter { it.key !in newKeys }.forEach { it.detach() }
-
-	private fun updateChildren(newElements: List<UElement<N, *>>)
+	private fun NodeOperation<N>.applyTo(children: List<TreeNode<N, *>>) = when(this)
 	{
-		children = newElements.map { reuseOrRenderChild(it) }
+		is CreateNode<N> -> children + createChild(element).also { it.init() }
+		is UpdateNode<N, *> -> children.also { this.apply() }
+		is AttachNode<N> -> children.addAtIndex(node.also { it.attach(/* index */) }, index)
+		is DetachNode<N> -> children - node.also { it.detach() }
+		is DestroyNode<N> -> children - node.also { it.destroy() }
 	}
-
-	private fun reuseOrRenderChild(element: UElement<N, *>) = reuseChild(element) ?: renderChild(element)
-
-	private fun renderChild(element: UElement<N, *>) = createChild(element).apply { init() }
 
 	private fun createChild(element: UElement<N, *>) = element.createNode(component.requireContext(), scheduler)
 
-	private fun <P : UProps> reuseChild(element: UElement<N, P>) = findChildByKey<P>(element.key)?.apply { reuse(element) }
-
-	private fun <P : UProps> findChildByKey(key: Any) = children.firstOrNull { it.key == key } as? TreeNode<N, P>
+	private fun <P : UProps> UpdateNode<N, P>.apply() = node.reuse(element)
 
 	private fun reuse(element: UElement<N, P>)
 	{
@@ -89,17 +87,22 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 
 	private fun update(previousProps: P? = null) = component.onUpdate(previousProps)
 
-	private fun detach()
+	private fun destroy()
 	{
-		detachChildren()
-		component.detach()
+		destroyChildren()
+		detach()
+		onDestroy()
 	}
 
-	private fun detachChildren()
+	private fun destroyChildren()
 	{
-		children.forEach { it.detach() }
+		children.forEach { it.destroy() }
 		children = emptyList()
 	}
+
+	private fun detach() = component.detach()
+
+	private fun onDestroy() = component.onDestroy()
 
 	internal fun isCompatibleWith(element: UElement<N, *>) = propsClass == element.propsClass
 }

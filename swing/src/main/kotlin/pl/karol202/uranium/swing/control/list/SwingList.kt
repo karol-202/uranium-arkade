@@ -3,9 +3,7 @@ package pl.karol202.uranium.swing.control.list
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.Color
@@ -55,13 +53,13 @@ class SwingList<E>(private val native: JList<E>,
 	private val mutableModel = MutableListModel(props.items.value ?: emptyList())
 	private var renderer: CustomListCellRenderer<E>? = null
 
-	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onCreate()
 	{
 		native.addListSelectionListener(listSelectionListener)
 		native.model = mutableModel
 	}
 
-	override fun onDetach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onDestroy()
 	{
 		native.removeListSelectionListener(listSelectionListener)
 	}
@@ -71,7 +69,7 @@ class SwingList<E>(private val native: JList<E>,
 		+ nativeComponent(native = { native }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props<E>?) = native.apply {
+	override fun onUpdate(previousProps: Props<E>?) = native.update {
 		props.items.ifPresent { mutableModel.items = it }
 		props.selectedItems.ifPresent { setSelectedItems(it) }
 		props.renderer.ifPresent { native.cellRenderer = getRenderer(it) }
@@ -84,7 +82,7 @@ class SwingList<E>(private val native: JList<E>,
 		props.selectionMode.ifPresent { selectionMode = it.code }
 		props.selectionBackground.ifPresent { selectionBackground = it }
 		props.selectionForeground.ifPresent { selectionForeground = it }
-	}.unit
+	}
 
 	private fun JList<E>.setSelectedItems(selectedItems: List<E>)
 	{

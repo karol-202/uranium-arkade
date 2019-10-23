@@ -44,7 +44,7 @@ class SwingLabel(private val native: JLabel,
 		+ nativeComponent(native = { native }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.update {
 		props.text.ifPresent { text = it }
 		props.icon.ifPresent { icon = it }
 		props.disabledIcon.ifPresent { disabledIcon = it }
@@ -53,7 +53,7 @@ class SwingLabel(private val native: JLabel,
 		props.verticalAlign.ifPresent { verticalAlignment = it.code }
 		props.horizontalTextPosition.ifPresent { horizontalTextPosition = it.code }
 		props.verticalTextPosition.ifPresent { verticalTextPosition = it.code }
-	}.unit
+	}
 }
 
 fun SwingRenderScope.label(native: () -> JLabel = ::JLabel,

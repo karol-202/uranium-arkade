@@ -40,15 +40,13 @@ class SwingToggleButton(private val native: JToggleButton,
 
 	private val itemListener = ItemListener { onSelect(it.stateChange == ItemEvent.SELECTED) }
 
-	override fun onAttach(parentContext: SwingInvalidateableContext)
+	override fun onCreate()
 	{
-		super.onAttach(parentContext)
 		native.addItemListener(itemListener)
 	}
 
-	override fun onDetach(parentContext: SwingInvalidateableContext)
+	override fun onDestroy()
 	{
-		super.onDetach(parentContext)
 		native.removeItemListener(itemListener)
 	}
 

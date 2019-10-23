@@ -3,9 +3,7 @@ package pl.karol202.uranium.swing.control.combobox
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.control.list.CustomListCellRenderer
 import pl.karol202.uranium.swing.nativeComponent
 import pl.karol202.uranium.swing.util.*
@@ -59,14 +57,14 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 	private var renderer: CustomListCellRenderer<E>? = null
 	private var editor: CustomComboBoxEditor<E>? = null
 
-	override fun onAttach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onCreate()
 	{
 		native.addItemListener(itemListener)
 		native.addPopupMenuListener(popupListener)
 		native.model = model
 	}
 
-	override fun onDetach(parentContext: InvalidateableContext<SwingNativeWrapper>)
+	override fun onDestroy()
 	{
 		native.removeItemListener(itemListener)
 		native.removePopupMenuListener(popupListener)

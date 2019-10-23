@@ -44,7 +44,7 @@ class SwingProgressBar(private val native: JProgressBar,
 		+ nativeComponent(native = { native }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.apply {
+	override fun onUpdate(previousProps: Props?) = native.update {
 		props.value.ifPresent { value = it }
 		props.minimum.ifPresent { minimum = it }
 		props.maximum.ifPresent { maximum = it }
@@ -53,7 +53,7 @@ class SwingProgressBar(private val native: JProgressBar,
 		props.stringPainted.ifPresent { isStringPainted = it }
 		props.orientation.ifPresent { orientation = it.code }
 		props.string.ifPresent { string = it }
-	}.unit
+	}
 }
 
 fun SwingRenderScope.progressBar(native: () -> JProgressBar = ::JProgressBar,

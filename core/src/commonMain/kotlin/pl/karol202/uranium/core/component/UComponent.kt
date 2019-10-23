@@ -10,15 +10,19 @@ import pl.karol202.uranium.core.render.RenderScope
 interface UComponent<N, P : UProps> : ContextProvider<N>,
                                       PropsProvider<P>
 {
+	fun onCreate() { }
+
+	fun onDestroy() { }
+
 	fun attach(parentContext: InvalidateableContext<N>)
+
+	fun detach()
 
 	fun render(): List<UElement<N, *>>
 
 	fun onUpdate(previousProps: P?)
 
 	fun modifyPropsInternal(props: P)
-
-	fun detach()
 }
 
 inline fun <N, reified P : UProps> RenderScope<N>.component(noinline constructor: (P) -> UComponent<N, P>, props: P) =
