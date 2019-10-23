@@ -21,4 +21,5 @@ interface UComponent<N, P : UProps> : ContextProvider<N>,
 	fun detach()
 }
 
-fun <N, P : UProps> RenderScope<N>.component(constructor: (P) -> UComponent<N, P>, props: P) = UElement(constructor, props)
+inline fun <N, reified P : UProps> RenderScope<N>.component(noinline constructor: (P) -> UComponent<N, P>, props: P) =
+		UElement(constructor, props, P::class)

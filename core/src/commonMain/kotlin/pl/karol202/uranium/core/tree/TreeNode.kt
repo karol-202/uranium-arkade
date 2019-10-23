@@ -1,20 +1,23 @@
 package pl.karol202.uranium.core.tree
 
+import pl.karol202.uranium.core.common.KeyProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
 import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.context.invalidateable
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.schedule.RenderScheduler
+import kotlin.reflect.KClass
 
 fun <N, P : UProps> UElement<N, P>.createNode(context: UContext<N>, renderScheduler: RenderScheduler<N>) =
-		TreeNode(createComponent(), context, renderScheduler)
+		TreeNode(createComponent(), context, renderScheduler, propsClass)
 
-class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
-                              private val context: UContext<N>,
-                              private val scheduler: RenderScheduler<N>)
+class TreeNode<N, P : UProps> internal constructor(private val component: UComponent<N, P>,
+                                                   private val context: UContext<N>,
+                                                   private val scheduler: RenderScheduler<N>,
+                                                   private val propsClass: KClass<P>) : KeyProvider
 {
-	private val key get() = component.key
+	override val key get() = component.key
 	private var children = emptyList<TreeNode<N, *>>()
 
 	fun scheduleInit() = scheduler.submit { init() }
@@ -97,4 +100,6 @@ class TreeNode<N, P : UProps>(private val component: UComponent<N, P>,
 		children.forEach { it.detach() }
 		children = emptyList()
 	}
+
+	internal fun isCompatibleWith(element: UElement<N, *>) = propsClass == element.propsClass
 }
