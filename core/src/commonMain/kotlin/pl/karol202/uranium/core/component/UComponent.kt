@@ -2,25 +2,21 @@ package pl.karol202.uranium.core.component
 
 import pl.karol202.uranium.core.common.PropsProvider
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.context.ContextProvider
-import pl.karol202.uranium.core.context.InvalidateableContext
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.render.RenderScope
+import pl.karol202.uranium.core.tree.ComponentContext
 
-interface UComponent<N, P : UProps> : ContextProvider<N>,
-                                      PropsProvider<P>
+interface UComponent<N, P : UProps> : PropsProvider<P>
 {
-	fun onCreate() { }
+	val native: N? get() = null
 
-	fun onDestroy() { }
+	fun create(context: ComponentContext)
 
-	fun attach(parentContext: InvalidateableContext<N>)
-
-	fun detach()
+	fun destroy()
 
 	fun render(): List<UElement<N, *>>
 
-	fun onUpdate(previousProps: P?)
+	fun onUpdate(previousProps: P?) { }
 
 	fun modifyPropsInternal(props: P)
 }

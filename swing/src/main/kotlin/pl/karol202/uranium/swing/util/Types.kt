@@ -2,7 +2,7 @@ package pl.karol202.uranium.swing.util
 
 import pl.karol202.uranium.core.component.AbstractComponent
 import pl.karol202.uranium.core.component.StatefulComponent
-import pl.karol202.uranium.core.context.InvalidateableContext
+import pl.karol202.uranium.core.tree.ComponentContext
 import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.render.RenderBuilder
@@ -35,7 +35,7 @@ typealias SwingRenderBuilder = RenderBuilder<SwingNativeWrapper>
 
 typealias SwingContext = UContext<SwingNativeWrapper>
 
-typealias SwingInvalidateableContext = InvalidateableContext<SwingNativeWrapper>
+typealias SwingInvalidateableContext = ComponentContext<SwingNativeWrapper>
 
 typealias SwingTreeNode<P> = TreeNode<SwingNativeWrapper, P>
 

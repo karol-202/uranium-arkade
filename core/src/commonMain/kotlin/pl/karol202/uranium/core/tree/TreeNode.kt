@@ -3,19 +3,16 @@ package pl.karol202.uranium.core.tree
 import pl.karol202.uranium.core.common.KeyProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
-import pl.karol202.uranium.core.context.UContext
-import pl.karol202.uranium.core.context.invalidateable
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.schedule.RenderScheduler
-import pl.karol202.uranium.core.tree.NodeOperation.*
+import pl.karol202.uranium.core.tree.TreeNodeOperation.*
 import pl.karol202.uranium.core.util.addAtIndex
 import kotlin.reflect.KClass
 
-fun <N, P : UProps> UElement<N, P>.createNode(context: UContext<N>, renderScheduler: RenderScheduler<N>) =
-		TreeNode(createComponent(), context, renderScheduler, propsClass)
+fun <N, P : UProps> UElement<N, P>.createNode(renderScheduler: RenderScheduler<N>) =
+		TreeNode(createComponent(), renderScheduler, propsClass)
 
 class TreeNode<N, P : UProps> internal constructor(private val component: UComponent<N, P>,
-                                                   private val context: UContext<N>,
                                                    private val scheduler: RenderScheduler<N>,
                                                    private val propsClass: KClass<P>) : KeyProvider
 {
@@ -32,15 +29,12 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 
 	private fun init()
 	{
-		onCreate()
-		attach()
+		createComponent()
 		render()
 		update()
 	}
 
-	private fun onCreate() = component.onCreate()
-
-	private fun attach() = component.attach(context.invalidateable { scheduleInvalidate() })
+	private fun createComponent() = component.create(componentContext { scheduleInvalidate() })
 
 	private fun scheduleInvalidate() = scheduler.submit(this::invalidate)
 
@@ -55,16 +49,16 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 		children = dispatchDiff(children, component.render()).fold(children) { children, op -> op.applyTo(children) }
 	}
 
-	private fun NodeOperation<N>.applyTo(children: List<TreeNode<N, *>>) = when(this)
+	private fun TreeNodeOperation<N>.applyTo(children: List<TreeNode<N, *>>) = when(this)
 	{
-		is CreateNode<N> -> children + createChild(element).also { it.init() }
+		is CreateAndAttachNode<N> -> children.addAtIndex(createChild(element), index)
 		is UpdateNode<N, *> -> children.also { this.apply() }
-		is AttachNode<N> -> children.addAtIndex(node.also { it.attach(/* index */) }, index)
-		is DetachNode<N> -> children - node.also { it.detach() }
-		is DestroyNode<N> -> children - node.also { it.destroy() }
+		is DestroyAndDetachNode<N> -> children - node.also { it.destroy() }
+		is AttachNode<N> -> children.addAtIndex(node, index)
+		is DetachNode<N> -> children - node
 	}
 
-	private fun createChild(element: UElement<N, *>) = element.createNode(component.requireContext(), scheduler)
+	private fun createChild(element: UElement<N, *>) = element.createNode(scheduler).also { it.init() }
 
 	private fun <P : UProps> UpdateNode<N, P>.apply() = node.reuse(element)
 
@@ -90,8 +84,7 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 	private fun destroy()
 	{
 		destroyChildren()
-		detach()
-		onDestroy()
+		destroyComponent()
 	}
 
 	private fun destroyChildren()
@@ -100,9 +93,7 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 		children = emptyList()
 	}
 
-	private fun detach() = component.detach()
-
-	private fun onDestroy() = component.onDestroy()
+	private fun destroyComponent() = component.destroy()
 
 	internal fun isCompatibleWith(element: UElement<N, *>) = propsClass == element.propsClass
 }
