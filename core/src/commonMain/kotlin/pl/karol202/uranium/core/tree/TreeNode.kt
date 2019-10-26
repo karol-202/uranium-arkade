@@ -4,11 +4,12 @@ import pl.karol202.uranium.core.common.KeyProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
 import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.native.Native
 import pl.karol202.uranium.core.native.NativeContainer
 import pl.karol202.uranium.core.native.NativeNode
 import pl.karol202.uranium.core.schedule.RenderScheduler
 import pl.karol202.uranium.core.tree.TreeNodeOperation.*
-import pl.karol202.uranium.core.util.addAtIndex
+import pl.karol202.uranium.core.util.elementInserted
 import kotlin.reflect.KClass
 
 fun <N, P : UProps> UElement<N, P>.createNode(renderScheduler: RenderScheduler<N>) =
@@ -22,11 +23,13 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 	private var children = emptyList<TreeNode<N, *>>()
 
 	val nativeNodes: List<NativeNode<N>>
-		get()
-		{
-			val native = component.native
-			return if(native is NativeContainer) listOf(NativeNode.Container(native, children.flatMap { it.nativeNodes }))
-			else children.flatMap { it.nativeNodes }
+		get() = component.native.let { native ->
+			when(native)
+			{
+				is NativeContainer -> listOf(NativeNode.Container(native, children.flatMap { it.nativeNodes }))
+				is Native -> listOf(NativeNode(native))
+				else -> children.flatMap { it.nativeNodes }
+			}
 		}
 
 	fun scheduleInit() = scheduler.submit { init() }
@@ -61,10 +64,10 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 
 	private fun TreeNodeOperation<N>.applyTo(children: List<TreeNode<N, *>>) = when(this)
 	{
-		is CreateAndAttachNode<N> -> children.addAtIndex(createChild(element), index)
+		is CreateAndAttachNode<N> -> children.elementInserted(createChild(element), index)
 		is UpdateNode<N, *> -> children.also { this.apply() }
 		is DestroyAndDetachNode<N> -> children - node.also { it.destroy() }
-		is AttachNode<N> -> children.addAtIndex(node, index)
+		is AttachNode<N> -> children.elementInserted(node, index)
 		is DetachNode<N> -> children - node
 	}
 

@@ -11,7 +11,7 @@ interface NativeContainer<N> : Native<N>
 
 	fun attach(native: Native<N>, index: Int)
 
-	fun detach(native: Native<N>, index: Int)
+	fun detach(native: Native<N>)
 }
 
 fun <N> Native<N>.asNativeNode(): NativeNode<N> = asContainer()?.asNativeNode() ?: NativeNode(this)
