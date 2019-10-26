@@ -3,12 +3,13 @@ package pl.karol202.uranium.core.component
 import pl.karol202.uranium.core.common.PropsProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.native.Native
 import pl.karol202.uranium.core.render.RenderScope
 import pl.karol202.uranium.core.tree.ComponentContext
 
 interface UComponent<N, P : UProps> : PropsProvider<P>
 {
-	val native: N? get() = null
+	val native: Native<N>? get() = null
 
 	fun create(context: ComponentContext)
 

@@ -4,6 +4,8 @@ import pl.karol202.uranium.core.common.KeyProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
 import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.native.NativeContainer
+import pl.karol202.uranium.core.native.NativeNode
 import pl.karol202.uranium.core.schedule.RenderScheduler
 import pl.karol202.uranium.core.tree.TreeNodeOperation.*
 import pl.karol202.uranium.core.util.addAtIndex
@@ -18,6 +20,14 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 {
 	override val key get() = component.key
 	private var children = emptyList<TreeNode<N, *>>()
+
+	val nativeNodes: List<NativeNode<N>>
+		get()
+		{
+			val native = component.native
+			return if(native is NativeContainer) listOf(NativeNode.Container(native, children.flatMap { it.nativeNodes }))
+			else children.flatMap { it.nativeNodes }
+		}
 
 	fun scheduleInit() = scheduler.submit { init() }
 
