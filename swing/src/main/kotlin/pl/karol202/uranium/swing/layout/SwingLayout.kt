@@ -3,10 +3,9 @@ package pl.karol202.uranium.swing.layout
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingContextImpl
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.context
-import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.native.SwingNative
+import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JPanel
 
@@ -32,22 +31,22 @@ class SwingLayout(initialProps: Props) : SwingAbstractComponent<SwingLayout.Prop
 		fun withLayoutProps(builder: Builder<Props>): S
 	}
 
-	private val native = JPanel()
-	private val panelContext = SwingContextImpl(native)
+	private val nativeComponent = JPanel()
+	override val native get() = SwingNative.from(nativeComponent, props.swingProps.constraints.value)
 
 	override fun onCreate()
 	{
-		props.layoutData.ifPresent { native.layout = it.createLayout(native) }
+		props.layoutData.ifPresent { nativeComponent.layout = it.createLayout(nativeComponent) }
 	}
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ nativeComponent(native = { native }, props = props.swingProps).context(panelContext)
+		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 	}
 
 	override fun onUpdate(previousProps: Props?)
 	{
-		props.layoutData.ifPresent { native.layout = it.updateLayout(native, native.layout) }
+		props.layoutData.ifPresent { nativeComponent.layout = it.updateLayout(nativeComponent, nativeComponent.layout) }
 	}
 }
 

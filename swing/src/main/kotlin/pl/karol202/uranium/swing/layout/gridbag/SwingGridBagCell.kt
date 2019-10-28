@@ -1,7 +1,7 @@
 package pl.karol202.uranium.swing.layout.gridbag
 
-import pl.karol202.uranium.swing.SNCProvider
-import pl.karol202.uranium.swing.constraints
+import pl.karol202.uranium.swing.native.SNCProvider
+import pl.karol202.uranium.swing.native.constraints
 import pl.karol202.uranium.swing.util.*
 
 fun <EP : SNCProvider<EP>> SwingGridBagScope.cell(x: Int,

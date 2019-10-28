@@ -3,8 +3,8 @@ package pl.karol202.uranium.swing.control.list
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.Color
 import javax.swing.DropMode
@@ -12,7 +12,7 @@ import javax.swing.JList
 import javax.swing.ListModel
 import javax.swing.event.ListSelectionListener
 
-class SwingList<E>(private val native: JList<E>,
+class SwingList<E>(private val nativeComponent: JList<E>,
                    initialProps: Props<E>) : SwingAbstractComponent<SwingList.Props<E>>(initialProps)
 {
 	data class Props<E>(override val key: Any = AutoKey,
@@ -53,26 +53,24 @@ class SwingList<E>(private val native: JList<E>,
 	private val mutableModel = MutableListModel(props.items.value ?: emptyList())
 	private var renderer: CustomListCellRenderer<E>? = null
 
-	override fun onCreate()
-	{
-		native.addListSelectionListener(listSelectionListener)
-		native.model = mutableModel
+	override fun onCreate() = nativeComponent.update {
+		addListSelectionListener(listSelectionListener)
+		model = mutableModel
 	}
 
-	override fun onDestroy()
-	{
-		native.removeListSelectionListener(listSelectionListener)
+	override fun onDestroy() = nativeComponent.update {
+		removeListSelectionListener(listSelectionListener)
 	}
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ nativeComponent(native = { native }, props = props.swingProps)
+		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props<E>?) = native.update {
+	override fun onUpdate(previousProps: Props<E>?) = nativeComponent.update {
 		props.items.ifPresent { mutableModel.items = it }
 		props.selectedItems.ifPresent { setSelectedItems(it) }
-		props.renderer.ifPresent { native.cellRenderer = getRenderer(it) }
+		props.renderer.ifPresent { cellRenderer = getRenderer(it) }
 		props.dragEnabled.ifPresent { dragEnabled = it }
 		props.fixedCellWidth.ifPresent { fixedCellWidth = it }
 		props.fixedCellHeight.ifPresent { fixedCellHeight = it }
@@ -97,15 +95,15 @@ class SwingList<E>(private val native: JList<E>,
 
 	private fun onSelect()
 	{
-		props.onSelect.value?.invoke(native.selectedValuesList)
+		props.onSelect.value?.invoke(nativeComponent.selectedValuesList)
 		invalidate()
 	}
 }
 
-fun <E> SwingRenderScope.list(native: () -> JList<E> = ::JList,
+fun <E> SwingRenderScope.list(nativeComponent: () -> JList<E> = ::JList,
                               key: Any = AutoKey,
                               props: SwingList.Props<E> = SwingList.Props(key)) =
-		component({ SwingList(native(), it) }, props)
+		component({ SwingList(nativeComponent(), it) }, props)
 
 private typealias SCBProvider<P, E> = SwingList.PropsProvider<P, E>
 fun <P : SCBProvider<P, E>, E> SwingElement<P>.withListProps(builder: Builder<SwingList.Props<E>>) =

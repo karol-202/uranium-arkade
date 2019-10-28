@@ -3,12 +3,12 @@ package pl.karol202.uranium.swing.control.progress
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JProgressBar
 
-class SwingProgressBar(private val native: JProgressBar,
+class SwingProgressBar(private val nativeComponent: JProgressBar,
                        initialProps: Props) : SwingAbstractComponent<SwingProgressBar.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
@@ -41,10 +41,10 @@ class SwingProgressBar(private val native: JProgressBar,
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ nativeComponent(native = { native }, props = props.swingProps)
+		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.update {
+	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.value.ifPresent { value = it }
 		props.minimum.ifPresent { minimum = it }
 		props.maximum.ifPresent { maximum = it }
@@ -56,10 +56,10 @@ class SwingProgressBar(private val native: JProgressBar,
 	}
 }
 
-fun SwingRenderScope.progressBar(native: () -> JProgressBar = ::JProgressBar,
+fun SwingRenderScope.progressBar(nativeComponent: () -> JProgressBar = ::JProgressBar,
                                  key: Any = AutoKey,
                                  props: SwingProgressBar.Props = SwingProgressBar.Props(key)) =
-		component({ SwingProgressBar(native(), it) }, props)
+		component({ SwingProgressBar(nativeComponent(), it) }, props)
 
 private typealias SPBProvider<P> = SwingProgressBar.PropsProvider<P>
 fun <P : SPBProvider<P>> SwingElement<P>.withProgressBarProps(builder: Builder<SwingProgressBar.Props>) =

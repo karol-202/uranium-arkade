@@ -3,15 +3,14 @@ package pl.karol202.uranium.swing.layout.box
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.render.RenderBuilder
 import pl.karol202.uranium.core.render.render
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.layout.LayoutData
 import pl.karol202.uranium.swing.layout.SwingLayout
 import pl.karol202.uranium.swing.layout.layout
 import pl.karol202.uranium.swing.layout.layoutData
+import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
+import java.awt.Container
 import java.awt.LayoutManager
 import javax.swing.BoxLayout
 
@@ -44,13 +43,13 @@ class SwingBoxLayout(props: Props) : SwingAbstractComponent<SwingBoxLayout.Props
 
 	data class Data(private val props: Props) : LayoutData<BoxLayout>
 	{
-		override fun createLayout(container: SwingContainer) = BoxLayout(container, props.axis.code)
+		override fun createLayout(container: Container) = BoxLayout(container, props.axis.code)
 
-		override fun updateLayout(container: SwingContainer, layout: LayoutManager) =
+		override fun updateLayout(container: Container, layout: LayoutManager) =
 				(layout as? BoxLayout)?.takeIf { it.axis == props.axis.code } ?: createLayout(container)
 	}
 
-	override fun RenderBuilder<SwingNativeWrapper>.render()
+	override fun SwingRenderBuilder.render()
 	{
 		+ layout(props = props.layoutProps).layoutData(Data(props))
 	}

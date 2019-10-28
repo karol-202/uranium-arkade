@@ -1,9 +1,6 @@
 package pl.karol202.uranium.core.native
 
 interface Native<N>
-{
-	fun asContainer(): NativeContainer<N>?
-}
 
 interface NativeContainer<N> : Native<N>
 {
@@ -14,6 +11,6 @@ interface NativeContainer<N> : Native<N>
 	fun detach(native: Native<N>)
 }
 
-fun <N> Native<N>.asNativeNode(): NativeNode<N> = asContainer()?.asNativeNode() ?: NativeNode(this)
+fun <N> Native<N>.asNativeNode(): NativeNode<N> = (this as? NativeContainer<N>)?.asNativeNode() ?: NativeNode(this)
 
 fun <N> NativeContainer<N>.asNativeNode() = NativeNode.Container(this, children.map { it.asNativeNode() })

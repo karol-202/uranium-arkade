@@ -3,13 +3,13 @@ package pl.karol202.uranium.swing.control.slider
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JSlider
 import javax.swing.event.ChangeListener
 
-class SwingSlider(private val native: JSlider,
+class SwingSlider(private val nativeComponent: JSlider,
                   initialProps: Props) : SwingAbstractComponent<SwingSlider.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
@@ -48,22 +48,20 @@ class SwingSlider(private val native: JSlider,
 
 	private val changeListener = ChangeListener { onChange() }
 
-	override fun onCreate()
-	{
-		native.addChangeListener(changeListener)
+	override fun onCreate() = nativeComponent.update {
+		addChangeListener(changeListener)
 	}
 
-	override fun onDestroy()
-	{
-		native.removeChangeListener(changeListener)
+	override fun onDestroy() = nativeComponent.update {
+		removeChangeListener(changeListener)
 	}
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ nativeComponent(native = { native }, props = props.swingProps)
+		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.update {
+	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.value.ifPresent { if(it != value) value = it }
 		props.minimum.ifPresent { if(it != minimum) minimum = it }
 		props.maximum.ifPresent { if(it != maximum) maximum = it }
@@ -81,8 +79,8 @@ class SwingSlider(private val native: JSlider,
 
 	private fun onChange()
 	{
-		if(native.value == props.value.value) return
-		props.onChange.value?.invoke(native.value)
+		if(nativeComponent.value == props.value.value) return
+		props.onChange.value?.invoke(nativeComponent.value)
 		invalidate()
 	}
 }

@@ -3,12 +3,12 @@ package pl.karol202.uranium.swing.control.text
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ActionListener
 import javax.swing.JPasswordField
 
-class SwingPasswordField(private val native: JPasswordField,
+class SwingPasswordField(private val nativeComponent: JPasswordField,
                          initialProps: Props) : SwingAbstractComponent<SwingPasswordField.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
@@ -48,32 +48,30 @@ class SwingPasswordField(private val native: JPasswordField,
 		const val PASSWORD_VISIBLE_CHAR = 0
 	}
 
-	private val actionListener = ActionListener { props.onPasswordApply.value?.invoke(native.password) }
+	private val actionListener = ActionListener { props.onPasswordApply.value?.invoke(nativeComponent.password) }
 
-	override fun onCreate()
-	{
-		native.addActionListener(actionListener)
+	override fun onCreate() = nativeComponent.update {
+		addActionListener(actionListener)
 	}
 
-	override fun onDestroy()
-	{
-		native.removeActionListener(actionListener)
+	override fun onDestroy() = nativeComponent.update {
+		removeActionListener(actionListener)
 	}
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ textField(native = { native }, props = props.textFieldProps)
+		+ textField(nativeComponent = { nativeComponent }, props = props.textFieldProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.update {
+	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.echoChar.ifPresent { echoChar = it ?: PASSWORD_VISIBLE_CHAR.toChar() }
 	}
 }
 
-fun SwingRenderScope.passwordField(native: () -> JPasswordField = ::JPasswordField,
+fun SwingRenderScope.passwordField(nativeComponent: () -> JPasswordField = ::JPasswordField,
                                    key: Any = AutoKey,
                                    props: SwingPasswordField.Props = SwingPasswordField.Props(key)) =
-		component({ SwingPasswordField(native(), it) }, props)
+		component({ SwingPasswordField(nativeComponent(), it) }, props)
 
 private typealias SPFProvider<P> = SwingPasswordField.PropsProvider<P>
 fun <P : SPFProvider<P>> SwingElement<P>.withPasswordFieldProps(builder: Builder<SwingPasswordField.Props>) =

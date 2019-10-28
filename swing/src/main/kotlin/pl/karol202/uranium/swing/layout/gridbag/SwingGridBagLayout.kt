@@ -3,14 +3,13 @@ package pl.karol202.uranium.swing.layout.gridbag
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.render.RenderBuilder
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.layout.LayoutData
 import pl.karol202.uranium.swing.layout.SwingLayout
 import pl.karol202.uranium.swing.layout.layout
 import pl.karol202.uranium.swing.layout.layoutData
+import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
+import java.awt.Container
 import java.awt.GridBagLayout
 import java.awt.LayoutManager
 
@@ -43,13 +42,13 @@ class SwingGridBagLayout(props: Props) : SwingAbstractComponent<SwingGridBagLayo
 
 	data class Data(private val props: Props) : LayoutData<GridBagLayout>
 	{
-		override fun createLayout(container: SwingContainer) = GridBagLayout()
+		override fun createLayout(container: Container) = GridBagLayout()
 
-		override fun updateLayout(container: SwingContainer, layout: LayoutManager) =
+		override fun updateLayout(container: Container, layout: LayoutManager) =
 				(layout as? GridBagLayout) ?: createLayout(container)
 	}
 
-	override fun RenderBuilder<SwingNativeWrapper>.render()
+	override fun SwingRenderBuilder.render()
 	{
 		+ layout(props = props.layoutProps).layoutData(Data(props))
 	}

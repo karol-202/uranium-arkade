@@ -3,15 +3,15 @@ package pl.karol202.uranium.swing.control.button
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.Insets
 import java.awt.event.ActionListener
 import javax.swing.AbstractButton
 import javax.swing.Icon
 
-class SwingAbstractButton(private val native: AbstractButton,
+class SwingAbstractButton(private val nativeComponent: AbstractButton,
                           initialProps: Props) : SwingAbstractComponent<SwingAbstractButton.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
@@ -58,22 +58,20 @@ class SwingAbstractButton(private val native: AbstractButton,
 
 	private val actionListener = ActionListener { onClick() }
 
-	override fun onCreate()
-	{
-		native.addActionListener(actionListener)
+	override fun onCreate() = nativeComponent.update {
+		addActionListener(actionListener)
 	}
 
-	override fun onDestroy()
-	{
-		native.removeActionListener(actionListener)
+	override fun onDestroy() = nativeComponent.update {
+		removeActionListener(actionListener)
 	}
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ nativeComponent(native = { native }, props = props.swingProps)
+		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.update {
+	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.text.ifPresent { text = it }
 		props.icon.ifPresent { icon = it }
 		props.pressedIcon.ifPresent { pressedIcon = it }
@@ -105,10 +103,10 @@ class SwingAbstractButton(private val native: AbstractButton,
 	}
 }
 
-fun SwingRenderScope.abstractButton(native: () -> AbstractButton,
+fun SwingRenderScope.abstractButton(nativeComponent: () -> AbstractButton,
                                     key: Any = AutoKey,
                                     props: SwingAbstractButton.Props = SwingAbstractButton.Props(key)) =
-		component({ SwingAbstractButton(native(), it) }, props)
+		component({ SwingAbstractButton(nativeComponent(), it) }, props)
 
 private typealias SABProvider<P> = SwingAbstractButton.PropsProvider<P>
 fun <P : SABProvider<P>> SwingElement<P>.withAbstractButtonProps(builder: Builder<SwingAbstractButton.Props>) = withProps { withAbstractButtonProps(builder) }

@@ -1,4 +1,4 @@
-package pl.karol202.uranium.swing
+package pl.karol202.uranium.swing.native
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
@@ -9,15 +9,15 @@ import java.awt.event.*
 import java.beans.PropertyChangeListener
 import java.beans.VetoableChangeListener
 import java.util.*
+import javax.swing.JComponent
 import javax.swing.border.Border
 import javax.swing.event.AncestorListener
 
-class SwingNativeComponent(private val native: SwingNative,
+class SwingNativeComponent(private val nativeComponent: JComponent,
                            initialProps: Props) : SwingAbstractComponent<SwingNativeComponent.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 val children: List<SwingElement<*>> = emptyList(),
-	                 val context: Prop<SwingContext> = Prop.NoValue,
 	                 val constraints: Prop<Any?> = Prop.NoValue,
 	                 val componentListener: Prop<ComponentListener> = Prop.NoValue,
 	                 val focusListener: Prop<FocusListener> = Prop.NoValue,
@@ -57,8 +57,7 @@ class SwingNativeComponent(private val native: SwingNative,
 	                 val minimumSize: Prop<Dimension?> = Prop.NoValue,
 	                 val maximumSize: Prop<Dimension?> = Prop.NoValue,
 	                 val preferredSize: Prop<Dimension?> = Prop.NoValue,
-	                 val size: Prop<Dimension> = Prop.NoValue) : UProps,
-	                                                             PropsProvider<Props>
+	                 val size: Prop<Dimension> = Prop.NoValue) : UProps, PropsProvider<Props>
 	{
 		override val swingProps = this
 
@@ -72,7 +71,7 @@ class SwingNativeComponent(private val native: SwingNative,
 		fun withSwingProps(builder: Builder<Props>): S
 	}
 
-	override val context get() = props.context.value ?: super.context
+	override val native get() = SwingNative.from(nativeComponent, props.constraints.value)
 
 	private val componentListener = ComponentListenerDelegate { props.componentListener.value }
 	private val focusListener = FocusListenerDelegate { props.focusListener.value }
@@ -88,7 +87,7 @@ class SwingNativeComponent(private val native: SwingNative,
 	private val ancestorListener = AncestorListenerDelegate { props.ancestorListener.value }
 	private val vetoableChangeListener = VetoableChangeListenerDelegate { props.vetoableChangeListener.value }
 
-	override fun onCreate() = native.update {
+	override fun onCreate() = nativeComponent.update {
 		addComponentListener(componentListener)
 		addFocusListener(focusListener)
 		addHierarchyBoundsListener(hierarchyBoundsListener)
@@ -104,7 +103,7 @@ class SwingNativeComponent(private val native: SwingNative,
 		addVetoableChangeListener(vetoableChangeListener)
 	}
 
-	override fun onDestroy() = native.update {
+	override fun onDestroy() = nativeComponent.update {
 		removeComponentListener(componentListener)
 		removeFocusListener(focusListener)
 		removeHierarchyBoundsListener(hierarchyBoundsListener)
@@ -120,32 +119,12 @@ class SwingNativeComponent(private val native: SwingNative,
 		removeVetoableChangeListener(vetoableChangeListener)
 	}
 
-	override fun onAttach(parentContext: SwingInvalidateableContext)
-	{
-		parentContext.attachNative()
-	}
-
-	override fun onDetach(parentContext: SwingInvalidateableContext)
-	{
-		parentContext.detachNative()
-	}
-
-	private fun SwingContext.attachNative() = attachNative(native.constrained(props.constraints.value))
-
-	private fun SwingContext.detachNative() = detachNative(native.notConstrained())
-
-	private fun SwingContext.reattachNative()
-	{
-		detachNative()
-		attachNative()
-	}
-
 	override fun SwingRenderBuilder.render()
 	{
 		+ props.children
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.update {
+	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.enabled.ifPresent { isEnabled = it }
 		props.visible.ifPresent { isVisible = it }
 		props.focusable.ifPresent { isFocusable = it }
@@ -172,19 +151,16 @@ class SwingNativeComponent(private val native: SwingNative,
 		props.maximumSize.ifPresent { maximumSize = it }
 		props.preferredSize.ifPresent { preferredSize = it }
 		props.size.ifPresent { size = it }
-
-		if(previousProps != null && previousProps.constraints.value != props.constraints.value) requireParentContext().reattachNative()
 	}
 }
 
-fun SwingRenderScope.nativeComponent(native: () -> SwingNative,
+fun SwingRenderScope.nativeComponent(nativeComponent: () -> JComponent,
                                      key: Any = AutoKey,
                                      props: SwingNativeComponent.Props = SwingNativeComponent.Props(key)) =
-		component({ SwingNativeComponent(native(), it) }, props)
+		component({ SwingNativeComponent(nativeComponent(), it) }, props)
 
 internal typealias SNCProvider<P> = SwingNativeComponent.PropsProvider<P>
 fun <P : SNCProvider<P>> SwingElement<P>.withSwingProps(builder: Builder<SwingNativeComponent.Props>) = withProps { withSwingProps(builder) }
-internal fun <P : SNCProvider<P>> SwingElement<P>.context(context: SwingContext) = withSwingProps { copy(context = context.prop()) }
 internal fun <P : SNCProvider<P>> SwingElement<P>.constraints(constraints: Any?) = withSwingProps { copy(constraints = constraints.prop()) }
 fun <P : SNCProvider<P>> SwingElement<P>.componentListener(listener: ComponentListener) = withSwingProps { copy(componentListener = listener.prop()) }
 fun <P : SNCProvider<P>> SwingElement<P>.focusListener(listener: FocusListener) = withSwingProps { copy(focusListener = listener.prop()) }

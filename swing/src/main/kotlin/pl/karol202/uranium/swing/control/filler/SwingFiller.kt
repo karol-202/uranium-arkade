@@ -3,8 +3,8 @@ package pl.karol202.uranium.swing.control.filler
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.Builder
 import pl.karol202.uranium.swing.util.SwingAbstractComponent
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
@@ -26,10 +26,10 @@ class SwingFiller(initialProps: Props) : SwingAbstractComponent<SwingFiller.Prop
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ nativeComponent(native = { createNative() }, props = props.swingProps)
+		+ nativeComponent(nativeComponent = { createNativeComponent() }, props = props.swingProps)
 	}
 
-	private fun createNative() = Box.Filler(props.minimumSize, props.preferredSize, props.maximumSize)
+	private fun createNativeComponent() = Box.Filler(props.minimumSize, props.preferredSize, props.maximumSize)
 }
 
 fun SwingRenderScope.filler(key: Any = AutoKey,

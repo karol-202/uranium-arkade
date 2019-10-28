@@ -3,8 +3,8 @@ package pl.karol202.uranium.swing.control.text
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.Color
 import java.awt.Insets
@@ -12,7 +12,7 @@ import javax.swing.DropMode
 import javax.swing.event.CaretListener
 import javax.swing.text.*
 
-class SwingAbstractTextComponent(private val native: JTextComponent,
+class SwingAbstractTextComponent(private val nativeComponent: JTextComponent,
                                  initialProps: Props) : SwingAbstractComponent<SwingAbstractTextComponent.Props>(initialProps)
 {
     data class Props(override val key: Any = AutoKey,
@@ -58,24 +58,22 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
 
     private var ignoreTextChanges = false
 
-    override fun onCreate()
-    {
-        native.addCaretListener(caretListener)
-        native.document.addDocumentListener(documentListener)
+    override fun onCreate() = nativeComponent.update {
+        addCaretListener(caretListener)
+        document.addDocumentListener(documentListener)
     }
 
-    override fun onDestroy()
-    {
-        native.removeCaretListener(caretListener)
-        native.document.removeDocumentListener(documentListener)
+    override fun onDestroy() = nativeComponent.update {
+        removeCaretListener(caretListener)
+        document.removeDocumentListener(documentListener)
     }
 
     override fun SwingRenderBuilder.render()
     {
-        + nativeComponent(native = { native }, props = props.swingProps)
+        + nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
     }
 
-	override fun onUpdate(previousProps: Props?) = native.update {
+	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
         ignoreTextChanges {
             props.text.ifPresent { if(it != text) text = it }
         }
@@ -111,10 +109,10 @@ class SwingAbstractTextComponent(private val native: JTextComponent,
             }.also { invalidate() }
 }
 
-fun SwingRenderScope.abstractTextComponent(native: () -> JTextComponent,
+fun SwingRenderScope.abstractTextComponent(nativeComponent: () -> JTextComponent,
                                            key: Any = AutoKey,
                                            props: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props(key)) =
-        component({ SwingAbstractTextComponent(native(), it) }, props)
+        component({ SwingAbstractTextComponent(nativeComponent(), it) }, props)
 
 private typealias SATCProvider<P> = SwingAbstractTextComponent.PropsProvider<P>
 fun <P : SATCProvider<P>> SwingElement<P>.withAbstractTextProps(builder: Builder<SwingAbstractTextComponent.Props>) =

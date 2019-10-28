@@ -2,8 +2,6 @@ package pl.karol202.uranium.swing.util
 
 import pl.karol202.uranium.core.component.AbstractComponent
 import pl.karol202.uranium.core.component.StatefulComponent
-import pl.karol202.uranium.core.tree.ComponentContext
-import pl.karol202.uranium.core.context.UContext
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.render.RenderBuilder
 import pl.karol202.uranium.core.render.RenderBuilderBase
@@ -11,36 +9,27 @@ import pl.karol202.uranium.core.render.RenderScope
 import pl.karol202.uranium.core.schedule.BlockingRenderScheduler
 import pl.karol202.uranium.core.schedule.SuspendRenderScheduler
 import pl.karol202.uranium.core.tree.TreeNode
-import pl.karol202.uranium.swing.SwingNativeWrapper
-import java.awt.Container
-import javax.swing.JComponent
 
-typealias SwingNative = JComponent
+object Swing
 
-typealias SwingContainer = Container
+typealias SwingElement<P> = UElement<Swing, P>
 
-typealias SwingElement<P> = UElement<SwingNativeWrapper, P>
+typealias SwingAbstractComponent<P> = AbstractComponent<Swing, P>
 
-typealias SwingAbstractComponent<P> = AbstractComponent<SwingNativeWrapper, P>
+typealias SwingStatefulComponent<P, S> = StatefulComponent<Swing, P, S>
 
-typealias SwingStatefulComponent<P, S> = StatefulComponent<SwingNativeWrapper, P, S>
+typealias SwingRenderScope = RenderScope<Swing>
 
-typealias SwingRenderScope = RenderScope<SwingNativeWrapper>
+object SwingEmptyRenderScope : RenderScope<Swing>
 
-object SwingEmptyRenderScope : RenderScope<SwingNativeWrapper>
+typealias SwingRenderBuilderBase = RenderBuilderBase<Swing>
 
-typealias SwingRenderBuilderBase = RenderBuilderBase<SwingNativeWrapper>
+typealias SwingRenderBuilder = RenderBuilder<Swing>
 
-typealias SwingRenderBuilder = RenderBuilder<SwingNativeWrapper>
+typealias SwingTreeNode<P> = TreeNode<Swing, P>
 
-typealias SwingContext = UContext<SwingNativeWrapper>
+typealias SwingSuspendRenderScheduler = SuspendRenderScheduler<Swing>
 
-typealias SwingInvalidateableContext = ComponentContext<SwingNativeWrapper>
-
-typealias SwingTreeNode<P> = TreeNode<SwingNativeWrapper, P>
-
-typealias SwingSuspendRenderScheduler = SuspendRenderScheduler<SwingNativeWrapper>
-
-typealias SwingBlockingRenderScheduler = BlockingRenderScheduler<SwingNativeWrapper>
+typealias SwingBlockingRenderScheduler = BlockingRenderScheduler<Swing>
 
 internal typealias Builder<T> = T.() -> T

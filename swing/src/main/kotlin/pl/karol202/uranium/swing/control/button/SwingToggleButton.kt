@@ -3,13 +3,13 @@ package pl.karol202.uranium.swing.control.button
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
 import javax.swing.JToggleButton
 
-class SwingToggleButton(private val native: JToggleButton,
+class SwingToggleButton(private val nativeComponent: JToggleButton,
                         initialProps: Props) : SwingAbstractComponent<SwingToggleButton.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
@@ -40,19 +40,17 @@ class SwingToggleButton(private val native: JToggleButton,
 
 	private val itemListener = ItemListener { onSelect(it.stateChange == ItemEvent.SELECTED) }
 
-	override fun onCreate()
-	{
-		native.addItemListener(itemListener)
+	override fun onCreate() = nativeComponent.update {
+		addItemListener(itemListener)
 	}
 
-	override fun onDestroy()
-	{
-		native.removeItemListener(itemListener)
+	override fun onDestroy() = nativeComponent.update {
+		removeItemListener(itemListener)
 	}
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ abstractButton(native = { native }, props = props.abstractButtonProps)
+		+ abstractButton(nativeComponent = { nativeComponent }, props = props.abstractButtonProps)
 	}
 
 	private fun onSelect(selected: Boolean)
@@ -62,10 +60,10 @@ class SwingToggleButton(private val native: JToggleButton,
 	}
 }
 
-fun SwingRenderScope.toggleButton(native: () -> JToggleButton = ::JToggleButton,
+fun SwingRenderScope.toggleButton(nativeComponent: () -> JToggleButton = ::JToggleButton,
                                   key: Any = AutoKey,
                                   props: SwingToggleButton.Props = SwingToggleButton.Props(key)) =
-		component({ SwingToggleButton(native(), it) }, props)
+		component({ SwingToggleButton(nativeComponent(), it) }, props)
 
 private typealias STBProvider<P> = SwingToggleButton.PropsProvider<P>
 fun <P : STBProvider<P>> SwingElement<P>.withToggleButtonProps(builder: Builder<SwingToggleButton.Props>) = withProps { withToggleButtonProps(builder) }

@@ -3,15 +3,15 @@ package pl.karol202.uranium.swing.control.combobox
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
 import pl.karol202.uranium.swing.control.list.CustomListCellRenderer
-import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
 import javax.swing.JComboBox
 
-class SwingComboBox<E>(private val native: JComboBox<E>,
+class SwingComboBox<E>(private val nativeComponent: JComboBox<E>,
                        initialProps: Props<E>) : SwingAbstractComponent<SwingComboBox.Props<E>>(initialProps)
 {
 	data class Props<E>(override val key: Any = AutoKey,
@@ -57,35 +57,33 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 	private var renderer: CustomListCellRenderer<E>? = null
 	private var editor: CustomComboBoxEditor<E>? = null
 
-	override fun onCreate()
-	{
-		native.addItemListener(itemListener)
-		native.addPopupMenuListener(popupListener)
-		native.model = model
+	override fun onCreate() = nativeComponent.update {
+		addItemListener(itemListener)
+		addPopupMenuListener(popupListener)
+		model = model
 	}
 
-	override fun onDestroy()
-	{
-		native.removeItemListener(itemListener)
-		native.removePopupMenuListener(popupListener)
+	override fun onDestroy() = nativeComponent.update {
+		removeItemListener(itemListener)
+		removePopupMenuListener(popupListener)
 	}
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ nativeComponent(native = { native }, props = props.swingProps)
+		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 	}
 
 	override fun onUpdate(previousProps: Props<E>?)
 	{
 		props.items.ifPresent { model.items = it }
 		props.selectedItem.ifPresent { model.selectedItem = it }
-		props.renderer.ifPresent { native.renderer = getRenderer(it) }
-		props.editor.ifPresent { native.editor = getEditor(it) }
-		props.editable.ifPresent { native.isEditable = it }
-		props.popupVisible.ifPresent { native.isPopupVisible = it }
-		props.lightweightPopup.ifPresent { native.isLightWeightPopupEnabled = it }
-		props.maximumRowCount.ifPresent { native.maximumRowCount = it }
-		props.prototypeDisplayValue.ifPresent { native.prototypeDisplayValue = it }
+		props.renderer.ifPresent { nativeComponent.renderer = getRenderer(it) }
+		props.editor.ifPresent { nativeComponent.editor = getEditor(it) }
+		props.editable.ifPresent { nativeComponent.isEditable = it }
+		props.popupVisible.ifPresent { nativeComponent.isPopupVisible = it }
+		props.lightweightPopup.ifPresent { nativeComponent.isLightWeightPopupEnabled = it }
+		props.maximumRowCount.ifPresent { nativeComponent.maximumRowCount = it }
+		props.prototypeDisplayValue.ifPresent { nativeComponent.prototypeDisplayValue = it }
 	}
 
 	private fun getRenderer(renderFunction: SwingRenderScope.(CustomListCellRenderer.Props<E>) -> SwingElement<*>) =
@@ -101,10 +99,10 @@ class SwingComboBox<E>(private val native: JComboBox<E>,
 	}
 }
 
-fun <E> SwingRenderScope.comboBox(native: () -> JComboBox<E> = ::JComboBox,
+fun <E> SwingRenderScope.comboBox(nativeComponent: () -> JComboBox<E> = ::JComboBox,
                                   key: Any = AutoKey,
                                   props: SwingComboBox.Props<E> = SwingComboBox.Props(key)) =
-		component({ SwingComboBox(native(), it) }, props)
+		component({ SwingComboBox(nativeComponent(), it) }, props)
 
 private typealias SCBProvider<P, E> = SwingComboBox.PropsProvider<P, E>
 fun <P : SCBProvider<P, E>, E> SwingElement<P>.withComboBoxProps(builder: Builder<SwingComboBox.Props<E>>) =

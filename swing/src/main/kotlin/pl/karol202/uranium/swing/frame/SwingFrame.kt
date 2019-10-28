@@ -3,7 +3,6 @@ package pl.karol202.uranium.swing.frame
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import pl.karol202.uranium.core.schedule.renderToNode
-import pl.karol202.uranium.swing.SwingContextImpl
 import pl.karol202.uranium.swing.util.SwingElement
 import pl.karol202.uranium.swing.util.SwingRenderScope
 import pl.karol202.uranium.swing.util.SwingSuspendRenderScheduler

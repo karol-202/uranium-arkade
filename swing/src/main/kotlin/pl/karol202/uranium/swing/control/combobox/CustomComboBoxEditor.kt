@@ -4,9 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import pl.karol202.uranium.core.schedule.renderToNodeAndWait
-import pl.karol202.uranium.swing.SwingContextImpl
-import pl.karol202.uranium.swing.SwingSingleWrapper
-import pl.karol202.uranium.swing.singleWrapper
+import pl.karol202.uranium.swing.util.SwingSingleWrapper
+import pl.karol202.uranium.swing.util.singleWrapper
 import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent

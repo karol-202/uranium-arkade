@@ -3,13 +3,14 @@ package pl.karol202.uranium.swing.layout.border
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
 import pl.karol202.uranium.swing.layout.LayoutData
 import pl.karol202.uranium.swing.layout.SwingLayout
 import pl.karol202.uranium.swing.layout.layout
 import pl.karol202.uranium.swing.layout.layoutData
+import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout
+import java.awt.Container
 import java.awt.LayoutManager
 
 class SwingBorderLayoutBase(initialProps: Props) : SwingAbstractComponent<SwingBorderLayoutBase.Props>(initialProps)
@@ -19,7 +20,7 @@ class SwingBorderLayoutBase(initialProps: Props) : SwingAbstractComponent<SwingB
 	                 val horizontalGap: Prop<Int> = Prop.NoValue,
 	                 val verticalGap: Prop<Int> = Prop.NoValue) : UProps,
 	                                                              SwingNativeComponent.PropsProvider<Props>,
-                                                                  SwingLayout.PropsProvider<Props>,
+	                                                              SwingLayout.PropsProvider<Props>,
 	                                                              PropsProvider<Props>
 	{
 		override val swingProps = layoutProps.swingProps
@@ -42,9 +43,9 @@ class SwingBorderLayoutBase(initialProps: Props) : SwingAbstractComponent<SwingB
 
 	data class Data(private val props: Props) : LayoutData<BorderLayout>
 	{
-		override fun createLayout(container: SwingContainer): BorderLayout = updateLayout(container, BorderLayout())
+		override fun createLayout(container: Container): BorderLayout = updateLayout(container, BorderLayout())
 
-		override fun updateLayout(container: SwingContainer, layout: LayoutManager) = (layout as? BorderLayout)?.apply {
+		override fun updateLayout(container: Container, layout: LayoutManager) = (layout as? BorderLayout)?.apply {
 			props.horizontalGap.ifPresent { hgap = it }
 			props.verticalGap.ifPresent { vgap = it }
 		} ?: createLayout(container)

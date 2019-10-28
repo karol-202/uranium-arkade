@@ -3,11 +3,11 @@ package pl.karol202.uranium.swing.control.button
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JCheckBox
 
-class SwingCheckBox(private val native: JCheckBox,
+class SwingCheckBox(private val nativeComponent: JCheckBox,
                     initialProps: Props) : SwingAbstractComponent<SwingCheckBox.Props>(initialProps)
 {
 	data class Props(override val key: Any,
@@ -43,18 +43,18 @@ class SwingCheckBox(private val native: JCheckBox,
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ toggleButton(native = { native }, props = props.toggleButtonProps)
+		+ toggleButton(nativeComponent = { nativeComponent }, props = props.toggleButtonProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.update {
+	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.borderPaintedFlat.ifPresent { isBorderPaintedFlat = it }
 	}
 }
 
-fun SwingRenderScope.checkBox(native: () -> JCheckBox = ::JCheckBox,
+fun SwingRenderScope.checkBox(nativeComponent: () -> JCheckBox = ::JCheckBox,
                               key: Any = AutoKey,
                               props: SwingCheckBox.Props = SwingCheckBox.Props(key)) =
-		component({ SwingCheckBox(native(), it) }, props)
+		component({ SwingCheckBox(nativeComponent(), it) }, props)
 
 private typealias SCBProvider<P> = SwingCheckBox.PropsProvider<P>
 fun <P : SCBProvider<P>> SwingElement<P>.withCheckBoxProps(builder: Builder<SwingCheckBox.Props>) = withProps { withCheckBoxProps(builder) }

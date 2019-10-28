@@ -4,14 +4,13 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.render.RenderBuilder
-import pl.karol202.uranium.swing.SwingNativeWrapper
 import pl.karol202.uranium.swing.control.text.onApply
 import pl.karol202.uranium.swing.control.text.onTextChange
 import pl.karol202.uranium.swing.control.text.text
 import pl.karol202.uranium.swing.control.text.textField
 import pl.karol202.uranium.swing.test.EditorComponent.Props
 import pl.karol202.uranium.swing.test.EditorComponent.State
+import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import pl.karol202.uranium.swing.util.SwingRenderScope
 import pl.karol202.uranium.swing.util.SwingStatefulComponent
 
@@ -23,7 +22,7 @@ class EditorComponent(props: Props) : SwingStatefulComponent<Props, State>(props
 
 	data class State(val value: String) : UState
 
-	override fun RenderBuilder<SwingNativeWrapper>.render()
+	override fun SwingRenderBuilder.render()
 	{
 		+ textField().text(state.value).onTextChange { setValue(it) }.onApply { onApply() }
 	}

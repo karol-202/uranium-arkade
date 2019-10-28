@@ -3,11 +3,9 @@ package pl.karol202.uranium.swing.layout.border
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.core.render.RenderBuilder
-import pl.karol202.uranium.swing.SNCProvider
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.SwingNativeWrapper
-import pl.karol202.uranium.swing.constraints
+import pl.karol202.uranium.swing.native.SNCProvider
+import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.native.constraints
 import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout.*
 
@@ -43,7 +41,7 @@ class SwingBorderLayoutCompass(initialProps: Props) : SwingAbstractComponent<Swi
 		fun withBorderLayoutCompassProps(builder: Builder<Props>): S
 	}
 
-	override fun RenderBuilder<SwingNativeWrapper>.render()
+	override fun SwingRenderBuilder.render()
 	{
 		+ borderLayoutBase(props = props.borderLayoutBaseProps.updateBaseProps())
 	}

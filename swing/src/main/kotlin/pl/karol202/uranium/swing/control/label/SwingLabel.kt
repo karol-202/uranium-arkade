@@ -3,13 +3,13 @@ package pl.karol202.uranium.swing.control.label
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.SwingNativeComponent
-import pl.karol202.uranium.swing.nativeComponent
+import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.Icon
 import javax.swing.JLabel
 
-class SwingLabel(private val native: JLabel,
+class SwingLabel(private val nativeComponent: JLabel,
                  initialProps: Props) : SwingAbstractComponent<SwingLabel.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
@@ -22,7 +22,8 @@ class SwingLabel(private val native: JLabel,
 	                 val verticalAlign: Prop<VerticalAlign> = Prop.NoValue,
 	                 val horizontalTextPosition: Prop<HorizontalAlign> = Prop.NoValue,
 	                 val verticalTextPosition: Prop<VerticalAlign> = Prop.NoValue) : UProps,
-	                                                                                 SwingNativeComponent.PropsProvider<Props>, PropsProvider<Props>
+	                                                                                 SwingNativeComponent.PropsProvider<Props>,
+	                                                                                 PropsProvider<Props>
 	{
 		override val labelProps = this
 
@@ -41,10 +42,10 @@ class SwingLabel(private val native: JLabel,
 
 	override fun SwingRenderBuilder.render()
 	{
-		+ nativeComponent(native = { native }, props = props.swingProps)
+		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 	}
 
-	override fun onUpdate(previousProps: Props?) = native.update {
+	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.text.ifPresent { text = it }
 		props.icon.ifPresent { icon = it }
 		props.disabledIcon.ifPresent { disabledIcon = it }
@@ -56,10 +57,10 @@ class SwingLabel(private val native: JLabel,
 	}
 }
 
-fun SwingRenderScope.label(native: () -> JLabel = ::JLabel,
+fun SwingRenderScope.label(nativeComponent: () -> JLabel = ::JLabel,
                            key: Any = AutoKey,
                            props: SwingLabel.Props = SwingLabel.Props(key)) =
-		component({ SwingLabel(native(), it) }, props)
+		component({ SwingLabel(nativeComponent(), it) }, props)
 
 private typealias SLProvider<P> = SwingLabel.PropsProvider<P>
 fun <P : SLProvider<P>> SwingElement<P>.withLabelProps(builder: Builder<SwingLabel.Props>) = withProps { withLabelProps(builder) }
