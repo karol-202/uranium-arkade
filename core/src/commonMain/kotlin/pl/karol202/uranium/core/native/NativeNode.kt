@@ -3,10 +3,10 @@ package pl.karol202.uranium.core.native
 import pl.karol202.uranium.core.util.elementInserted
 import pl.karol202.uranium.core.util.elementRemoved
 
-open class NativeNode<N>(open val native: Native<N>)
+open class NativeNode<N>(protected open val native: Native<N>)
 {
 	class Container<N>(override val native: NativeContainer<N>,
-	                   val children: List<NativeNode<N>>) : NativeNode<N>(native)
+	                   private val children: List<NativeNode<N>>) : NativeNode<N>(native)
 	{
 		fun commit(targetChildren: List<NativeNode<N>>) =
 				Container(native, targetChildren.foldIndexed(children) { targetIndex, currentChildren, node ->

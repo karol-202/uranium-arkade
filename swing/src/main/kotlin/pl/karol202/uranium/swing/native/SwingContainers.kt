@@ -6,6 +6,7 @@ import javax.swing.OverlayLayout
 
 val Container.componentsWithConstraints get() = components.map { it to layout.getLayoutConstraints(it) }
 
+// TODO Refactor this method to make it comply open-closed principle
 fun LayoutManager.getLayoutConstraints(component: Component) = when(this)
 {
 	is BorderLayout -> getConstraints(component)

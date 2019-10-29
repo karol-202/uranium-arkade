@@ -3,7 +3,6 @@ package pl.karol202.uranium.swing.layout
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.native.SwingNative
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
@@ -32,7 +31,6 @@ class SwingLayout(initialProps: Props) : SwingAbstractComponent<SwingLayout.Prop
 	}
 
 	private val nativeComponent = JPanel()
-	override val native get() = SwingNative.from(nativeComponent, props.swingProps.constraints.value)
 
 	override fun onCreate()
 	{

@@ -2,10 +2,6 @@ package pl.karol202.uranium.swing.control.combobox
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import pl.karol202.uranium.core.schedule.renderToNodeAndWait
-import pl.karol202.uranium.swing.util.SwingSingleWrapper
-import pl.karol202.uranium.swing.util.singleWrapper
 import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent
@@ -41,21 +37,20 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 	override fun setItem(rawItem: Any?)
 	{
 		this.item = rawItem as? E
-		reuseOrRenderBlocking(Props(item) { onEdit(it) })
+		//reuseOrRenderBlocking(Props(item) { onEdit(it) })
+		// TODO Make CustomComboBoxEditor work again
 	}
 
-	private fun reuseOrRenderBlocking(props: Props<E>) = runBlocking { reuse(props) ?: render(props) }
+	/*private fun reuseOrRenderBlocking(props: Props<E>) = runBlocking { reuse(props) ?: render(props) }
 
 	private suspend fun reuse(props: Props<E>) = rootNode?.scheduleReuseAndWait(renderRootElement(props))
 
 	private suspend fun render(props: Props<E>)
 	{
 		rootNode = scheduler.renderToNodeAndWait(renderRootElement(props), createContext())
-	}
+	}*/
 
 	private fun renderRootElement(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }
-
-	private fun createContext() = SwingContextImpl(nativeContainer)
 
 	private fun onEdit(newItem: E)
 	{

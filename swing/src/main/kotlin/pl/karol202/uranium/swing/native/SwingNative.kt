@@ -12,11 +12,14 @@ sealed class SwingNative : Native<Swing>
 {
 	companion object
 	{
-		fun from(component: Component, constraints: Any?) = when(component)
+		fun fromComponent(component: Component, constraints: Any? = null): Native<Swing> = when(component)
 		{
-			is Container -> ConstrainedContainer(component, constraints)
+			is Container -> fromContainer(component, constraints)
 			else -> ConstrainedComponent(component, constraints)
 		}
+
+		fun fromContainer(component: Container, constraints: Any? = null): NativeContainer<Swing> =
+				ConstrainedContainer(component, constraints)
 	}
 
 	private data class ConstrainedComponent(override val component: Component,
@@ -25,7 +28,7 @@ sealed class SwingNative : Native<Swing>
 	private data class ConstrainedContainer(override val component: Container,
 	                                        override val constraints: Any?) : SwingNative(), NativeContainer<Swing>
 	{
-		override val children = component.componentsWithConstraints.map { (comp, constr) -> from(comp, constr) }
+		override val children = component.componentsWithConstraints.map { (comp, constr) -> fromComponent(comp, constr) }
 
 		override fun attach(native: Native<Swing>, index: Int)
 		{
@@ -36,6 +39,6 @@ sealed class SwingNative : Native<Swing>
 		override fun detach(native: Native<Swing>) = component.remove(native.asSwingNative().component)
 	}
 
-	abstract val component: Component
-	abstract val constraints: Any?
+	protected abstract val component: Component
+	protected abstract val constraints: Any?
 }
