@@ -1,29 +1,19 @@
 package pl.karol202.uranium.core.schedule
 
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 
-abstract class AbstractRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<N>
+class QueueRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<N>
 {
 	companion object
 	{
 		const val MAX_BUFFER_SIZE = 64
 	}
 
-	protected data class Request(private val function: () -> Unit)
+	private data class Request(private val function: () -> Unit)
 	{
-		private val deferred = CompletableDeferred<Unit>()
-
-		fun execute()
-		{
-			function()
-			deferred.complete(Unit)
-		}
-
-		fun asJob(): Job = deferred
+		fun execute() = function()
 	}
 
 	private val scheduleChannel = Channel<Request>(MAX_BUFFER_SIZE)
@@ -40,11 +30,7 @@ abstract class AbstractRenderScheduler<N>(coroutineScope: CoroutineScope) : Rend
 
 	override fun submit(function: () -> Unit)
 	{
-		submitAndReturnJob(function)
-	}
-
-	protected fun submitAndReturnJob(function: () -> Unit) = Request(function).let { request ->
+		val request = Request(function)
 		scheduleChannel.offer(request) || throw RuntimeException("Too many scheduled renders (probably an infinite loop)")
-		request.asJob()
 	}
 }

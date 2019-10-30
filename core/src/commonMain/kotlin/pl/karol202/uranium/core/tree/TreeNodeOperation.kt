@@ -9,7 +9,7 @@ sealed class TreeNodeOperation<N>
 	                             val index: Int) : TreeNodeOperation<N>()
 
 	class UpdateNode<N, P : UProps>(val node: TreeNode<N, P>,
-	                                val element: UElement<N, P>) : TreeNodeOperation<N>()
+	                                val props: P) : TreeNodeOperation<N>()
 
 	class DestroyAndDetachNode<N>(val node: TreeNode<N, *>) : TreeNodeOperation<N>()
 

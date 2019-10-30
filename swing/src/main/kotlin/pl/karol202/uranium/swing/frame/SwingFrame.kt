@@ -1,13 +1,11 @@
 package pl.karol202.uranium.swing.frame
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import pl.karol202.uranium.core.native.asNativeNode
-import pl.karol202.uranium.core.tree.createNode
+import pl.karol202.uranium.core.common.UProps
+import pl.karol202.uranium.core.manager.RenderManager
 import pl.karol202.uranium.swing.native.SwingNative
 import pl.karol202.uranium.swing.util.SwingElement
+import pl.karol202.uranium.swing.util.SwingRenderManager
 import pl.karol202.uranium.swing.util.SwingRenderScope
-import pl.karol202.uranium.swing.util.SwingSuspendRenderScheduler
 import javax.swing.JFrame
 
 abstract class SwingFrame
@@ -18,8 +16,8 @@ abstract class SwingFrame
 	}
 
 	private val frame = JFrame()
-	private val coroutineScope = CoroutineScope(Dispatchers.Main)
-	private val scheduler = SwingSuspendRenderScheduler(coroutineScope)
+	private val container = SwingNative.fromContainer(frame.contentPane)
+	private var renderManager: SwingRenderManager<*>? = null
 
 	fun show()
 	{
@@ -27,14 +25,10 @@ abstract class SwingFrame
 		frame.initFrame()
 	}
 
-	private fun render()
-	{
-		val node = renderRoot().createNode(scheduler)
-		node.scheduleInit()
-		scheduler.submit {
-			SwingNative.fromContainer(frame.contentPane).asNativeNode().commit(node.nativeNodes)
-		}
-	}
+	private fun render() = getOrCreateRenderManager(renderRoot()).scheduleInit()
+
+	private fun <P : UProps> getOrCreateRenderManager(element: SwingElement<P>) =
+			renderManager ?: RenderManager(element, container).also { renderManager = it }
 
 	protected abstract fun renderRoot(): SwingElement<*>
 

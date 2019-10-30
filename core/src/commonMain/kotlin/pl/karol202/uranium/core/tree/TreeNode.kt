@@ -7,17 +7,16 @@ import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.native.Native
 import pl.karol202.uranium.core.native.NativeContainer
 import pl.karol202.uranium.core.native.NativeNode
-import pl.karol202.uranium.core.schedule.RenderScheduler
 import pl.karol202.uranium.core.tree.TreeNodeOperation.*
 import pl.karol202.uranium.core.util.elementInserted
 import kotlin.reflect.KClass
 
-fun <N, P : UProps> UElement<N, P>.createNode(renderScheduler: RenderScheduler<N>) =
-		TreeNode(createComponent(), renderScheduler, propsClass)
+fun <N, P : UProps> UElement<N, P>.createNode(invalidateCallback: (TreeNode<N, *>) -> Unit) =
+		TreeNode(createComponent(), propsClass, invalidateCallback)
 
 class TreeNode<N, P : UProps> internal constructor(private val component: UComponent<N, P>,
-                                                   private val scheduler: RenderScheduler<N>,
-                                                   private val propsClass: KClass<P>) : KeyProvider
+                                                   private val propsClass: KClass<P>,
+                                                   private val invalidateCallback: (TreeNode<N, *>) -> Unit) : KeyProvider
 {
 	override val key get() = component.key
 	private var children = emptyList<TreeNode<N, *>>()
@@ -32,26 +31,16 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 			}
 		}
 
-	fun scheduleInit() = scheduler.submit { init() }
-
-	suspend fun scheduleInitAndWait() = scheduler.submitAndWait { init() }
-
-	fun scheduleReuse(element: UElement<N, P>) = scheduler.submit { reuse(element) }
-
-	suspend fun scheduleReuseAndWait(element: UElement<N, P>) = scheduler.submitAndWait { reuse(element) }
-
-	private fun init()
+	fun init()
 	{
 		createComponent()
 		render()
 		update()
 	}
 
-	private fun createComponent() = component.create(componentContext { scheduleInvalidate() })
+	private fun createComponent() = component.create(componentContext { invalidateCallback(this) })
 
-	private fun scheduleInvalidate() = scheduler.submit(this::invalidate)
-
-	private fun invalidate()
+	fun invalidate()
 	{
 		render()
 		update(component.props)
@@ -71,26 +60,26 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 		is DetachNode<N> -> children - node
 	}
 
-	private fun createChild(element: UElement<N, *>) = element.createNode(scheduler).also { it.init() }
+	private fun createChild(element: UElement<N, *>) = element.createNode(invalidateCallback).also { it.init() }
 
-	private fun <P : UProps> UpdateNode<N, P>.apply() = node.reuse(element)
+	private fun <P : UProps> UpdateNode<N, P>.apply() = node.reuse(props)
 
-	private fun reuse(element: UElement<N, P>)
+	fun reuse(props: P)
 	{
-		if(needsUpdate(element)) keepProps { prevProps ->
-			setProps(element)
+		if(needsUpdate(props)) keepProps { prevProps ->
+			setProps(props)
 			render()
 			update(prevProps)
 		}
-		else setProps(element)
+		else setProps(props)
 	}
 
 	// Returning false doesn't have to necessarily mean that props haven't changed
-	private fun needsUpdate(newElement: UElement<N, P>) = component.props != newElement.props
+	private fun needsUpdate(props: P) = component.props != props
 
 	private fun <R> keepProps(block: (P) -> R) = component.props.let(block)
 
-	private fun setProps(newElement: UElement<N, P>) = component.modifyPropsInternal(newElement.props)
+	private fun setProps(props: P) = component.modifyPropsInternal(props)
 
 	private fun update(previousProps: P? = null) = component.onUpdate(previousProps)
 

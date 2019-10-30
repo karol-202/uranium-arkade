@@ -23,7 +23,7 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 	private val nativeContainer = JPanel(BorderLayout())
 	private var rootNode: SwingTreeNode<SwingSingleWrapper.Props>? = null
 	private val coroutineScope = CoroutineScope(Dispatchers.Main)
-	private val scheduler = SwingBlockingRenderScheduler(coroutineScope)
+	//private val scheduler = SwingBlockingRenderScheduler(coroutineScope)
 
 	private var item: E? = null
 

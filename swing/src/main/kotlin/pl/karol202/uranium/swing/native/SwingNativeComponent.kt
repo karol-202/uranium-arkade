@@ -71,7 +71,7 @@ class SwingNativeComponent(private val nativeComponent: JComponent,
 		fun withSwingProps(builder: Builder<Props>): S
 	}
 
-	override val native get() = SwingNative.fromComponent(nativeComponent, props.constraints.value)
+	override val native get() = SwingNative.from(nativeComponent, props.constraints.value)
 
 	private val componentListener = ComponentListenerDelegate { props.componentListener.value }
 	private val focusListener = FocusListenerDelegate { props.focusListener.value }

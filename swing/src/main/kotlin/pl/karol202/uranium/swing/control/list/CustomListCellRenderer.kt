@@ -17,7 +17,7 @@ class CustomListCellRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) 
 	private val nativeContainer = JPanel()
 	private var rootNode: SwingTreeNode<SwingSingleWrapper.Props>? = null
 	private val coroutineScope = CoroutineScope(Dispatchers.Main)
-	private val scheduler = SwingBlockingRenderScheduler(coroutineScope)
+	//private val scheduler = SwingBlockingRenderScheduler(coroutineScope)
 
 	override fun getListCellRendererComponent(list: JList<out E>?, value: E?, index: Int, selected: Boolean, focus: Boolean) =
 			nativeContainer//.also { reuseOrRender(Props(value, index, selected, focus)) }
