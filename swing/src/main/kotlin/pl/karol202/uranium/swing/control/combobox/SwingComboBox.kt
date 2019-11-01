@@ -57,15 +57,17 @@ class SwingComboBox<E>(private val nativeComponent: JComboBox<E>,
 	private var renderer: CustomListCellRenderer<E>? = null
 	private var editor: CustomComboBoxEditor<E>? = null
 
-	override fun onCreate() = nativeComponent.update {
-		addItemListener(itemListener)
-		addPopupMenuListener(popupListener)
-		model = model
+	override fun onCreate()
+	{
+		nativeComponent.addItemListener(itemListener)
+		nativeComponent.addPopupMenuListener(popupListener)
+		nativeComponent.model = model
 	}
 
-	override fun onDestroy() = nativeComponent.update {
-		removeItemListener(itemListener)
-		removePopupMenuListener(popupListener)
+	override fun onDestroy()
+	{
+		nativeComponent.removeItemListener(itemListener)
+		nativeComponent.removePopupMenuListener(popupListener)
 	}
 
 	override fun SwingRenderBuilder.render()

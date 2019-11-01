@@ -1,7 +1,7 @@
 package pl.karol202.uranium.swing.control.list
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import pl.karol202.uranium.core.manager.RenderManager
+import pl.karol202.uranium.swing.native.SwingNative
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JList
 import javax.swing.JPanel
@@ -14,23 +14,18 @@ class CustomListCellRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) 
 	                    val selected: Boolean,
 	                    val hasFocus: Boolean)
 
-	private val nativeContainer = JPanel()
-	private var rootNode: SwingTreeNode<SwingSingleWrapper.Props>? = null
-	private val coroutineScope = CoroutineScope(Dispatchers.Main)
-	//private val scheduler = SwingBlockingRenderScheduler(coroutineScope)
+	private val containerComponent = JPanel()
+	private val container = SwingNative.fromContainer(containerComponent)
+	private var renderManager: SwingRenderManager<SwingSingleWrapper.Props>? = null
 
 	override fun getListCellRendererComponent(list: JList<out E>?, value: E?, index: Int, selected: Boolean, focus: Boolean) =
-			nativeContainer//.also { reuseOrRender(Props(value, index, selected, focus)) }
-	// TODO Make CustomComboBoxEditor work again
+			containerComponent.also { reuseOrRender(Props(value, index, selected, focus)) }
 
-	/*private fun reuseOrRender(props: Props<E>) = runBlocking { reuse(props) ?: render(props) }
+	private fun reuseOrRender(props: Props<E>) = reuse(props) ?: render(props)
 
-	private suspend fun reuse(props: Props<E>) = rootNode?.scheduleReuseAndWait(renderRootElement(props))
+	private fun reuse(props: Props<E>) = renderManager?.reuse(renderRoot(props).props)
 
-	private suspend fun render(props: Props<E>)
-	{
-		rootNode = scheduler.renderToNodeAndWait(renderRootElement(props), createContext())
-	}*/
+	private fun render(props: Props<E>) = RenderManager(renderRoot(props), container).also { renderManager = it }.init()
 
-	private fun renderRootElement(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }
+	private fun renderRoot(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }
 }

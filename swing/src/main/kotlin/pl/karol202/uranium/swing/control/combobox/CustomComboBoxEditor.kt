@@ -1,7 +1,7 @@
 package pl.karol202.uranium.swing.control.combobox
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import pl.karol202.uranium.core.manager.RenderManager
+import pl.karol202.uranium.swing.native.SwingNative
 import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout
 import java.awt.event.ActionEvent
@@ -20,14 +20,13 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 	                    val onEdit: (E) -> Unit)
 
 	private val listeners = mutableListOf<ActionListener>()
-	private val nativeContainer = JPanel(BorderLayout())
-	private var rootNode: SwingTreeNode<SwingSingleWrapper.Props>? = null
-	private val coroutineScope = CoroutineScope(Dispatchers.Main)
-	//private val scheduler = SwingBlockingRenderScheduler(coroutineScope)
+	private val containerComponent = JPanel(BorderLayout())
+	private val container = SwingNative.fromContainer(containerComponent)
+	private var renderManager: SwingRenderManager<SwingSingleWrapper.Props>? = null
 
 	private var item: E? = null
 
-	override fun getEditorComponent() = nativeContainer
+	override fun getEditorComponent() = containerComponent
 
 	override fun selectAll() { }
 
@@ -37,20 +36,16 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 	override fun setItem(rawItem: Any?)
 	{
 		this.item = rawItem as? E
-		//reuseOrRenderBlocking(Props(item) { onEdit(it) })
-		// TODO Make CustomComboBoxEditor work again
+		reuseOrRender(Props(item) { onEdit(it) })
 	}
 
-	/*private fun reuseOrRenderBlocking(props: Props<E>) = runBlocking { reuse(props) ?: render(props) }
+	private fun reuseOrRender(props: Props<E>) = reuse(props) ?: render(props)
 
-	private suspend fun reuse(props: Props<E>) = rootNode?.scheduleReuseAndWait(renderRootElement(props))
+	private fun reuse(props: Props<E>) = renderManager?.reuse(renderRoot(props).props)
 
-	private suspend fun render(props: Props<E>)
-	{
-		rootNode = scheduler.renderToNodeAndWait(renderRootElement(props), createContext())
-	}*/
+	private fun render(props: Props<E>) = RenderManager(renderRoot(props), container).also { renderManager = it }.init()
 
-	private fun renderRootElement(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }
+	private fun renderRoot(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }
 
 	private fun onEdit(newItem: E)
 	{
