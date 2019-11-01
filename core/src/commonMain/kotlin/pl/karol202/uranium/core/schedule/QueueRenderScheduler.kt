@@ -3,6 +3,7 @@ package pl.karol202.uranium.core.schedule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import pl.karol202.uranium.core.util.StackTrace
 
 class QueueRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<N>
 {
@@ -11,7 +12,8 @@ class QueueRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<
 		const val MAX_BUFFER_SIZE = 64
 	}
 
-	private data class Request(private val function: () -> Unit)
+	private data class Request(private val function: () -> Unit,
+	                           val stackTrace: StackTrace) // For debugging purposes
 	{
 		fun execute() = function()
 	}
@@ -30,7 +32,7 @@ class QueueRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<
 
 	override fun submit(function: () -> Unit)
 	{
-		val request = Request(function)
+		val request = Request(function, StackTrace.current)
 		scheduleChannel.offer(request) || throw RuntimeException("Too many scheduled renders (probably an infinite loop)")
 	}
 }

@@ -10,5 +10,3 @@ interface NativeContainer<N> : Native<N>
 }
 
 fun <N> Native<N>.asNode() = NativeNode(this)
-
-fun <N> NativeContainer<N>.asEmptyContainerNode() = NativeNode.Container(this, emptyList())

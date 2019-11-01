@@ -5,7 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.native.NativeContainer
-import pl.karol202.uranium.core.native.asEmptyContainerNode
+import pl.karol202.uranium.core.native.asNode
 import pl.karol202.uranium.core.schedule.QueueRenderScheduler
 import pl.karol202.uranium.core.tree.TreeNode
 import pl.karol202.uranium.core.tree.createNode
@@ -16,7 +16,7 @@ class RenderManager<N, P : UProps>(element: UElement<N, P>,
 	private val scheduler = QueueRenderScheduler<N>(CoroutineScope(Dispatchers.Main))
 	private val rootTreeNode = element.createNode { scheduleInvalidate(it) }
 
-	private var rootNativeNode = container.asEmptyContainerNode()
+	private var rootNativeNode = container.asNode()
 
 	fun scheduleInit() = scheduler.submit { init() }
 
@@ -42,5 +42,5 @@ class RenderManager<N, P : UProps>(element: UElement<N, P>,
 		commit()
 	}
 
-	private fun commit() = rootNativeNode.commit(rootTreeNode.nativeNodes)
+	private fun commit() = rootNativeNode.transformedTo(rootTreeNode.nativeNodes).also { rootNativeNode = it }
 }

@@ -3,9 +3,9 @@ package pl.karol202.uranium.core.tree
 import pl.karol202.uranium.core.common.KeyProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
+import pl.karol202.uranium.core.component.componentContext
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.native.Native
-import pl.karol202.uranium.core.native.NativeContainer
 import pl.karol202.uranium.core.native.NativeNode
 import pl.karol202.uranium.core.tree.TreeNodeOperation.*
 import pl.karol202.uranium.core.util.elementInserted
@@ -25,8 +25,7 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 		get() = component.native.let { native ->
 			when(native)
 			{
-				is NativeContainer -> listOf(NativeNode.Container(native, children.flatMap { it.nativeNodes }))
-				is Native -> listOf(NativeNode(native))
+				is Native -> listOf(NativeNode(native, children.flatMap { it.nativeNodes }))
 				else -> children.flatMap { it.nativeNodes }
 			}
 		}

@@ -5,7 +5,6 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.native.Native
 import pl.karol202.uranium.core.render.RenderScope
-import pl.karol202.uranium.core.tree.ComponentContext
 
 interface UComponent<N, P : UProps> : PropsProvider<P>
 {

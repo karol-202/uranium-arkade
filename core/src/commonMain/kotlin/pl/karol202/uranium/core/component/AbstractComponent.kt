@@ -2,7 +2,6 @@ package pl.karol202.uranium.core.component
 
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.render.RenderBuilder
-import pl.karol202.uranium.core.tree.ComponentContext
 
 abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 {

@@ -1,4 +1,4 @@
-package pl.karol202.uranium.core.tree
+package pl.karol202.uranium.core.component
 
 interface ComponentContext
 {

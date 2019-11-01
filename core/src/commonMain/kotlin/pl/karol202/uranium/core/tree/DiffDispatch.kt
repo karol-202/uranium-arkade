@@ -6,8 +6,6 @@ import pl.karol202.uranium.core.element.UElement
 fun <N> dispatchDiff(currentNodes: List<TreeNode<N, *>>,
                      newElements: List<UElement<N, *>>): List<TreeNodeOperation<N>>
 {
-	val operations = mutableListOf<TreeNodeOperation<N>>()
-	currentNodes.map { TreeNodeOperation.DestroyAndDetachNode(it) }.forEach { operations.add(it) }
-	newElements.mapIndexed { index, element -> TreeNodeOperation.CreateAndAttachNode(element, index) }.forEach { operations.add(it) }
-	return operations
+	return if(currentNodes.isEmpty()) newElements.mapIndexed { index, element -> TreeNodeOperation.CreateAndAttachNode(element, index) }
+	else emptyList()
 }
