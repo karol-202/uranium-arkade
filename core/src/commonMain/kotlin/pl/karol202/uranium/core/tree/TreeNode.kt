@@ -15,10 +15,12 @@ fun <N, P : UProps> UElement<N, P>.createNode(invalidateCallback: (TreeNode<N, *
 		TreeNode(createComponent(), propsClass, invalidateCallback)
 
 class TreeNode<N, P : UProps> internal constructor(private val component: UComponent<N, P>,
-                                                   private val propsClass: KClass<P>,
+                                                   internal val propsClass: KClass<P>,
                                                    private val invalidateCallback: (TreeNode<N, *>) -> Unit) : KeyProvider
 {
 	override val key get() = component.key
+	internal val props get() = component.props
+
 	private var children = emptyList<TreeNode<N, *>>()
 
 	val nativeNodes: List<NativeNode<N>>
@@ -95,6 +97,4 @@ class TreeNode<N, P : UProps> internal constructor(private val component: UCompo
 	}
 
 	private fun destroyComponent() = component.destroy()
-
-	internal fun isCompatibleWith(element: UElement<N, *>) = propsClass == element.propsClass
 }
