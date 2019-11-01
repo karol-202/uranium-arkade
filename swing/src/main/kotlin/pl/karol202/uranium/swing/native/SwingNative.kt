@@ -31,13 +31,30 @@ sealed class SwingNative : Native<Swing>
 	private data class ConstrainedContainer(override val component: Container,
 	                                        override val constraints: Any?) : SwingNative(), NativeContainer<Swing>
 	{
-		override fun attach(native: Native<Swing>, index: Int)
+		private data class Occurrence(val constraints: Any?,
+		                              val index: Int)
+
+		private val childrenOccurrences = mutableMapOf<Component, List<Occurrence>>()
+
+		override fun attach(native: Native<Swing>, index: Int) =
+				updateChildren(native) { this + Occurrence(it.constraints, index) }
+
+		override fun detach(native: Native<Swing>) =
+				updateChildren(native) { swingNative -> filter { it.constraints != swingNative.constraints } }
+
+		private fun updateChildren(native: Native<Swing>, builder: List<Occurrence>.(SwingNative) -> List<Occurrence>)
 		{
 			val swingNative = native.asSwingNative()
-			component.add(swingNative.component, swingNative.constraints, index)
+			val currentOccurrenceList = childrenOccurrences[swingNative.component] ?: emptyList()
+			val newOccurrenceList = currentOccurrenceList.builder(swingNative)
+			childrenOccurrences[swingNative.component] = newOccurrenceList
+			update(swingNative.component, newOccurrenceList)
 		}
 
-		override fun detach(native: Native<Swing>) = component.remove(native.asSwingNative().component)
+		private fun update(component: Component, occurrences: List<Occurrence>) =
+				occurrences.firstOrNull()?.let {
+					this.component.add(component, it.constraints, it.index)
+				} ?: this.component.remove(component)
 	}
 
 	protected abstract val component: Component

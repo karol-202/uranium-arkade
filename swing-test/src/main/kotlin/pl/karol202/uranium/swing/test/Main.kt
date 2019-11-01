@@ -43,10 +43,10 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	override fun SwingRenderBuilder.render()
 	{
 		+ gridBagLayout {
-			+ cell(0, 0) {
+			+ cell(if(state.checked) 1 else 0, 0) {
 				label(key = 0).text("Tekst: ${state.text} Stan: ${state.checked} Slider: ${state.sliderValue}")
 			}
-			+ cell(1, 0, weights = weights(1.0, 0.0), fill = GridBagFill.HORIZONTAL) {
+			+ cell(if(state.checked) 0 else 1, 0, weights = weights(1.0, 0.0), fill = GridBagFill.HORIZONTAL) {
 				textField(key = 1).text(state.text).onTextChange { setText(it) }.columns(50)
 			}
 			+ cell(2, 0) {
