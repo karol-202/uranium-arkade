@@ -1,16 +1,20 @@
 package pl.karol202.uranium.swing.layout.gridbag
 
 import pl.karol202.uranium.swing.util.Insets
-import pl.karol202.uranium.swing.util.Size
 import java.awt.GridBagConstraints
 
+// Decision about making this class a subclass of Swing's GridBagConstraints has been made because of need for
+// being constraints comparable by contents and not by instance (like Swing's GridBagConstraints).
 data class GridBagConstraints(private val x: Int,
                               private val y: Int,
-                              private val size: Size,
-                              private val weights: GridBagWeights,
+                              private val width: Int,
+                              private val height: Int,
+                              private val weightX: Double,
+                              private val weightY: Double,
                               private val anchor: GridBagAnchor,
                               private val fill: GridBagFill,
                               private val insets: Insets,
-                              private val padding: Size) : GridBagConstraints(x, y, size.x, size.y, weights.x, weights.y,
+                              private val paddingX: Int,
+                              private val paddingY: Int) : GridBagConstraints(x, y, width, height, weightX, weightY,
                                                                               anchor.code, fill.code, insets.toAWTInsets(),
-                                                                              padding.x, padding.y)
+                                                                              paddingX, paddingY)

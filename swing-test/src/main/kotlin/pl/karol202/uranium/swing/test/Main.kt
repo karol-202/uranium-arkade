@@ -43,22 +43,22 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	override fun SwingRenderBuilder.render()
 	{
 		+ gridBagLayout {
-			+ cell(if(state.checked) 1 else 0, 0) {
+			+ cell(x = if(state.checked) 1 else 0, y = 0) {
 				label(key = 0).text("Tekst: ${state.text} Stan: ${state.checked} Slider: ${state.sliderValue}")
 			}
-			+ cell(if(state.checked) 0 else 1, 0, weights = weights(1.0, 0.0), fill = GridBagFill.HORIZONTAL) {
+			+ cell(x = if(state.checked) 0 else 1, y = 0, weightX = 1.0, fillX = true) {
 				textField(key = 1).text(state.text).onTextChange { setText(it) }.columns(50)
 			}
-			+ cell(2, 0) {
+			+ cell(x = 2, y = 0) {
 				checkBox(key = 2).text("Checkbox").selected(state.checked).onSelect { setChecked(it) }
 			}
-			+ cell(3, 0) {
+			+ cell(x = 3, y = 0) {
 				radioButton(key = 3).text("Radio").selected(state.checked).onSelect { setChecked(it) }
 			}
-			+ cell(4, 0) {
+			+ cell(x = 4, y = 0) {
 				toggleButton(key = 4).text(state.text).selected(state.checked).onClick { setChecked(false) }
 			}
-			+ cell(4, 1, weights = weights(1.0, 0.0)) {
+			+ cell(x = 4, y = 1, weightX = 1.0) {
 				comboBox<String>(key = 5).items(state.items).renderer { props ->
 					label().text(props.item?.let { "Zwierz: $it" } ?: "Brak")
 				}.editable(true).editor { props ->
@@ -69,10 +69,10 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 					})
 				}.selectedItem(state.selectedItem).onSelect { setSelectedItem(it) }
 			}
-			+ cell(0, 1, fill = GridBagFill.HORIZONTAL) {
+			+ cell(x = 0, y = 1, fillX = true) {
 				slider(key = 7).minimum(50).maximum(100).value(state.sliderValue).onChange { setSliderValue(it) }
 			}
-			+ cell(2, 1, fill = GridBagFill.HORIZONTAL, insets = insets(8, 8, 8, 8)) {
+			+ cell(x = 2, y = 1, fillX = true, insets = insets(8, 8, 8, 8)) {
 				list<String>(key = 8).items(state.items).selectionMode(ListSelectionMode.MULTIPLE_INTERNAL_SELECTION)
 						.selectedItems(state.selectedListItems).onSelect { setSelectedListItems(it) }
 						.renderer {
@@ -80,7 +80,7 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 							label().text("$prefix${it.item}").alignmentX(1f)
 						}
 			}
-			+ cell(3, 1, fill = GridBagFill.HORIZONTAL) {
+			+ cell(x = 3, y = 1, fillX = true) {
 				progressBar(key = 6).minimum(0).maximum(200).value((state.sliderValue - 50) * 4)
 			}
 		}

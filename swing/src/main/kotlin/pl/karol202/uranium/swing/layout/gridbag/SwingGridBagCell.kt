@@ -4,13 +4,22 @@ import pl.karol202.uranium.swing.native.SNCProvider
 import pl.karol202.uranium.swing.native.constraints
 import pl.karol202.uranium.swing.util.*
 
-fun <EP : SNCProvider<EP>> SwingGridBagScope.cell(x: Int,
+// Insets are the first argument in order to force to use named arguments
+fun <EP : SNCProvider<EP>> SwingGridBagScope.cell(insets: Insets = insets(),
+                                                  x: Int,
                                                   y: Int,
-                                                  size: Size = size(1, 1),
-                                                  weights: GridBagWeights = weights(0.0, 0.0),
+                                                  width: Int = 1,
+                                                  height: Int = 1,
+                                                  weightX: Double = 0.0,
+                                                  weightY: Double = 0.0,
                                                   anchor: GridBagAnchor = GridBagAnchor.CENTER,
-                                                  fill: GridBagFill = GridBagFill.NONE,
-                                                  insets: Insets = insets(),
-                                                  internalPadding: Size = padding(0, 0),
+                                                  fillX: Boolean = false,
+                                                  fillY: Boolean = false,
+                                                  paddingX: Int = 0,
+                                                  paddingY: Int = 0,
                                                   element: SwingRenderScope.() -> SwingElement<EP>) =
-		SwingEmptyRenderScope.element().constraints(GridBagConstraints(x, y, size, weights, anchor, fill, insets, internalPadding))
+		SwingEmptyRenderScope.element().constraints(GridBagConstraints(x, y,
+		                                                               width, height,
+		                                                               weightX, weightY,
+		                                                               anchor, GridBagFill.fill(fillX, fillY),
+		                                                               insets, paddingX, paddingY))
