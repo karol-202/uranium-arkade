@@ -12,9 +12,10 @@ data class GridBagConstraints(private val x: Int,
                               private val weightX: Double,
                               private val weightY: Double,
                               private val anchor: GridBagAnchor,
-                              private val fill: GridBagFill,
+                              private val fillX: Boolean,
+                              private val fillY: Boolean,
                               private val insets: Insets,
                               private val paddingX: Int,
                               private val paddingY: Int) : GridBagConstraints(x, y, width, height, weightX, weightY,
-                                                                              anchor.code, fill.code, insets.toAWTInsets(),
-                                                                              paddingX, paddingY)
+                                                                              anchor.code, GridBagFill.fill(fillX, fillY).code,
+                                                                              insets.toAWTInsets(), paddingX, paddingY)
