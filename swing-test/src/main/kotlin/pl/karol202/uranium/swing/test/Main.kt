@@ -13,12 +13,11 @@ import pl.karol202.uranium.swing.control.progress.minimum
 import pl.karol202.uranium.swing.control.progress.progressBar
 import pl.karol202.uranium.swing.control.progress.value
 import pl.karol202.uranium.swing.control.slider.*
-import pl.karol202.uranium.swing.control.text.columns
-import pl.karol202.uranium.swing.control.text.onTextChange
-import pl.karol202.uranium.swing.control.text.text
-import pl.karol202.uranium.swing.control.text.textField
+import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
-import pl.karol202.uranium.swing.layout.gridbag.*
+import pl.karol202.uranium.swing.layout.gridbag.cell
+import pl.karol202.uranium.swing.layout.gridbag.gridBagLayout
+import pl.karol202.uranium.swing.layout.gridbag.insets
 import pl.karol202.uranium.swing.native.alignmentX
 import pl.karol202.uranium.swing.util.SwingRenderBuilder
 import pl.karol202.uranium.swing.util.SwingRenderScope
@@ -38,7 +37,8 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	                 val items: List<String> = listOf("Kot", "Pies", "Koń"),
 	                 val selectedItem: String? = null,
 	                 val sliderValue: Int = 0,
-	                 val selectedListItems: List<String> = listOf("Koń")) : UState
+	                 val selectedListItems: List<String> = listOf("Koń"),
+	                 val textAreaText: String = "tekst") : UState
 
 	override fun SwingRenderBuilder.render()
 	{
@@ -83,6 +83,9 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 			+ cell(x = 3, y = 1, fillX = true) {
 				progressBar(key = 6).minimum(0).maximum(200).value((state.sliderValue - 50) * 4)
 			}
+			+ cell(x = 0, y = 2, width = 2, fillX = true, fillY = true) {
+				textArea(key = 7).columns(10).rows(10).text(state.textAreaText).onTextChange { setTextAreaText(it) }
+			}
 		}
 	}
 
@@ -97,6 +100,8 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	private fun setSliderValue(value: Int) = setState { copy(sliderValue = value) }
 
 	private fun setSelectedListItems(items: List<String>) = setState { copy(selectedListItems = items) }
+
+	private fun setTextAreaText(text: String) = setState { copy(textAreaText = text) }
 }
 
 fun SwingRenderScope.counter(key: Any) = component(::CounterComponent, BasicProps(key))
