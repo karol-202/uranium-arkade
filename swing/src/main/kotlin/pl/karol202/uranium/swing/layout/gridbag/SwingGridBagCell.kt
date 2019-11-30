@@ -19,11 +19,8 @@ fun <EP : SNCProvider<EP>> SwingGridBagScope.cell(insets: Insets = insets(),
                                                   paddingX: Int = 0,
                                                   paddingY: Int = 0,
                                                   element: SwingRenderScope.() -> SwingElement<EP>) =
-		SwingEmptyRenderScope.element().constraints(GridBagConstraints(x, y,
-		                                                               width, height,
-		                                                               weightX, weightY,
-		                                                               anchor, fillX, fillY,
-		                                                               insets, paddingX, paddingY))
+		SwingEmptyRenderScope.element().constraints(GridBagConstraints(x, y, width, height, weightX, weightY, anchor,
+		                                                               fillX, fillY, insets, paddingX, paddingY))
 
 fun SwingGridBagScope.panelCell(insets: Insets = insets(),
                                 x: Int,
@@ -38,8 +35,8 @@ fun SwingGridBagScope.panelCell(insets: Insets = insets(),
                                 paddingX: Int = 0,
                                 paddingY: Int = 0,
                                 element: SwingRenderScope.() -> SwingElement<*>) =
-		SwingEmptyRenderScope.flowLayout { + element() }.constraints(GridBagConstraints(x, y,
-		                                                                                width, height,
-		                                                                                weightX, weightY,
-		                                                                                anchor, fillX, fillY,
-		                                                                                insets, paddingX, paddingY))
+		SwingEmptyRenderScope.element().let { elem ->
+			SwingEmptyRenderScope.flowLayout(key = elem.key) { + elem }
+					.constraints(GridBagConstraints(x, y, width, height, weightX, weightY, anchor, fillX, fillY, insets,
+					                                paddingX, paddingY))
+		}
