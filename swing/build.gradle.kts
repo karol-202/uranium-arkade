@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	kotlin("jvm") version "1.3.50"
-	maven
+	`maven-publish`
 }
 
 dependencies {
@@ -15,4 +15,12 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions.jvmTarget = "1.8"
+}
+
+publishing {
+	publications {
+		create<MavenPublication>("swing") {
+			from(components["java"])
+		}
+	}
 }
