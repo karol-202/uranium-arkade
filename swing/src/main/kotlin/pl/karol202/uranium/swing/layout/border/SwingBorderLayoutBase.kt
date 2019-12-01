@@ -57,8 +57,8 @@ class SwingBorderLayoutBase(initialProps: Props) : SwingAbstractComponent<SwingB
 	}
 }
 
-fun SwingRenderScope.borderLayoutBase(key: Any = AutoKey,
-                                      props: SwingBorderLayoutBase.Props = SwingBorderLayoutBase.Props(key)) =
+internal fun SwingRenderScope.borderLayoutBase(key: Any = AutoKey,
+                                               props: SwingBorderLayoutBase.Props = SwingBorderLayoutBase.Props(key)) =
 		component(::SwingBorderLayoutBase, props)
 
 private typealias SBLProvider<P> = SwingBorderLayoutBase.PropsProvider<P>

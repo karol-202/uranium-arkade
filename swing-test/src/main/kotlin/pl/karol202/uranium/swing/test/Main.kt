@@ -3,6 +3,7 @@ package pl.karol202.uranium.swing.test
 import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
 import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.render.RenderBuilder
 import pl.karol202.uranium.swing.control.button.*
 import pl.karol202.uranium.swing.control.combobox.*
 import pl.karol202.uranium.swing.control.label.label
@@ -16,6 +17,7 @@ import pl.karol202.uranium.swing.control.scrollbar.ScrollBarAxis
 import pl.karol202.uranium.swing.control.scrollbar.axis
 import pl.karol202.uranium.swing.control.scrollbar.scrollBar
 import pl.karol202.uranium.swing.control.scrollbar.value
+import pl.karol202.uranium.swing.control.scrollpane.*
 import pl.karol202.uranium.swing.control.slider.*
 import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
@@ -23,9 +25,7 @@ import pl.karol202.uranium.swing.layout.gridbag.cell
 import pl.karol202.uranium.swing.layout.gridbag.gridBagLayout
 import pl.karol202.uranium.swing.layout.gridbag.insets
 import pl.karol202.uranium.swing.native.alignmentX
-import pl.karol202.uranium.swing.util.SwingRenderBuilder
-import pl.karol202.uranium.swing.util.SwingRenderScope
-import pl.karol202.uranium.swing.util.SwingStatefulComponent
+import pl.karol202.uranium.swing.util.*
 import javax.swing.UIManager
 
 fun main()
@@ -74,10 +74,10 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 				}.selectedItem(state.selectedItem).onSelect { setSelectedItem(it) }
 			}
 			+ cell(x = 0, y = 1, fillX = true) {
-				slider(key = 7).minimum(50).maximum(100).value(state.sliderValue).onChange { setSliderValue(it) }
+				slider(key = 6).minimum(50).maximum(100).value(state.sliderValue).onChange { setSliderValue(it) }
 			}
 			+ cell(x = 2, y = 1, fillX = true, insets = insets(8, 8, 8, 8)) {
-				list<String>(key = 8).items(state.items).selectionMode(ListSelectionMode.MULTIPLE_INTERNAL_SELECTION)
+				list<String>(key = 7).items(state.items).selectionMode(ListSelectionMode.MULTIPLE_INTERNAL_SELECTION)
 						.selectedItems(state.selectedListItems).onSelect { setSelectedListItems(it) }
 						.renderer {
 							val prefix = if(it.selected) "> " else ""
@@ -85,13 +85,15 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 						}
 			}
 			+ cell(x = 3, y = 1, fillX = true) {
-				progressBar(key = 6).minimum(0).maximum(200).value((state.sliderValue - 50) * 4)
+				progressBar(key = 8).minimum(0).maximum(200).value((state.sliderValue - 50) * 4)
 			}
 			+ cell(x = 0, y = 2, width = 2, fillX = true, fillY = true) {
-				textArea(key = 7).columns(10).rows(10).text(state.textAreaText).onTextChange { setTextAreaText(it) }
+				scrollPaneUnidirectional(key = 9).content {
+					textArea().columns(100).rows(10).text(state.textAreaText).onTextChange { setTextAreaText(it) }
+				}.lowerRightCorner { button() }
 			}
 			+ cell(x = 2, y = 2, fillY = true, paddingY = 100) {
-				scrollBar(key = 8).axis(ScrollBarAxis.HORIZONTAL).value(state.sliderValue)
+				scrollBar(key = 10).axis(ScrollBarAxis.HORIZONTAL).value(state.sliderValue)
 			}
 		}
 	}

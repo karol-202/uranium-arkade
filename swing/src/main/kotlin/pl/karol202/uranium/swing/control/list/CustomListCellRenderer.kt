@@ -3,6 +3,7 @@ package pl.karol202.uranium.swing.control.list
 import pl.karol202.uranium.core.manager.RenderManager
 import pl.karol202.uranium.swing.native.SwingNative
 import pl.karol202.uranium.swing.util.*
+import java.awt.BorderLayout
 import javax.swing.JList
 import javax.swing.JPanel
 import javax.swing.ListCellRenderer
@@ -14,7 +15,7 @@ class CustomListCellRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) 
 	                    val selected: Boolean,
 	                    val hasFocus: Boolean)
 
-	private val containerComponent = JPanel()
+	private val containerComponent = JPanel(BorderLayout())
 	private val container = SwingNative.fromContainer(containerComponent)
 	private var renderManager: SwingRenderManager<SwingSingleWrapper.Props>? = null
 
