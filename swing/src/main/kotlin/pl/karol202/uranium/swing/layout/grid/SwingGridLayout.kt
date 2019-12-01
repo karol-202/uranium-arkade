@@ -61,9 +61,9 @@ class SwingGridLayout(props: Props) : SwingAbstractComponent<SwingGridLayout.Pro
 	}
 }
 
-fun SwingRenderScope.gridLayout(key: Any = AutoKey,
-                                props: SwingGridLayout.Props = SwingGridLayout.Props(key = key)) =
-		component(::SwingGridLayout, props)
+fun SwingRenderScope.gridLayout(key: Any = AutoKey) = gridLayout(props = SwingGridLayout.Props(key))
+
+internal fun SwingRenderScope.gridLayout(props: SwingGridLayout.Props) = component(::SwingGridLayout, props)
 
 private typealias SGLProvider<P> = SwingGridLayout.PropsProvider<P>
 fun <P : SGLProvider<P>> SwingElement<P>.withGridLayoutProps(builder: Builder<SwingGridLayout.Props>) =

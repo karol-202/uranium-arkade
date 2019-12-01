@@ -56,9 +56,10 @@ class SwingOverlayLayout(props: Props) : SwingAbstractComponent<SwingOverlayLayo
 }
 
 fun SwingRenderScope.overlayLayout(key: Any = AutoKey,
-                                   props: SwingOverlayLayout.Props = SwingOverlayLayout.Props(key = key),
                                    block: SwingRenderBuilder.() -> Unit) =
-		component(::SwingOverlayLayout, props).content(block)
+		component(::SwingOverlayLayout, SwingOverlayLayout.Props(key)).content(block)
+
+internal fun SwingRenderScope.overlayLayout(props: SwingOverlayLayout.Props) = component(::SwingOverlayLayout, props)
 
 private typealias SOLProvider<P> = SwingOverlayLayout.PropsProvider<P>
 fun <P : SOLProvider<P>> SwingElement<P>.withOverlayLayoutProps(builder: Builder<SwingOverlayLayout.Props>) =

@@ -68,9 +68,10 @@ class SwingPasswordField(private val nativeComponent: JPasswordField,
 	}
 }
 
-fun SwingRenderScope.passwordField(nativeComponent: () -> JPasswordField = ::JPasswordField,
-                                   key: Any = AutoKey,
-                                   props: SwingPasswordField.Props = SwingPasswordField.Props(key)) =
+fun SwingRenderScope.passwordField(key: Any = AutoKey) = passwordField(props = SwingPasswordField.Props(key))
+
+internal fun SwingRenderScope.passwordField(nativeComponent: () -> JPasswordField = ::JPasswordField,
+                                            props: SwingPasswordField.Props) =
 		component({ SwingPasswordField(nativeComponent(), it) }, props)
 
 private typealias SPFProvider<P> = SwingPasswordField.PropsProvider<P>

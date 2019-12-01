@@ -85,9 +85,10 @@ class SwingSlider(private val nativeComponent: JSlider,
 	}
 }
 
-fun SwingRenderScope.slider(native: () -> JSlider = ::JSlider,
-                            key: Any = AutoKey,
-                            props: SwingSlider.Props = SwingSlider.Props(key)) =
+fun SwingRenderScope.slider(key: Any = AutoKey) = slider(props = SwingSlider.Props(key))
+
+internal fun SwingRenderScope.slider(native: () -> JSlider = ::JSlider,
+                                     props: SwingSlider.Props) =
 		component({ SwingSlider(native(), it) }, props)
 
 private typealias SSProvider<P> = SwingSlider.PropsProvider<P>

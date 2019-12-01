@@ -16,7 +16,8 @@ class SwingButton(private val nativeComponent: JButton,
 	}
 }
 
-fun SwingRenderScope.button(nativeComponent: () -> JButton = ::JButton,
-                            key: Any = AutoKey,
-                            props: SwingAbstractButton.Props = SwingAbstractButton.Props(key)) =
+fun SwingRenderScope.button(key: Any = AutoKey) = button(props = SwingAbstractButton.Props(key))
+
+internal fun SwingRenderScope.button(nativeComponent: () -> JButton = ::JButton,
+                                     props: SwingAbstractButton.Props) =
 		component({ SwingButton(nativeComponent(), it) }, props)

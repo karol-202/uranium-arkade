@@ -57,12 +57,15 @@ class SwingBoxLayout(props: Props) : SwingAbstractComponent<SwingBoxLayout.Props
 
 fun SwingRenderScope.boxLayout(key: Any = AutoKey,
                                axis: BoxAxis,
-                               props: SwingBoxLayout.Props = SwingBoxLayout.Props(key = key, axis = axis),
-                               block: SwingRenderBuilder.() -> Unit) =
-		component(::SwingBoxLayout, props).content(block)
+                               block: SwingRenderBuilder.() -> Unit = {}) =
+		boxLayout(props = SwingBoxLayout.Props(key = key, axis = axis)).content(block)
+
+internal fun SwingRenderScope.boxLayout(props: SwingBoxLayout.Props) = component(::SwingBoxLayout, props)
 
 private typealias SBLProvider<P> = SwingBoxLayout.PropsProvider<P>
 fun <P : SBLProvider<P>> SwingElement<P>.withBoxLayoutProps(builder: Builder<SwingBoxLayout.Props>) =
 		withProps { withBoxLayoutProps(builder) }
+fun <P : SBLProvider<P>> SwingElement<P>.axis(axis: BoxAxis) =
+		withBoxLayoutProps { copy(axis = axis) }
 fun <P : SBLProvider<P>> SwingElement<P>.content(block: SwingRenderBuilder.() -> Unit) =
 		withBoxLayoutProps { withSwingProps { copy(children = block.render()) } }

@@ -10,7 +10,7 @@ import javax.swing.JCheckBox
 class SwingCheckBox(private val nativeComponent: JCheckBox,
                     initialProps: Props) : SwingAbstractComponent<SwingCheckBox.Props>(initialProps)
 {
-	data class Props(override val key: Any,
+	data class Props(override val key: Any = AutoKey,
 	                 override val toggleButtonProps: SwingToggleButton.Props = SwingToggleButton.Props(),
 	                 val borderPaintedFlat: Prop<Boolean> = Prop.NoValue) : UProps,
 	                                                                        SwingNativeComponent.PropsProvider<Props>,
@@ -51,9 +51,10 @@ class SwingCheckBox(private val nativeComponent: JCheckBox,
 	}
 }
 
-fun SwingRenderScope.checkBox(nativeComponent: () -> JCheckBox = ::JCheckBox,
-                              key: Any = AutoKey,
-                              props: SwingCheckBox.Props = SwingCheckBox.Props(key)) =
+fun SwingRenderScope.checkBox(key: Any = AutoKey) = checkBox(props = SwingCheckBox.Props(key))
+
+internal fun SwingRenderScope.checkBox(nativeComponent: () -> JCheckBox = ::JCheckBox,
+                                       props: SwingCheckBox.Props) =
 		component({ SwingCheckBox(nativeComponent(), it) }, props)
 
 private typealias SCBProvider<P> = SwingCheckBox.PropsProvider<P>

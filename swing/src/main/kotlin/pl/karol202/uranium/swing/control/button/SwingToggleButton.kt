@@ -60,9 +60,10 @@ class SwingToggleButton(private val nativeComponent: JToggleButton,
 	}
 }
 
-fun SwingRenderScope.toggleButton(nativeComponent: () -> JToggleButton = ::JToggleButton,
-                                  key: Any = AutoKey,
-                                  props: SwingToggleButton.Props = SwingToggleButton.Props(key)) =
+fun SwingRenderScope.toggleButton(key: Any = AutoKey) = toggleButton(props = SwingToggleButton.Props(key))
+
+internal fun SwingRenderScope.toggleButton(nativeComponent: () -> JToggleButton = ::JToggleButton,
+                                           props: SwingToggleButton.Props) =
 		component({ SwingToggleButton(nativeComponent(), it) }, props)
 
 private typealias STBProvider<P> = SwingToggleButton.PropsProvider<P>

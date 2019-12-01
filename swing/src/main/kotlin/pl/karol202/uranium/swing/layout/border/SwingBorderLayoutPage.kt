@@ -52,9 +52,9 @@ class SwingBorderLayoutPage(initialProps: Props) : SwingAbstractComponent<SwingB
 			listOf(props.center, props.pageStart, props.lineStart, props.lineEnd, props.pageEnd).mapNotNull { it.value }
 }
 
-fun SwingRenderScope.borderLayoutPage(key: Any = AutoKey,
-                                      props: SwingBorderLayoutPage.Props = SwingBorderLayoutPage.Props(key)) =
-		component(::SwingBorderLayoutPage, props)
+fun SwingRenderScope.borderLayout(key: Any = AutoKey) = borderLayoutPage(props = SwingBorderLayoutPage.Props(key))
+
+internal fun SwingRenderScope.borderLayoutPage(props: SwingBorderLayoutPage.Props) = component(::SwingBorderLayoutPage, props)
 
 private typealias SBLPProvider<P> = SwingBorderLayoutPage.PropsProvider<P>
 fun <P : SBLPProvider<P>> SwingElement<P>.withBorderLayoutPageProps(builder: Builder<SwingBorderLayoutPage.Props>) =

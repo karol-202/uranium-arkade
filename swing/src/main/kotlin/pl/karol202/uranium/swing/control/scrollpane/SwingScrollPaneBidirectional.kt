@@ -85,9 +85,10 @@ class SwingScrollPaneBidirectional(private val nativeComponent: JScrollPane,
 	}
 }
 
-fun SwingRenderScope.scrollPaneBidirectional(nativeComponent: () -> JScrollPane = ::JScrollPane,
-                                             key: Any = AutoKey,
-                                             props: SwingScrollPaneBidirectional.Props = SwingScrollPaneBidirectional.Props(key)) =
+fun SwingRenderScope.scrollPane(key: Any = AutoKey) = scrollPaneBidirectional(props = SwingScrollPaneBidirectional.Props(key))
+
+internal fun SwingRenderScope.scrollPaneBidirectional(nativeComponent: () -> JScrollPane = ::JScrollPane,
+                                                      props: SwingScrollPaneBidirectional.Props) =
 		component({ SwingScrollPaneBidirectional(nativeComponent(), it) }, props)
 
 private typealias SSPBIProvider<P> = SwingScrollPaneBidirectional.PropsProvider<P>

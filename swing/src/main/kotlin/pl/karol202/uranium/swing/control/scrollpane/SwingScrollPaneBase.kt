@@ -81,8 +81,7 @@ class SwingScrollPaneBase(private val nativeComponent: JScrollPane,
 }
 
 internal fun SwingRenderScope.scrollPaneBase(nativeComponent: () -> JScrollPane = ::JScrollPane,
-                                             key: Any = AutoKey,
-                                             props: SwingScrollPaneBase.Props = SwingScrollPaneBase.Props(key)) =
+                                             props: SwingScrollPaneBase.Props) =
 		component({ SwingScrollPaneBase(nativeComponent(), it) }, props)
 
 private typealias SSPBProvider<P> = SwingScrollPaneBase.PropsProvider<P>

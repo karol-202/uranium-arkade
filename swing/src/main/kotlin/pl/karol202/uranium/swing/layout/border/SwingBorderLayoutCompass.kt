@@ -51,8 +51,9 @@ class SwingBorderLayoutCompass(initialProps: Props) : SwingAbstractComponent<Swi
 	private fun createChildren() = listOf(props.center, props.north, props.west, props.east, props.south).mapNotNull { it.value }
 }
 
-fun SwingRenderScope.borderLayoutCompass(key: Any = AutoKey,
-                                         props: SwingBorderLayoutCompass.Props = SwingBorderLayoutCompass.Props(key)) =
+fun SwingRenderScope.borderLayoutCompass(key: Any = AutoKey) = borderLayoutCompass(props = SwingBorderLayoutCompass.Props(key))
+
+internal fun SwingRenderScope.borderLayoutCompass(props: SwingBorderLayoutCompass.Props) =
 		component(::SwingBorderLayoutCompass, props)
 
 private typealias SBLCProvider<P> = SwingBorderLayoutCompass.PropsProvider<P>

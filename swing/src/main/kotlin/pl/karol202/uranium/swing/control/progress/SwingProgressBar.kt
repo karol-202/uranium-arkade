@@ -56,9 +56,10 @@ class SwingProgressBar(private val nativeComponent: JProgressBar,
 	}
 }
 
-fun SwingRenderScope.progressBar(nativeComponent: () -> JProgressBar = ::JProgressBar,
-                                 key: Any = AutoKey,
-                                 props: SwingProgressBar.Props = SwingProgressBar.Props(key)) =
+fun SwingRenderScope.progressBar(key: Any = AutoKey) = progressBar(props = SwingProgressBar.Props(key))
+
+internal fun SwingRenderScope.progressBar(nativeComponent: () -> JProgressBar = ::JProgressBar,
+                                          props: SwingProgressBar.Props) =
 		component({ SwingProgressBar(nativeComponent(), it) }, props)
 
 private typealias SPBProvider<P> = SwingProgressBar.PropsProvider<P>

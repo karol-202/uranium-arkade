@@ -100,9 +100,10 @@ class SwingList<E>(private val nativeComponent: JList<E>,
 	}
 }
 
-fun <E> SwingRenderScope.list(nativeComponent: () -> JList<E> = ::JList,
-                              key: Any = AutoKey,
-                              props: SwingList.Props<E> = SwingList.Props(key)) =
+fun <E> SwingRenderScope.list(key: Any = AutoKey) = list(props = SwingList.Props<E>(key))
+
+internal fun <E> SwingRenderScope.list(nativeComponent: () -> JList<E> = ::JList,
+                                       props: SwingList.Props<E>) =
 		component({ SwingList(nativeComponent(), it) }, props)
 
 private typealias SCBProvider<P, E> = SwingList.PropsProvider<P, E>

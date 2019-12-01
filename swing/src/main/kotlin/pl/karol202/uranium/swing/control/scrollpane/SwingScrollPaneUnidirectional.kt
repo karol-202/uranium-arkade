@@ -85,9 +85,11 @@ class SwingScrollPaneUnidirectional(private val nativeComponent: JScrollPane,
 	}
 }
 
-fun SwingRenderScope.scrollPaneUnidirectional(nativeComponent: () -> JScrollPane = ::JScrollPane,
-                                              key: Any = AutoKey,
-                                              props: SwingScrollPaneUnidirectional.Props = SwingScrollPaneUnidirectional.Props(key)) =
+fun SwingRenderScope.scrollPaneUnidirectional(key: Any = AutoKey) =
+		scrollPaneUnidirectional(props = SwingScrollPaneUnidirectional.Props(key))
+
+internal fun SwingRenderScope.scrollPaneUnidirectional(nativeComponent: () -> JScrollPane = ::JScrollPane,
+                                                       props: SwingScrollPaneUnidirectional.Props) =
 		component({ SwingScrollPaneUnidirectional(nativeComponent(), it) }, props)
 
 private typealias SSPUProvider<P> = SwingScrollPaneUnidirectional.PropsProvider<P>

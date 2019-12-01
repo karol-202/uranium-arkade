@@ -4,7 +4,8 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.swing.util.SwingRenderScope
 import javax.swing.JRadioButton
 
-fun SwingRenderScope.radioButton(nativeComponent: () -> JRadioButton = ::JRadioButton,
-                                 key: Any = AutoKey,
-                                 props: SwingToggleButton.Props = SwingToggleButton.Props(key)) =
-		toggleButton(nativeComponent, key, props)
+fun SwingRenderScope.radioButton(key: Any = AutoKey) = radioButton(props = SwingToggleButton.Props(key))
+
+internal fun SwingRenderScope.radioButton(nativeComponent: () -> JRadioButton = ::JRadioButton,
+                                          props: SwingToggleButton.Props) =
+		toggleButton(nativeComponent, props)

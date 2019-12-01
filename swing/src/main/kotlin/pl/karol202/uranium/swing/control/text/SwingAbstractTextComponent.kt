@@ -109,9 +109,8 @@ class SwingAbstractTextComponent(private val nativeComponent: JTextComponent,
             }.also { invalidate() }
 }
 
-fun SwingRenderScope.abstractTextComponent(nativeComponent: () -> JTextComponent,
-                                           key: Any = AutoKey,
-                                           props: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props(key)) =
+internal fun SwingRenderScope.abstractTextComponent(nativeComponent: () -> JTextComponent,
+                                                    props: SwingAbstractTextComponent.Props) =
         component({ SwingAbstractTextComponent(nativeComponent(), it) }, props)
 
 private typealias SATCProvider<P> = SwingAbstractTextComponent.PropsProvider<P>

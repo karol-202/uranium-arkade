@@ -54,9 +54,10 @@ class SwingTextArea(private val nativeComponent: JTextArea,
 	}
 }
 
-fun SwingRenderScope.textArea(nativeComponent: () -> JTextArea = ::JTextArea,
-                              key: Any = AutoKey,
-                              props: SwingTextArea.Props = SwingTextArea.Props(key)) =
+fun SwingRenderScope.textArea(key: Any = AutoKey) = textArea(props = SwingTextArea.Props(key))
+
+internal fun SwingRenderScope.textArea(nativeComponent: () -> JTextArea = ::JTextArea,
+                                       props: SwingTextArea.Props) =
 		component({ SwingTextArea(nativeComponent(), it) }, props)
 
 private typealias STAProvider<P> = SwingTextArea.PropsProvider<P>

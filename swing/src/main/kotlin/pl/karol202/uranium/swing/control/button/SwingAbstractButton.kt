@@ -103,9 +103,8 @@ class SwingAbstractButton(private val nativeComponent: AbstractButton,
 	}
 }
 
-fun SwingRenderScope.abstractButton(nativeComponent: () -> AbstractButton,
-                                    key: Any = AutoKey,
-                                    props: SwingAbstractButton.Props = SwingAbstractButton.Props(key)) =
+internal fun SwingRenderScope.abstractButton(nativeComponent: () -> AbstractButton,
+                                             props: SwingAbstractButton.Props) =
 		component({ SwingAbstractButton(nativeComponent(), it) }, props)
 
 private typealias SABProvider<P> = SwingAbstractButton.PropsProvider<P>

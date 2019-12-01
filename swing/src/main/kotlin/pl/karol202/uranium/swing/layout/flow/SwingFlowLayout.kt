@@ -22,7 +22,9 @@ class SwingFlowLayout(initialProps: Props) : SwingAbstractComponent<SwingFlowLay
 	                 val alignOnBaseline: Prop<Boolean> = Prop.NoValue,
 	                 val horizontalGap: Prop<Int> = Prop.NoValue,
 	                 val verticalGap: Prop<Int> = Prop.NoValue) : UProps,
-	                                                              SwingNativeComponent.PropsProvider<Props>, SwingLayout.PropsProvider<Props>, PropsProvider<Props>
+	                                                              SwingNativeComponent.PropsProvider<Props>,
+	                                                              SwingLayout.PropsProvider<Props>,
+	                                                              PropsProvider<Props>
 	{
 		override val swingProps = layoutProps.swingProps
 		override val flowLayoutProps = this
@@ -61,9 +63,10 @@ class SwingFlowLayout(initialProps: Props) : SwingAbstractComponent<SwingFlowLay
 }
 
 fun SwingRenderScope.flowLayout(key: Any = AutoKey,
-                                props: SwingFlowLayout.Props = SwingFlowLayout.Props(key),
                                 block: SwingRenderBuilder.() -> Unit = {}) =
-		component(::SwingFlowLayout, props).content(block)
+		flowLayout(props = SwingFlowLayout.Props(key)).content(block)
+
+internal fun SwingRenderScope.flowLayout(props: SwingFlowLayout.Props) = component(::SwingFlowLayout, props)
 
 private typealias SFLProvider<P> = SwingFlowLayout.PropsProvider<P>
 fun <P : SFLProvider<P>> SwingElement<P>.withFlowLayoutProps(builder: Builder<SwingFlowLayout.Props>) = withProps { withFlowLayoutProps(builder) }

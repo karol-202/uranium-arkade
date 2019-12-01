@@ -73,9 +73,10 @@ class SwingScrollBar(private val nativeComponent: JScrollBar,
 	}
 }
 
-fun SwingRenderScope.scrollBar(nativeComponent: () -> JScrollBar = ::JScrollBar,
-                               key: Any = AutoKey,
-                               props: SwingScrollBar.Props = SwingScrollBar.Props(key)) =
+fun SwingRenderScope.scrollBar(key: Any = AutoKey) = scrollBar(props = SwingScrollBar.Props(key))
+
+internal fun SwingRenderScope.scrollBar(nativeComponent: () -> JScrollBar = ::JScrollBar,
+                                        props: SwingScrollBar.Props) =
 		component({ SwingScrollBar(nativeComponent(), it) }, props)
 
 private typealias SSBProvider<P> = SwingScrollBar.PropsProvider<P>

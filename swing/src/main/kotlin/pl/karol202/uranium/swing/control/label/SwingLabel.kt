@@ -57,9 +57,10 @@ class SwingLabel(private val nativeComponent: JLabel,
 	}
 }
 
-fun SwingRenderScope.label(nativeComponent: () -> JLabel = ::JLabel,
-                           key: Any = AutoKey,
-                           props: SwingLabel.Props = SwingLabel.Props(key)) =
+fun SwingRenderScope.label(key: Any = AutoKey) = label(props = SwingLabel.Props(key))
+
+internal fun SwingRenderScope.label(nativeComponent: () -> JLabel = ::JLabel,
+                                    props: SwingLabel.Props) =
 		component({ SwingLabel(nativeComponent(), it) }, props)
 
 private typealias SLProvider<P> = SwingLabel.PropsProvider<P>

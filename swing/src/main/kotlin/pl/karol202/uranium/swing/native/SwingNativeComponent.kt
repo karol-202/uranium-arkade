@@ -154,9 +154,8 @@ class SwingNativeComponent(private val nativeComponent: JComponent,
 	}
 }
 
-fun SwingRenderScope.nativeComponent(nativeComponent: () -> JComponent,
-                                     key: Any = AutoKey,
-                                     props: SwingNativeComponent.Props = SwingNativeComponent.Props(key)) =
+internal fun SwingRenderScope.nativeComponent(nativeComponent: () -> JComponent,
+                                              props: SwingNativeComponent.Props) =
 		component({ SwingNativeComponent(nativeComponent(), it) }, props)
 
 internal typealias SNCProvider<P> = SwingNativeComponent.PropsProvider<P>

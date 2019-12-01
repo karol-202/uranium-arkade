@@ -101,9 +101,10 @@ class SwingComboBox<E>(private val nativeComponent: JComboBox<E>,
 	}
 }
 
-fun <E> SwingRenderScope.comboBox(nativeComponent: () -> JComboBox<E> = ::JComboBox,
-                                  key: Any = AutoKey,
-                                  props: SwingComboBox.Props<E> = SwingComboBox.Props(key)) =
+fun <E> SwingRenderScope.comboBox(key: Any = AutoKey) = comboBox(props = SwingComboBox.Props<E>(key))
+
+internal fun <E> SwingRenderScope.comboBox(nativeComponent: () -> JComboBox<E> = ::JComboBox,
+                                           props: SwingComboBox.Props<E>) =
 		component({ SwingComboBox(nativeComponent(), it) }, props)
 
 private typealias SCBProvider<P, E> = SwingComboBox.PropsProvider<P, E>

@@ -69,9 +69,10 @@ class SwingTextField(private val nativeComponent: JTextField,
 	}
 }
 
-fun SwingRenderScope.textField(nativeComponent: () -> JTextField = ::JTextField,
-                               key: Any = AutoKey,
-                               props: SwingTextField.Props = SwingTextField.Props(key)) =
+fun SwingRenderScope.textField(key: Any = AutoKey) = textField(props = SwingTextField.Props(key))
+
+internal fun SwingRenderScope.textField(nativeComponent: () -> JTextField = ::JTextField,
+                                        props: SwingTextField.Props) =
 		component({ SwingTextField(nativeComponent(), it) }, props)
 
 private typealias STFProvider<P> = SwingTextField.PropsProvider<P>

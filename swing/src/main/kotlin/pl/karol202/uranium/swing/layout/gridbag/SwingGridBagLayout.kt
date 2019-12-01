@@ -55,9 +55,10 @@ class SwingGridBagLayout(props: Props) : SwingAbstractComponent<SwingGridBagLayo
 }
 
 fun SwingRenderScope.gridBagLayout(key: Any = AutoKey,
-                                   props: SwingGridBagLayout.Props = SwingGridBagLayout.Props(key = key),
                                    block: SwingGridBagBuilder.() -> Unit) =
-		component(::SwingGridBagLayout, props).content(block)
+		component(::SwingGridBagLayout, SwingGridBagLayout.Props(key)).content(block)
+
+internal fun SwingRenderScope.gridBagLayout(props: SwingGridBagLayout.Props) = component(::SwingGridBagLayout, props)
 
 private typealias SGBLProvider<P> = SwingGridBagLayout.PropsProvider<P>
 fun <P : SGBLProvider<P>> SwingElement<P>.withGridBagLayoutProps(builder: Builder<SwingGridBagLayout.Props>) =
