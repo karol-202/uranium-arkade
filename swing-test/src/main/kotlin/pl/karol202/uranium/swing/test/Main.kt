@@ -12,6 +12,10 @@ import pl.karol202.uranium.swing.control.progress.maximum
 import pl.karol202.uranium.swing.control.progress.minimum
 import pl.karol202.uranium.swing.control.progress.progressBar
 import pl.karol202.uranium.swing.control.progress.value
+import pl.karol202.uranium.swing.control.scrollbar.ScrollBarAxis
+import pl.karol202.uranium.swing.control.scrollbar.axis
+import pl.karol202.uranium.swing.control.scrollbar.scrollBar
+import pl.karol202.uranium.swing.control.scrollbar.value
 import pl.karol202.uranium.swing.control.slider.*
 import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
@@ -85,6 +89,9 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 			}
 			+ cell(x = 0, y = 2, width = 2, fillX = true, fillY = true) {
 				textArea(key = 7).columns(10).rows(10).text(state.textAreaText).onTextChange { setTextAreaText(it) }
+			}
+			+ cell(x = 2, y = 2, fillY = true, paddingY = 100) {
+				scrollBar(key = 8).axis(ScrollBarAxis.HORIZONTAL).value(state.sliderValue)
 			}
 		}
 	}
