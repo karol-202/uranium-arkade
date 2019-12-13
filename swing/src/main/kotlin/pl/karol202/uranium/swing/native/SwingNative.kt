@@ -1,62 +1,97 @@
 package pl.karol202.uranium.swing.native
 
-import pl.karol202.uranium.core.native.Native
-import pl.karol202.uranium.core.native.NativeContainer
+import pl.karol202.uranium.core.native.UNative
+import pl.karol202.uranium.core.native.UNativeContainer
 import pl.karol202.uranium.swing.util.Swing
-import java.awt.Component
 import java.awt.Container
 
-fun Native<Swing>.asSwingNative() = this as SwingNative
+private fun UNative<Swing>.asSwingNative() = this as SwingNative
 
-sealed class SwingNative : Native<Swing>
+sealed class SwingNative : UNativeContainer<Swing>
 {
-	companion object
+	private class SwingContainer(private val container: Container) : SwingNative()
 	{
-		fun from(component: Component, constraints: Any? = null): Native<Swing> = when(component)
+		private val content = mutableMapOf<SwingNative, Any?>()
+
+		override fun attach(native: UNative<Swing>, index: Int) = attach(native.asSwingNative(), index)
+
+		fun attach(native: SwingNative, index: Int, constraint: Any? = null)
 		{
-			is Container -> fromContainer(component, constraints)
-			else -> fromComponent(component, constraints)
+			if(content.contains(native)) throw IllegalStateException("Native already attached")
+			content += native to constraint
+
+			when(native)
+			{
+				is SwingContainer -> container.add(native.container, constraint, index)
+				is SwingConstraint -> native.attachToParent(this, index)
+			}
 		}
 
-		fun fromContainer(component: Container, constraints: Any? = null): NativeContainer<Swing> =
-				ConstrainedContainer(component, constraints)
+		override fun detach(native: UNative<Swing>) = detach(native.asSwingNative())
 
-		fun fromComponent(component: Component, constraints: Any? = null): Native<Swing> =
-				ConstrainedComponent(component, constraints)
+		private fun detach(native: SwingNative)
+		{
+			if(!content.contains(native)) throw IllegalStateException("Native not attached")
+			content -= native
+
+			when(native)
+			{
+				is SwingContainer -> container.remove(native.container)
+				is SwingConstraint -> native.detachFromParent(this)
+			}
+		}
 	}
 
-	private data class ConstrainedComponent(override val component: Component,
-	                                        override val constraints: Any?) : SwingNative()
-
-	private data class ConstrainedContainer(override val component: Container,
-	                                        override val constraints: Any?) : SwingNative(), NativeContainer<Swing>
+	private class SwingConstraint(val constraint: Any) : SwingNative()
 	{
-		private data class Occurrence(val constraints: Any?,
-		                              val index: Int)
+		private data class Parent(val container: SwingContainer,
+		                          val index: Int)
 
-		private val childrenOccurrences = mutableMapOf<Component, List<Occurrence>>()
+		private var parent: Parent? = null
+		private var content: SwingNative? = null
 
-		override fun attach(native: Native<Swing>, index: Int) =
-				updateChildren(native) { this + Occurrence(it.constraints, index) }
-
-		override fun detach(native: Native<Swing>) =
-				updateChildren(native) { swingNative -> filter { it.constraints != swingNative.constraints } }
-
-		private fun updateChildren(native: Native<Swing>, builder: List<Occurrence>.(SwingNative) -> List<Occurrence>)
+		override fun attach(native: UNative<Swing>, index: Int)
 		{
 			val swingNative = native.asSwingNative()
-			val currentOccurrenceList = childrenOccurrences[swingNative.component] ?: emptyList()
-			val newOccurrenceList = currentOccurrenceList.builder(swingNative)
-			childrenOccurrences[swingNative.component] = newOccurrenceList
-			update(swingNative.component, newOccurrenceList)
+
+			if(content != null) throw IllegalStateException("Native already set")
+			content = swingNative
+
+			parent?.let {
+				it.container.attach(swingNative, it.index, constraint)
+			}
 		}
 
-		private fun update(component: Component, occurrences: List<Occurrence>) =
-				occurrences.firstOrNull()?.let {
-					this.component.add(component, it.constraints, it.index)
-				} ?: this.component.remove(component)
-	}
+		override fun detach(native: UNative<Swing>)
+		{
+			val swingNative = native.asSwingNative()
 
-	protected abstract val component: Component
-	protected abstract val constraints: Any?
+			if(content != swingNative) throw IllegalStateException("Native not set")
+			content = null
+
+			parent?.container?.detach(swingNative)
+		}
+
+		fun attachToParent(parentContainer: SwingContainer, index: Int)
+		{
+			if(this.parent != null) throw IllegalStateException("Parent already set")
+
+			this.parent = Parent(parentContainer, index)
+
+			content?.let {
+				parentContainer.attach(it, index, constraint)
+			}
+		}
+
+		fun detachFromParent(parentContainer: SwingContainer)
+		{
+			if(this.parent?.container != parentContainer) throw IllegalStateException("Parent not set")
+
+			this.parent = null
+
+			content?.let {
+				parentContainer.detach(it)
+			}
+		}
+	}
 }

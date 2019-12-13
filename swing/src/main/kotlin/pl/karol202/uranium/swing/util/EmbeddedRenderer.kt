@@ -19,5 +19,5 @@ class EmbeddedRenderer
 
 	private fun render(rootElement: SwingElement<*>) = RenderManager(rootElement.wrapped, container).also { renderManager = it }.init()
 
-	private val SwingElement<*>.wrapped get() = let { element -> SwingEmptyRenderScope.singleWrapper { element } }
+	private val SwingElement<*>.wrapped get() = let { element -> renderScope().singleWrapper { element } }
 }

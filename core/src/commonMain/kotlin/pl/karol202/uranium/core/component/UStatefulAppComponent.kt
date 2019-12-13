@@ -4,8 +4,8 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.common.UState
 import kotlin.jvm.JvmName
 
-abstract class StatefulComponent<N, P : UProps, S : UState>(props: P,
-                                                            state: S) : AbstractComponent<N, P>(props)
+abstract class UStatefulAppComponent<N, P : UProps, S : UState>(props: P,
+                                                                state: S) : UAbstractAppComponent<N, P>(props)
 {
 	@set:JvmName("setStateProperty")
 	var state = state

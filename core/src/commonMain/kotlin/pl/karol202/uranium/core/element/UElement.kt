@@ -3,6 +3,7 @@ package pl.karol202.uranium.core.element
 import pl.karol202.uranium.core.common.PropsProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
+import pl.karol202.uranium.core.render.URenderScope
 import kotlin.reflect.KClass
 
 class UElement<N, P : UProps>(private val constructor: (P) -> UComponent<N, P>,
@@ -13,3 +14,6 @@ class UElement<N, P : UProps>(private val constructor: (P) -> UComponent<N, P>,
 
 	internal fun createComponent() = constructor(props)
 }
+
+inline fun <N, reified P : UProps> URenderScope<N>.component(noinline constructor: (P) -> UComponent<N, P>, props: P) =
+		UElement(constructor, props, P::class)

@@ -1,5 +1,5 @@
 plugins {
-    kotlin("multiplatform") version "1.3.50"
+    kotlin("multiplatform") version "1.3.61"
     `maven-publish`
 }
 

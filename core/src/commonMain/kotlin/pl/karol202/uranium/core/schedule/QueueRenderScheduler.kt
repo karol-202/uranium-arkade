@@ -5,7 +5,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import pl.karol202.uranium.core.util.StackTrace
 
-class QueueRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<N>
+internal class QueueRenderScheduler<N>(coroutineScope: CoroutineScope) : RenderScheduler<N>
 {
 	companion object
 	{

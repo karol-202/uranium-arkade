@@ -3,7 +3,7 @@ package pl.karol202.uranium.core.tree
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.UElement
 
-sealed class TreeNodeOperation<N>
+internal sealed class TreeNodeOperation<N>
 {
 	class CreateAndAttachNode<N>(val element: UElement<N, *>,
 	                             val index: Int) : TreeNodeOperation<N>()

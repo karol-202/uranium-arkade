@@ -3,33 +3,32 @@ package pl.karol202.uranium.core.tree
 import pl.karol202.uranium.core.common.KeyProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
+import pl.karol202.uranium.core.component.UNativeComponent
 import pl.karol202.uranium.core.component.componentContext
 import pl.karol202.uranium.core.element.UElement
-import pl.karol202.uranium.core.native.Native
-import pl.karol202.uranium.core.native.NativeNode
+import pl.karol202.uranium.core.native.UNative
+import pl.karol202.uranium.core.native.UNativeNode
 import pl.karol202.uranium.core.tree.TreeNodeOperation.*
 import pl.karol202.uranium.core.util.elementInserted
 import kotlin.reflect.KClass
 
-fun <N, P : UProps> UElement<N, P>.createNode(invalidateCallback: (TreeNode<N, *>) -> Unit) =
+internal fun <N, P : UProps> UElement<N, P>.createNode(invalidateCallback: (TreeNode<N, *>) -> Unit) =
 		TreeNode(createComponent(), propsClass, invalidateCallback)
 
-class TreeNode<N, P : UProps> internal constructor(private val component: UComponent<N, P>,
-                                                   internal val propsClass: KClass<P>,
-                                                   private val invalidateCallback: (TreeNode<N, *>) -> Unit) : KeyProvider
+internal class TreeNode<N, P : UProps> internal constructor(private val component: UComponent<N, P>,
+                                                            internal val propsClass: KClass<P>,
+                                                            private val invalidateCallback: (TreeNode<N, *>) -> Unit) : KeyProvider
 {
 	override val key get() = component.key
 	internal val props get() = component.props
 
 	private var children = emptyList<TreeNode<N, *>>()
 
-	val nativeNodes: List<NativeNode<N>>
-		get() = component.native.let { native ->
-			when(native)
-			{
-				is Native -> listOf(NativeNode(native, children.flatMap { it.nativeNodes }))
-				else -> children.flatMap { it.nativeNodes }
-			}
+	val nativeNodes: List<UNativeNode<N>>
+		get() = when(component)
+		{
+			is UNativeComponent<N, P> -> listOf(UNativeNode(component.native, children.flatMap { it.nativeNodes }))
+			else -> children.flatMap { it.nativeNodes }
 		}
 
 	fun init()

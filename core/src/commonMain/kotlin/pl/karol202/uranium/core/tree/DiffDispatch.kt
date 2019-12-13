@@ -28,8 +28,8 @@ private data class DispatchingState<N>(val currentUnits: List<DispatchUnit<N, *>
 	fun withOperation(operation: TreeNodeOperation<N>) = copy(operations = operations + operation)
 }
 
-fun <N> dispatchDiff(currentNodes: List<TreeNode<N, *>>,
-                     newElements: List<UElement<N, *>>): List<TreeNodeOperation<N>>
+internal fun <N> dispatchDiff(currentNodes: List<TreeNode<N, *>>,
+                              newElements: List<UElement<N, *>>): List<TreeNodeOperation<N>>
 {
 	val initialUnits = currentNodes.map { DispatchUnit.Existing(it) }
 	val targetUnits = newElements.map { DispatchUnit.New(it) }

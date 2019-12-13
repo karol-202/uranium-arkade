@@ -2,7 +2,6 @@ package pl.karol202.uranium.swing.native
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
 import pl.karol202.uranium.swing.util.*
 import java.awt.*
 import java.awt.event.*
@@ -14,11 +13,10 @@ import javax.swing.border.Border
 import javax.swing.event.AncestorListener
 
 class SwingNativeComponent(private val nativeComponent: JComponent,
-                           initialProps: Props) : SwingAbstractComponent<SwingNativeComponent.Props>(initialProps)
+                           initialProps: Props) : SwingAbstractNativeComponent<SwingNativeComponent.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 val children: List<SwingElement<*>> = emptyList(),
-	                 val constraints: Prop<Any?> = Prop.NoValue,
 	                 val componentListener: Prop<ComponentListener> = Prop.NoValue,
 	                 val focusListener: Prop<FocusListener> = Prop.NoValue,
 	                 val hierarchyBoundsListener: Prop<HierarchyBoundsListener> = Prop.NoValue,

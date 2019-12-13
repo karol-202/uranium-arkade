@@ -1,9 +1,8 @@
 package pl.karol202.uranium.core.component
 
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.render.RenderBuilder
 
-abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
+abstract class UAbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 {
 	final override var props = props
 		private set
@@ -25,10 +24,6 @@ abstract class AbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 	protected open fun onCreate() { }
 
 	protected open fun onDestroy() { }
-
-	final override fun render() = RenderBuilder<N>().also { it.render() }.elements
-
-	protected abstract fun RenderBuilder<N>.render()
 
 	final override fun modifyPropsInternal(props: P)
 	{
