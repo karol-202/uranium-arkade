@@ -2,33 +2,29 @@ package pl.karol202.uranium.swing.layout.gridbag
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.layout.LayoutData
+import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.layout.SwingLayout
+import pl.karol202.uranium.swing.layout.constraint
 import pl.karol202.uranium.swing.layout.layout
-import pl.karol202.uranium.swing.layout.layoutData
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.Container
 import java.awt.GridBagLayout
 import java.awt.LayoutManager
 
-class SwingGridBagLayout(props: Props) : SwingAbstractComponent<SwingGridBagLayout.Props>(props)
+class SwingGridBagLayout(props: Props) : SwingAbstractAppComponent<SwingGridBagLayout.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
-	                 override val layoutProps: SwingLayout.Props = SwingLayout.Props()) :
-			UProps,
-			SwingNativeComponent.PropsProvider<Props>,
-			SwingLayout.PropsProvider<Props>,
-			PropsProvider<Props>
+	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+	                 val content: List<GridBagCell> = emptyList()) : UProps,
+	                                                                 SwingNativeComponent.PropsProvider<Props>,
+	                                                                 PropsProvider<Props>
 	{
-		override val swingProps = layoutProps.swingProps
 		override val gridBagLayoutProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
-				copy(layoutProps = layoutProps.withSwingProps(builder))
-
-		override fun withLayoutProps(builder: Builder<SwingLayout.Props>) = copy(layoutProps = layoutProps.builder())
+		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) = copy(swingProps = swingProps.builder())
 
 		override fun withGridBagLayoutProps(builder: Builder<Props>) = builder()
 	}
@@ -40,23 +36,19 @@ class SwingGridBagLayout(props: Props) : SwingAbstractComponent<SwingGridBagLayo
 		fun withGridBagLayoutProps(builder: Builder<Props>): S
 	}
 
-	data class Data(private val props: Props) : LayoutData<GridBagLayout>
-	{
-		override fun createLayout(container: Container) = GridBagLayout()
+	override fun SwingRenderScope.render() = layout(swingProps = props.swingProps,
+	                                                content = renderContent(),
+	                                                layoutUpdater = ::updateLayout)
 
-		override fun updateLayout(container: Container, layout: LayoutManager) =
-				(layout as? GridBagLayout) ?: createLayout(container)
-	}
+	private fun SwingRenderScope.renderContent() =
+			props.content.map { constraint(constraint = it.constraints, content = it.content) }
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ layout(props = props.layoutProps).layoutData(Data(props))
-	}
+	private fun updateLayout(container: Container, layout: LayoutManager?) = layout as? GridBagLayout ?: GridBagLayout()
 }
 
 fun SwingRenderScope.gridBagLayout(key: Any = AutoKey,
                                    block: SwingGridBagBuilder.() -> Unit) =
-		component(::SwingGridBagLayout, SwingGridBagLayout.Props(key)).content(block)
+		gridBagLayout(SwingGridBagLayout.Props(key)).content(block)
 
 internal fun SwingRenderScope.gridBagLayout(props: SwingGridBagLayout.Props) = component(::SwingGridBagLayout, props)
 
@@ -64,4 +56,4 @@ private typealias SGBLProvider<P> = SwingGridBagLayout.PropsProvider<P>
 fun <P : SGBLProvider<P>> SwingElement<P>.withGridBagLayoutProps(builder: Builder<SwingGridBagLayout.Props>) =
 		withProps { withGridBagLayoutProps(builder) }
 fun <P : SGBLProvider<P>> SwingElement<P>.content(block: SwingGridBagBuilder.() -> Unit) =
-		withGridBagLayoutProps { withSwingProps { copy(children = block.render()) } }
+		withGridBagLayoutProps { copy(content = block.render()) }

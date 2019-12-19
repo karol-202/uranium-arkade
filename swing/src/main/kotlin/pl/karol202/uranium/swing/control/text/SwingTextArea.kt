@@ -2,13 +2,14 @@ package pl.karol202.uranium.swing.control.text
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JTextArea
 
 class SwingTextArea(private val nativeComponent: JTextArea,
-                    initialProps: Props) : SwingAbstractComponent<SwingTextArea.Props>(initialProps)
+                    initialProps: Props) : SwingAbstractAppComponent<SwingTextArea.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val abstractTextProps: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props(),
@@ -40,10 +41,8 @@ class SwingTextArea(private val nativeComponent: JTextArea,
 		fun withTextAreaProps(builder: Builder<Props>): S
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ abstractTextComponent(nativeComponent = { nativeComponent }, props = props.abstractTextProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			abstractTextComponent(nativeComponent = { nativeComponent }, props = props.abstractTextProps)
 
 	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.columns.ifPresent { columns = it }

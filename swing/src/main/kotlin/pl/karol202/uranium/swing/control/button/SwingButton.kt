@@ -1,19 +1,15 @@
 package pl.karol202.uranium.swing.control.button
 
 import pl.karol202.uranium.core.common.AutoKey
-import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.util.SwingAbstractComponent
-import pl.karol202.uranium.swing.util.SwingRenderBuilder
-import pl.karol202.uranium.swing.util.SwingRenderScope
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
+import pl.karol202.uranium.swing.util.*
 import javax.swing.JButton
 
 class SwingButton(private val nativeComponent: JButton,
-                  initialProps: SwingAbstractButton.Props) : SwingAbstractComponent<SwingAbstractButton.Props>(initialProps)
+                  initialProps: SwingAbstractButton.Props) : SwingAbstractAppComponent<SwingAbstractButton.Props>(initialProps)
 {
-	override fun SwingRenderBuilder.render()
-	{
-		+ abstractButton(nativeComponent = { nativeComponent }, props = props)
-	}
+	override fun URenderScope<Swing>.render() = abstractButton(nativeComponent = { nativeComponent }, props = props)
 }
 
 fun SwingRenderScope.button(key: Any = AutoKey) = button(props = SwingAbstractButton.Props(key))

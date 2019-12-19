@@ -16,7 +16,7 @@ abstract class SwingFrame
 	}
 
 	private val frame = JFrame()
-	private val container = SwingNative.fromContainer(frame.contentPane)
+	private val container = SwingNative.container(frame.contentPane)
 	private var renderManager: SwingRenderManager<*>? = null
 
 	fun show()

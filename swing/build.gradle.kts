@@ -17,10 +17,16 @@ tasks.withType<KotlinCompile> {
 	kotlinOptions.jvmTarget = "1.8"
 }
 
+tasks.register<Jar>("sourcesJar") {
+	archiveClassifier.set("sources")
+	from(sourceSets.main.get().allSource)
+}
+
 publishing {
 	publications {
 		create<MavenPublication>("swing") {
 			from(components["java"])
+			artifact(tasks["sourcesJar"])
 		}
 	}
 }

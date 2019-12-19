@@ -9,6 +9,13 @@ private fun UNative<Swing>.asSwingNative() = this as SwingNative
 
 sealed class SwingNative : UNativeContainer<Swing>
 {
+	companion object
+	{
+		fun container(container: Container): SwingNative = SwingContainer(container)
+
+		fun constraint(constraint: Any): SwingNative = SwingConstraint(constraint)
+	}
+
 	private class SwingContainer(private val container: Container) : SwingNative()
 	{
 		private val content = mutableMapOf<SwingNative, Any?>()

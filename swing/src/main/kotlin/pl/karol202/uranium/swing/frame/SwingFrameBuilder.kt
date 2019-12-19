@@ -1,8 +1,9 @@
 package pl.karol202.uranium.swing.frame
 
+import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.swing.util.SwingElement
-import pl.karol202.uranium.swing.util.SwingEmptyRenderScope
 import pl.karol202.uranium.swing.util.SwingRenderScope
+import pl.karol202.uranium.swing.util.renderScope
 import java.awt.Dimension
 import javax.swing.JFrame
 
@@ -27,7 +28,7 @@ class SwingFrameBuilder internal constructor(private val rootSupplier: SwingRend
 
 	fun build() = object : SwingFrame()
 	{
-		override fun renderRoot() = SwingEmptyRenderScope.rootSupplier()
+		override fun renderRoot() = rootSupplier.render()
 
 		override fun JFrame.initFrame()
 		{

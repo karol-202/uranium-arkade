@@ -2,14 +2,15 @@ package pl.karol202.uranium.swing.control.text
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ActionListener
 import javax.swing.JPasswordField
 
 class SwingPasswordField(private val nativeComponent: JPasswordField,
-                         initialProps: Props) : SwingAbstractComponent<SwingPasswordField.Props>(initialProps)
+                         initialProps: Props) : SwingAbstractAppComponent<SwingPasswordField.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val textFieldProps: SwingTextField.Props = SwingTextField.Props(),
@@ -58,10 +59,8 @@ class SwingPasswordField(private val nativeComponent: JPasswordField,
 		removeActionListener(actionListener)
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ textField(nativeComponent = { nativeComponent }, props = props.textFieldProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			textField(nativeComponent = { nativeComponent }, props = props.textFieldProps)
 
 	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.echoChar.ifPresent { echoChar = it ?: PASSWORD_VISIBLE_CHAR.toChar() }

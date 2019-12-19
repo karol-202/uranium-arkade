@@ -2,21 +2,18 @@ package pl.karol202.uranium.swing.control.scrollpane
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.control.scrollbar.ScrollBarAxis.HORIZONTAL
-import pl.karol202.uranium.swing.control.scrollbar.ScrollBarAxis.VERTICAL
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
+import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.swing.native.SwingNativeComponent
-import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import pl.karol202.uranium.swing.util.update
 import java.awt.Component
 import javax.swing.JScrollPane
-import javax.swing.ScrollPaneConstants
 import javax.swing.ScrollPaneConstants.*
-import javax.swing.border.Border
 
 class SwingScrollPaneBidirectional(private val nativeComponent: JScrollPane,
-                                   initialProps: Props) : SwingAbstractComponent<SwingScrollPaneBidirectional.Props>(initialProps)
+                                   initialProps: Props) : SwingAbstractAppComponent<SwingScrollPaneBidirectional.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val scrollPaneBaseProps: SwingScrollPaneBase.Props = SwingScrollPaneBase.Props(),
@@ -52,10 +49,8 @@ class SwingScrollPaneBidirectional(private val nativeComponent: JScrollPane,
 	private var lowerLeadingCornerRenderer = EmbeddedRenderer()
 	private var lowerTrailingCornerRenderer = EmbeddedRenderer()
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ scrollPaneBase(nativeComponent = { nativeComponent }, props = props.scrollPaneBaseProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			scrollPaneBase(nativeComponent = { nativeComponent }, props = props.scrollPaneBaseProps)
 
 	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.upperLeadingCorner.ifPresent { corner ->
@@ -95,10 +90,10 @@ private typealias SSPBIProvider<P> = SwingScrollPaneBidirectional.PropsProvider<
 fun <P : SSPBIProvider<P>> SwingElement<P>.withScrollPaneBidirectionalProps(builder: Builder<SwingScrollPaneBidirectional.Props>) =
 		withProps { withScrollPaneBidirectionalProps(builder) }
 fun <P : SSPBIProvider<P>> SwingElement<P>.upperLeadingCorner(corner: SwingRenderScope.() -> SwingElement<*>) =
-		withScrollPaneBidirectionalProps { copy(upperLeadingCorner = SwingEmptyRenderScope.corner().prop()) }
+		withScrollPaneBidirectionalProps { copy(upperLeadingCorner = corner.render().prop()) }
 fun <P : SSPBIProvider<P>> SwingElement<P>.upperTrailingCorner(corner: SwingRenderScope.() -> SwingElement<*>) =
-		withScrollPaneBidirectionalProps { copy(upperTrailingCorner = SwingEmptyRenderScope.corner().prop()) }
+		withScrollPaneBidirectionalProps { copy(upperTrailingCorner = corner.render().prop()) }
 fun <P : SSPBIProvider<P>> SwingElement<P>.lowerLeadingCorner(corner: SwingRenderScope.() -> SwingElement<*>) =
-		withScrollPaneBidirectionalProps { copy(lowerLeadingCorner = SwingEmptyRenderScope.corner().prop()) }
+		withScrollPaneBidirectionalProps { copy(lowerLeadingCorner = corner.render().prop()) }
 fun <P : SSPBIProvider<P>> SwingElement<P>.lowerTrailingCorner(corner: SwingRenderScope.() -> SwingElement<*>) =
-		withScrollPaneBidirectionalProps { copy(lowerTrailingCorner = SwingEmptyRenderScope.corner().prop()) }
+		withScrollPaneBidirectionalProps { copy(lowerTrailingCorner = corner.render().prop()) }

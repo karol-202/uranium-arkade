@@ -2,14 +2,15 @@ package pl.karol202.uranium.swing.control.text
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ActionListener
 import javax.swing.JTextField
 
 class SwingTextField(private val nativeComponent: JTextField,
-                     initialProps: Props) : SwingAbstractComponent<SwingTextField.Props>(initialProps)
+                     initialProps: Props) : SwingAbstractAppComponent<SwingTextField.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val abstractTextProps: SwingAbstractTextComponent.Props = SwingAbstractTextComponent.Props(),
@@ -50,10 +51,8 @@ class SwingTextField(private val nativeComponent: JTextField,
 		removeActionListener(actionListener)
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ abstractTextComponent(nativeComponent = { nativeComponent }, props = props.abstractTextProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			abstractTextComponent(nativeComponent = { nativeComponent }, props = props.abstractTextProps)
 
 	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.columns.ifPresent { columns = it }

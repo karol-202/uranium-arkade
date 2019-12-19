@@ -2,7 +2,8 @@ package pl.karol202.uranium.swing.control.list
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
@@ -13,7 +14,7 @@ import javax.swing.ListModel
 import javax.swing.event.ListSelectionListener
 
 class SwingList<E>(private val nativeComponent: JList<E>,
-                   initialProps: Props<E>) : SwingAbstractComponent<SwingList.Props<E>>(initialProps)
+                   initialProps: Props<E>) : SwingAbstractAppComponent<SwingList.Props<E>>(initialProps)
 {
 	data class Props<E>(override val key: Any = AutoKey,
 	                    override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
@@ -62,10 +63,8 @@ class SwingList<E>(private val nativeComponent: JList<E>,
 		removeListSelectionListener(listSelectionListener)
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 
 	override fun onUpdate(previousProps: Props<E>?) = nativeComponent.update {
 		props.items.ifPresent { mutableModel.items = it }

@@ -2,7 +2,9 @@ package pl.karol202.uranium.swing.control.scrollpane
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
+import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.swing.control.scrollbar.ScrollBarAxis.HORIZONTAL
 import pl.karol202.uranium.swing.control.scrollbar.ScrollBarAxis.VERTICAL
 import pl.karol202.uranium.swing.native.SwingNativeComponent
@@ -14,7 +16,7 @@ import javax.swing.JScrollPane
 import javax.swing.border.Border
 
 class SwingScrollPaneBase(private val nativeComponent: JScrollPane,
-                          initialProps: Props) : SwingAbstractComponent<SwingScrollPaneBase.Props>(initialProps)
+                          initialProps: Props) : SwingAbstractAppComponent<SwingScrollPaneBase.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
@@ -46,10 +48,8 @@ class SwingScrollPaneBase(private val nativeComponent: JScrollPane,
 	private var columnHeaderRenderer = EmbeddedRenderer()
 	private var rowHeaderRenderer = EmbeddedRenderer()
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 
 	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.content.ifPresent { content ->
@@ -88,11 +88,11 @@ private typealias SSPBProvider<P> = SwingScrollPaneBase.PropsProvider<P>
 fun <P : SSPBProvider<P>> SwingElement<P>.withScrollPaneBaseProps(builder: Builder<SwingScrollPaneBase.Props>) =
 		withProps { withScrollPaneBaseProps(builder) }
 fun <P : SSPBProvider<P>> SwingElement<P>.content(content: SwingRenderScope.() -> SwingElement<*>) =
-		withScrollPaneBaseProps { copy(content = SwingEmptyRenderScope.content().prop()) }
+		withScrollPaneBaseProps { copy(content = content.render().prop()) }
 fun <P : SSPBProvider<P>> SwingElement<P>.columnHeader(header: SwingRenderScope.() -> SwingElement<*>) =
-		withScrollPaneBaseProps { copy(columnHeader = SwingEmptyRenderScope.header().prop()) }
+		withScrollPaneBaseProps { copy(columnHeader = header.render().prop()) }
 fun <P : SSPBProvider<P>> SwingElement<P>.rowHeader(header: SwingRenderScope.() -> SwingElement<*>) =
-		withScrollPaneBaseProps { copy(rowHeader = SwingEmptyRenderScope.header().prop()) }
+		withScrollPaneBaseProps { copy(rowHeader = header.render().prop()) }
 fun <P : SSPBProvider<P>> SwingElement<P>.horizontalScrollPolicy(policy: ScrollBarPolicy) =
 		withScrollPaneBaseProps { copy(horizontalScrollPolicy = policy.prop()) }
 fun <P : SSPBProvider<P>> SwingElement<P>.verticalScrollPolicy(policy: ScrollBarPolicy) =

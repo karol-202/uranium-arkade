@@ -2,7 +2,9 @@ package pl.karol202.uranium.swing.control.combobox
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.control.list.CustomListCellRenderer
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.native.nativeComponent
@@ -12,7 +14,7 @@ import java.awt.event.ItemListener
 import javax.swing.JComboBox
 
 class SwingComboBox<E>(private val nativeComponent: JComboBox<E>,
-                       initialProps: Props<E>) : SwingAbstractComponent<SwingComboBox.Props<E>>(initialProps)
+                       initialProps: Props<E>) : SwingAbstractAppComponent<SwingComboBox.Props<E>>(initialProps)
 {
 	data class Props<E>(override val key: Any = AutoKey,
 	                    override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
@@ -70,10 +72,8 @@ class SwingComboBox<E>(private val nativeComponent: JComboBox<E>,
 		nativeComponent.removePopupMenuListener(popupListener)
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 
 	override fun onUpdate(previousProps: Props<E>?)
 	{

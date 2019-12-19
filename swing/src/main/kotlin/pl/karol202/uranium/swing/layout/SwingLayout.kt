@@ -2,57 +2,38 @@ package pl.karol202.uranium.swing.layout
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
+import java.awt.Container
+import java.awt.LayoutManager
 import javax.swing.JPanel
 
-class SwingLayout(initialProps: Props) : SwingAbstractComponent<SwingLayout.Props>(initialProps)
+class SwingLayout(initialProps: Props) : SwingAbstractAppComponent<SwingLayout.Props>(initialProps)
 {
-	data class Props(override val key: Any = AutoKey,
-	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
-	                 val layoutData: Prop<LayoutData<*>> = Prop.NoValue) : UProps,
-	                                                                       SwingNativeComponent.PropsProvider<Props>,
-	                                                                       PropsProvider<Props>
+	data class Props(override val key: Any,
+	                 override val swingProps: SwingNativeComponent.Props,
+	                 val content: List<SwingElement<*>>,
+	                 val layoutUpdater: (Container, LayoutManager?) -> LayoutManager) : UProps,
+	                                                                                    SwingNativeComponent.PropsProvider<Props>
 	{
-		override val layoutProps = this
-
 		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) = copy(swingProps = swingProps.builder())
-
-		override fun withLayoutProps(builder: Builder<Props>) = builder()
-	}
-
-	interface PropsProvider<S : PropsProvider<S>> : UProps
-	{
-		val layoutProps: Props
-
-		fun withLayoutProps(builder: Builder<Props>): S
 	}
 
 	private val nativeComponent = JPanel()
 
-	override fun onCreate()
-	{
-		props.layoutData.ifPresent { nativeComponent.layout = it.createLayout(nativeComponent) }
-	}
+	override fun URenderScope<Swing>.render() =
+			nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps.copy(children = props.content))
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
-	}
-
-	override fun onUpdate(previousProps: Props?)
-	{
-		props.layoutData.ifPresent { nativeComponent.layout = it.updateLayout(nativeComponent, nativeComponent.layout) }
+	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
+		layout = props.layoutUpdater(nativeComponent, nativeComponent.layout)
 	}
 }
 
-fun SwingRenderScope.layout(key: Any = AutoKey,
-                            props: SwingLayout.Props = SwingLayout.Props(key)) = component(::SwingLayout, props)
-
-private typealias SLProvider<P> = SwingLayout.PropsProvider<P>
-fun <P : SLProvider<P>> SwingElement<P>.withLayoutProps(builder: Builder<SwingLayout.Props>) =
-		withProps { withLayoutProps(builder) }
-internal fun <P : SLProvider<P>> SwingElement<P>.layoutData(layout: LayoutData<*>) =
-		withLayoutProps { copy(layoutData = layout.prop()) }
+internal fun SwingRenderScope.layout(key: Any = AutoKey,
+                                     swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+                                     content: List<SwingElement<*>>,
+                                     layoutUpdater: (Container, LayoutManager?) -> LayoutManager) =
+		component(::SwingLayout, SwingLayout.Props(key, swingProps, content, layoutUpdater))

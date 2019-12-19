@@ -8,7 +8,7 @@ import javax.swing.JPanel
 class EmbeddedRenderer
 {
 	val component = JPanel(BorderLayout())
-	private val container = SwingNative.fromContainer(component)
+	private val container = SwingNative.container(component)
 	private var renderManager: SwingRenderManager<SwingSingleWrapper.Props>? = null
 
 	fun update(rootElement: SwingElement<*>) = reuseOrRender(rootElement)

@@ -2,7 +2,9 @@ package pl.karol202.uranium.swing.control.button
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ItemEvent
@@ -10,7 +12,7 @@ import java.awt.event.ItemListener
 import javax.swing.JToggleButton
 
 class SwingToggleButton(private val nativeComponent: JToggleButton,
-                        initialProps: Props) : SwingAbstractComponent<SwingToggleButton.Props>(initialProps)
+                        initialProps: Props) : SwingAbstractAppComponent<SwingToggleButton.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val abstractButtonProps: SwingAbstractButton.Props = SwingAbstractButton.Props(),
@@ -48,10 +50,8 @@ class SwingToggleButton(private val nativeComponent: JToggleButton,
 		removeItemListener(itemListener)
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ abstractButton(nativeComponent = { nativeComponent }, props = props.abstractButtonProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			abstractButton(nativeComponent = { nativeComponent }, props = props.abstractButtonProps)
 
 	private fun onSelect(selected: Boolean)
 	{

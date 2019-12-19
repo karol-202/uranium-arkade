@@ -2,7 +2,9 @@ package pl.karol202.uranium.swing.control.button
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
@@ -12,7 +14,7 @@ import javax.swing.AbstractButton
 import javax.swing.Icon
 
 class SwingAbstractButton(private val nativeComponent: AbstractButton,
-                          initialProps: Props) : SwingAbstractComponent<SwingAbstractButton.Props>(initialProps)
+                          initialProps: Props) : SwingAbstractAppComponent<SwingAbstractButton.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
@@ -66,10 +68,8 @@ class SwingAbstractButton(private val nativeComponent: AbstractButton,
 		removeActionListener(actionListener)
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 
 	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.text.ifPresent { text = it }

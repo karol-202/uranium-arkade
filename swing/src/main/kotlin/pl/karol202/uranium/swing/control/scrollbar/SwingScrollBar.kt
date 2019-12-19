@@ -2,16 +2,16 @@ package pl.karol202.uranium.swing.control.scrollbar
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
-import java.awt.event.ActionListener
 import java.awt.event.AdjustmentListener
 import javax.swing.JScrollBar
 
 class SwingScrollBar(private val nativeComponent: JScrollBar,
-                     initialProps: Props) : SwingAbstractComponent<SwingScrollBar.Props>(initialProps)
+                     initialProps: Props) : SwingAbstractAppComponent<SwingScrollBar.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
@@ -50,10 +50,8 @@ class SwingScrollBar(private val nativeComponent: JScrollBar,
 		removeAdjustmentListener(adjustmentListener)
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 
 	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.axis.ifPresent { orientation = it.code }

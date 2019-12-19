@@ -16,7 +16,7 @@ class CustomListCellRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) 
 	                    val hasFocus: Boolean)
 
 	private val containerComponent = JPanel(BorderLayout())
-	private val container = SwingNative.fromContainer(containerComponent)
+	private val container = SwingNative.container(containerComponent)
 	private var renderManager: SwingRenderManager<SwingSingleWrapper.Props>? = null
 
 	override fun getListCellRendererComponent(list: JList<out E>?, value: E?, index: Int, selected: Boolean, focus: Boolean) =
@@ -28,5 +28,5 @@ class CustomListCellRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) 
 
 	private fun render(props: Props<E>) = RenderManager(renderRoot(props), container).also { renderManager = it }.init()
 
-	private fun renderRoot(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }
+	private fun renderRoot(props: Props<E>) = renderScope().singleWrapper { renderFunction(props) }
 }

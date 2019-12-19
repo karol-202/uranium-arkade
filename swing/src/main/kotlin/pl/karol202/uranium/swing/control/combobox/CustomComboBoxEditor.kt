@@ -21,7 +21,7 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 
 	private val listeners = mutableListOf<ActionListener>()
 	private val containerComponent = JPanel(BorderLayout())
-	private val container = SwingNative.fromContainer(containerComponent)
+	private val container = SwingNative.container(containerComponent)
 	private var renderManager: SwingRenderManager<SwingSingleWrapper.Props>? = null
 
 	private var item: E? = null
@@ -45,7 +45,7 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 
 	private fun render(props: Props<E>) = RenderManager(renderRoot(props), container).also { renderManager = it }.init()
 
-	private fun renderRoot(props: Props<E>) = SwingEmptyRenderScope.singleWrapper { renderFunction(props) }
+	private fun renderRoot(props: Props<E>) = renderScope().singleWrapper { renderFunction(props) }
 
 	private fun onEdit(newItem: E)
 	{

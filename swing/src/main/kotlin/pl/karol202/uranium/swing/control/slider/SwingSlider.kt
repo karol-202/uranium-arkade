@@ -2,7 +2,8 @@ package pl.karol202.uranium.swing.control.slider
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.native.nativeComponent
 import pl.karol202.uranium.swing.util.*
@@ -10,7 +11,7 @@ import javax.swing.JSlider
 import javax.swing.event.ChangeListener
 
 class SwingSlider(private val nativeComponent: JSlider,
-                  initialProps: Props) : SwingAbstractComponent<SwingSlider.Props>(initialProps)
+                  initialProps: Props) : SwingAbstractAppComponent<SwingSlider.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
@@ -56,10 +57,8 @@ class SwingSlider(private val nativeComponent: JSlider,
 		removeChangeListener(changeListener)
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			nativeComponent(nativeComponent = { nativeComponent }, props = props.swingProps)
 
 	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.value.ifPresent { if(it != value) value = it }

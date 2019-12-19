@@ -2,13 +2,15 @@ package pl.karol202.uranium.swing.control.button
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
+import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JCheckBox
 
 class SwingCheckBox(private val nativeComponent: JCheckBox,
-                    initialProps: Props) : SwingAbstractComponent<SwingCheckBox.Props>(initialProps)
+                    initialProps: Props) : SwingAbstractAppComponent<SwingCheckBox.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val toggleButtonProps: SwingToggleButton.Props = SwingToggleButton.Props(),
@@ -41,10 +43,8 @@ class SwingCheckBox(private val nativeComponent: JCheckBox,
 		fun withCheckBoxProps(builder: Builder<Props>): S
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ toggleButton(nativeComponent = { nativeComponent }, props = props.toggleButtonProps)
-	}
+	override fun URenderScope<Swing>.render() =
+			toggleButton(nativeComponent = { nativeComponent }, props = props.toggleButtonProps)
 
 	override fun onUpdate(previousProps: Props?) = nativeComponent.update {
 		props.borderPaintedFlat.ifPresent { isBorderPaintedFlat = it }

@@ -2,14 +2,16 @@ package pl.karol202.uranium.swing.layout.border
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.component.component
-import pl.karol202.uranium.swing.native.SNCProvider
+import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderScope
+import pl.karol202.uranium.core.render.render
+import pl.karol202.uranium.swing.layout.constraint
 import pl.karol202.uranium.swing.native.SwingNativeComponent
-import pl.karol202.uranium.swing.native.constraints
 import pl.karol202.uranium.swing.util.*
+import java.awt.BorderLayout
 import java.awt.BorderLayout.*
 
-class SwingBorderLayoutCompass(initialProps: Props) : SwingAbstractComponent<SwingBorderLayoutCompass.Props>(initialProps)
+class SwingBorderLayoutCompass(initialProps: Props) : SwingAbstractAppComponent<SwingBorderLayoutCompass.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 override val borderLayoutBaseProps: SwingBorderLayoutBase.Props = SwingBorderLayoutBase.Props(),
@@ -41,14 +43,16 @@ class SwingBorderLayoutCompass(initialProps: Props) : SwingAbstractComponent<Swi
 		fun withBorderLayoutCompassProps(builder: Builder<Props>): S
 	}
 
-	override fun SwingRenderBuilder.render()
-	{
-		+ borderLayoutBase(props = props.borderLayoutBaseProps.updateBaseProps())
-	}
+	override fun URenderScope<Swing>.render() =
+			borderLayoutBase(props = props.borderLayoutBaseProps.copy(content = renderContent()))
 
-	private fun SwingBorderLayoutBase.Props.updateBaseProps() = withSwingProps { copy(children = createChildren()) }
-
-	private fun createChildren() = listOf(props.center, props.north, props.west, props.east, props.south).mapNotNull { it.value }
+	private fun SwingRenderScope.renderContent() = listOf(CENTER to props.center,
+	                                                      NORTH to props.north,
+	                                                      WEST to props.west,
+	                                                      EAST to props.east,
+	                                                      SOUTH to props.south)
+			.mapNotNull { (side, elementProp) -> elementProp.value?.let { side to it } }
+			.map { (side, element) -> constraint(constraint = side, content = element) }
 }
 
 fun SwingRenderScope.borderLayoutCompass(key: Any = AutoKey) = borderLayoutCompass(props = SwingBorderLayoutCompass.Props(key))
@@ -59,13 +63,13 @@ internal fun SwingRenderScope.borderLayoutCompass(props: SwingBorderLayoutCompas
 private typealias SBLCProvider<P> = SwingBorderLayoutCompass.PropsProvider<P>
 fun <P : SBLCProvider<P>> SwingElement<P>.withBorderLayoutCompassProps(builder: Builder<SwingBorderLayoutCompass.Props>) =
 		withProps { withBorderLayoutCompassProps(builder) }
-fun <P : SBLCProvider<P>, EP : SNCProvider<EP>> SwingElement<P>.center(element: SwingRenderScope.() -> SwingElement<EP>?) =
-		withBorderLayoutCompassProps { copy(center = SwingEmptyRenderScope.element()?.constraints(CENTER).prop()) }
-fun <P : SBLCProvider<P>, EP : SNCProvider<EP>> SwingElement<P>.north(element: SwingRenderScope.() -> SwingElement<EP>?) =
-		withBorderLayoutCompassProps { copy(north = SwingEmptyRenderScope.element()?.constraints(NORTH).prop()) }
-fun <P : SBLCProvider<P>, EP : SNCProvider<EP>> SwingElement<P>.west(element: SwingRenderScope.() -> SwingElement<EP>?) =
-		withBorderLayoutCompassProps { copy(west = SwingEmptyRenderScope.element()?.constraints(WEST).prop()) }
-fun <P : SBLCProvider<P>, EP : SNCProvider<EP>> SwingElement<P>.east(element: SwingRenderScope.() -> SwingElement<EP>?) =
-		withBorderLayoutCompassProps { copy(east = SwingEmptyRenderScope.element()?.constraints(EAST).prop()) }
-fun <P : SBLCProvider<P>, EP : SNCProvider<EP>> SwingElement<P>.south(element: SwingRenderScope.() -> SwingElement<EP>?) =
-		withBorderLayoutCompassProps { copy(south = SwingEmptyRenderScope.element()?.constraints(SOUTH).prop()) }
+fun <P : SBLCProvider<P>> SwingElement<P>.center(element: SwingRenderScope.() -> SwingElement<*>?) =
+		withBorderLayoutCompassProps { copy(center = element.render().prop()) }
+fun <P : SBLCProvider<P>> SwingElement<P>.north(element: SwingRenderScope.() -> SwingElement<*>?) =
+		withBorderLayoutCompassProps { copy(north = element.render().prop()) }
+fun <P : SBLCProvider<P>> SwingElement<P>.west(element: SwingRenderScope.() -> SwingElement<*>?) =
+		withBorderLayoutCompassProps { copy(west = element.render().prop()) }
+fun <P : SBLCProvider<P>> SwingElement<P>.east(element: SwingRenderScope.() -> SwingElement<*>?) =
+		withBorderLayoutCompassProps { copy(east = element.render().prop()) }
+fun <P : SBLCProvider<P>> SwingElement<P>.south(element: SwingRenderScope.() -> SwingElement<*>?) =
+		withBorderLayoutCompassProps { copy(south = element.render().prop()) }

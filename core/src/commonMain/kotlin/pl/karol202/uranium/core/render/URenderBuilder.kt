@@ -1,21 +1,12 @@
 package pl.karol202.uranium.core.render
 
 import pl.karol202.uranium.core.element.UElement
+import pl.karol202.uranium.core.util.PlusBuilder
+import pl.karol202.uranium.core.util.PlusBuilderImpl
 
-interface URenderBuilder<N> : URenderScope<N>
-{
-	operator fun UElement<N, *>.unaryPlus()
-}
+@RenderDsl
+interface URenderBuilder<N> : PlusBuilder<UElement<N, *>>, URenderScope<N>
 
-fun <N> (URenderBuilder<N>.() -> Unit).render() = URenderBuilderImpl<N>().also(this).elements
+private class URenderBuilderImpl<N> : PlusBuilderImpl<UElement<N, *>>(), URenderBuilder<N>
 
-private class URenderBuilderImpl<N> : URenderBuilder<N>
-{
-	var elements = emptyList<UElement<N, *>>()
-		private set
-
-	override operator fun UElement<N, *>.unaryPlus()
-	{
-		this@URenderBuilderImpl.elements += this
-	}
-}
+fun <N> (URenderBuilder<N>.() -> Unit).render() = URenderBuilderImpl<N>().apply(this).elements

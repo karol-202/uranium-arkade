@@ -1,7 +1,11 @@
 package pl.karol202.uranium.swing.layout.gridbag
 
-import pl.karol202.uranium.swing.util.SwingRenderBuilderBase
+import pl.karol202.uranium.core.util.PlusBuilder
+import pl.karol202.uranium.core.util.PlusBuilderImpl
+import pl.karol202.uranium.swing.util.SwingElement
 
-open class SwingGridBagBuilder : SwingRenderBuilderBase(), SwingGridBagScope
+interface SwingGridBagBuilder : PlusBuilder<GridBagCell>, SwingGridBagScope
 
-fun (SwingGridBagBuilder.() -> Unit).render() = SwingGridBagBuilder().also(this).elements
+private class SwingGridBagBuilderImpl : PlusBuilderImpl<GridBagCell>(), SwingGridBagBuilder
+
+fun (SwingGridBagBuilder.() -> Unit).render() = SwingGridBagBuilderImpl().also(this).elements

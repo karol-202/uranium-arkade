@@ -55,7 +55,7 @@ private fun <N, P : UProps> DispatchingState<N>.dispatchUnit(
 	current.index > targetIndex -> unitDetached(current.value.asExisting)
 								  .unitAttached(current.value.asExisting, targetIndex)
 								  .unitUpdated(current.value.asExisting, targetUnit.props)
-	current.index < targetIndex -> throw IllegalStateException("Diffing algorithm bug!")
+	current.index < targetIndex -> throw IllegalStateException("Dispatching error (maybe keys are not unique?)")
 	else -> unitUpdated(current.value.asExisting, targetUnit.props)
 }
 
