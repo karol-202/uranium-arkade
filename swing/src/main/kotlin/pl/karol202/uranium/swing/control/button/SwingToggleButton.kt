@@ -55,7 +55,7 @@ class SwingToggleButton(private val nativeComponent: JToggleButton,
 
 	private fun onSelect(selected: Boolean)
 	{
-		props.onSelect.value?.invoke(selected)
+		if(selected != props.abstractButtonProps.selected.value) props.onSelect.value?.invoke(selected)
 		invalidate()
 	}
 }
