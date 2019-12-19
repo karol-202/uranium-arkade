@@ -23,8 +23,8 @@ class SwingScrollPaneBase(private val nativeComponent: JScrollPane,
 	                 val content: Prop<SwingElement<*>?> = Prop.NoValue,
 	                 val columnHeader: Prop<SwingElement<*>?> = Prop.NoValue,
 	                 val rowHeader: Prop<SwingElement<*>?> = Prop.NoValue,
-	                 val horizontalScrollPolicy: Prop<ScrollBarPolicy> = Prop.NoValue,
-	                 val verticalScrollPolicy: Prop<ScrollBarPolicy> = Prop.NoValue,
+	                 val horizontalScrollBarPolicy: Prop<ScrollBarPolicy> = Prop.NoValue,
+	                 val verticalScrollBarPolicy: Prop<ScrollBarPolicy> = Prop.NoValue,
 	                 val wheelScrollingEnabled: Prop<Boolean> = Prop.NoValue,
 	                 val viewportBorder: Prop<Border?> = Prop.NoValue) : UProps,
 	                                                                            SwingNativeComponent.PropsProvider<Props>,
@@ -61,8 +61,8 @@ class SwingScrollPaneBase(private val nativeComponent: JScrollPane,
 		props.rowHeader.ifPresent { header ->
 			updateRenderer(rowHeaderRenderer, header, rowHeader?.view) { setRowHeaderView(it) }
 		}
-		props.horizontalScrollPolicy.ifPresent { horizontalScrollBarPolicy = it.codeProvider(HORIZONTAL) }
-		props.verticalScrollPolicy.ifPresent { verticalScrollBarPolicy = it.codeProvider(VERTICAL) }
+		props.horizontalScrollBarPolicy.ifPresent { horizontalScrollBarPolicy = it.codeProvider(HORIZONTAL) }
+		props.verticalScrollBarPolicy.ifPresent { verticalScrollBarPolicy = it.codeProvider(VERTICAL) }
 		props.wheelScrollingEnabled.ifPresent { isWheelScrollingEnabled = it }
 		props.viewportBorder.ifPresent { viewportBorder = it }
 	}
@@ -93,10 +93,10 @@ fun <P : SSPBProvider<P>> SwingElement<P>.columnHeader(header: SwingRenderScope.
 		withScrollPaneBaseProps { copy(columnHeader = header.render().prop()) }
 fun <P : SSPBProvider<P>> SwingElement<P>.rowHeader(header: SwingRenderScope.() -> SwingElement<*>) =
 		withScrollPaneBaseProps { copy(rowHeader = header.render().prop()) }
-fun <P : SSPBProvider<P>> SwingElement<P>.horizontalScrollPolicy(policy: ScrollBarPolicy) =
-		withScrollPaneBaseProps { copy(horizontalScrollPolicy = policy.prop()) }
-fun <P : SSPBProvider<P>> SwingElement<P>.verticalScrollPolicy(policy: ScrollBarPolicy) =
-		withScrollPaneBaseProps { copy(verticalScrollPolicy = policy.prop()) }
+fun <P : SSPBProvider<P>> SwingElement<P>.horizontalScrollBarPolicy(policy: ScrollBarPolicy) =
+		withScrollPaneBaseProps { copy(horizontalScrollBarPolicy = policy.prop()) }
+fun <P : SSPBProvider<P>> SwingElement<P>.verticalScrollBarPolicy(policy: ScrollBarPolicy) =
+		withScrollPaneBaseProps { copy(verticalScrollBarPolicy = policy.prop()) }
 fun <P : SSPBProvider<P>> SwingElement<P>.wheelScrollingEnabled(enabled: Boolean) =
 		withScrollPaneBaseProps { copy(wheelScrollingEnabled = enabled.prop()) }
 fun <P : SSPBProvider<P>> SwingElement<P>.viewportBorder(border: Border?) =
