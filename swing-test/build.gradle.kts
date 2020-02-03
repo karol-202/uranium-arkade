@@ -7,7 +7,11 @@ plugins {
 
 application {
 	mainClassName = "pl.karol202.uranium.swing.test.MainKt"
-	applicationDefaultJvmArgs = listOf("-Dsun.awt.disablegrab=true")
+	applicationDefaultJvmArgs = listOf(
+			"-Dsun.awt.disablegrab=true",
+			"-Djdk.gtk.version=2.2" /* OpenJDK 8u242 switched default implementation to GTK3,
+			 which results in terribly looking UI */
+	)
 }
 
 dependencies {
