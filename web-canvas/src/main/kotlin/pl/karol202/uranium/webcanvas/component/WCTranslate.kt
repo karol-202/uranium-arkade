@@ -13,27 +13,18 @@ import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Color
 import pl.karol202.uranium.webcanvas.values.Vector
 
-class WCTranslate(props: Props) : WCAbstractNativeComponent<WCTranslate.Props>(props)
+class WCTranslate(props: Props) : WCAbstractAppComponent<WCTranslate.Props>(props)
 {
 	data class Props(override val key: Any,
 	                 val vector: Vector,
 	                 val content: List<WCElement<*>>) : UProps
 
-	override val native = WCNativeContainer(beforeDrawOperation = { drawBefore() },
-	                                        afterDrawOperation = { drawAfter() })
-
-	override fun URenderScope<WC>.render() = props.content
-
-	private fun DrawContext.drawBefore()
-	{
+	override fun URenderScope<WC>.render() = drawContainer(beforeDrawOperation = {
 		save()
 		translate(props.vector.x, props.vector.y)
-	}
-
-	private fun DrawContext.drawAfter()
-	{
+	}, afterDrawOperation = {
 		restore()
-	}
+	}, content = props.content)
 }
 
 fun WCRenderScope.translate(key: Any = AutoKey,
