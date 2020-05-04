@@ -9,6 +9,8 @@ import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.WCAbstractAppComponent
 import pl.karol202.uranium.webcanvas.WCRenderScope
+import pl.karol202.uranium.webcanvas.assets.loadImage
+import pl.karol202.uranium.webcanvas.component.image
 import pl.karol202.uranium.webcanvas.component.rectFill
 import pl.karol202.uranium.webcanvas.component.translate
 import pl.karol202.uranium.webcanvas.render.CanvasRenderer
@@ -33,6 +35,8 @@ class App(props: BasicProps) : WCAbstractAppComponent<BasicProps>(props)
 	override fun URenderScope<WC>.render() = translate(vector = Vector(200.0, 0.0)) {
 		+ rectFill(bounds = Bounds(100.0, 100.0, 100.0, 100.0),
 		           style = Color.named("blue"))
+		+ image(image = loadImage("assets/ball.png"),
+		        drawBounds = Bounds(100.0, 100.0, 100.0, 100.0))
 	}
 }
 
