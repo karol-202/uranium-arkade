@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	kotlin("jvm") version "1.3.61"
+	kotlin("jvm") version "1.3.72"
 	application
 }
 
@@ -18,7 +18,7 @@ dependencies {
 	implementation(project(":swing"))
 
 	implementation(kotlin("stdlib-jdk8"))
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
 }
 
 tasks.withType<KotlinCompile> {
