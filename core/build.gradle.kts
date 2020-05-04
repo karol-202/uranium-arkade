@@ -5,7 +5,11 @@ plugins {
 
 kotlin {
     jvm()
-    js()
+    js {
+        targets {
+            browser()
+        }
+    }
 
     sourceSets {
         commonMain {
