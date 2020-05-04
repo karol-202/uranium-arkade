@@ -6,11 +6,6 @@ import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.*
-import pl.karol202.uranium.webcanvas.native.WCNativeContainer
-import pl.karol202.uranium.webcanvas.native.WCNativeLeaf
-import pl.karol202.uranium.webcanvas.render.DrawContext
-import pl.karol202.uranium.webcanvas.values.Bounds
-import pl.karol202.uranium.webcanvas.values.Color
 import pl.karol202.uranium.webcanvas.values.Vector
 
 class WCTranslate(props: Props) : WCAbstractAppComponent<WCTranslate.Props>(props)

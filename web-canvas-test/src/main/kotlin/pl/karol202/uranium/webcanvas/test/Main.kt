@@ -13,22 +13,16 @@ import pl.karol202.uranium.webcanvas.assets.loadImage
 import pl.karol202.uranium.webcanvas.component.image
 import pl.karol202.uranium.webcanvas.component.rectFill
 import pl.karol202.uranium.webcanvas.component.translate
-import pl.karol202.uranium.webcanvas.render.CanvasRenderer
+import pl.karol202.uranium.webcanvas.draw.CanvasRenderer
+import pl.karol202.uranium.webcanvas.draw.startOnCanvas
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Color
 import pl.karol202.uranium.webcanvas.values.Vector
 import kotlin.browser.document
 
-private const val RENDER_INTERVAL = 20
-
 private val canvas = document.body!!.append.canvas { }
-private val context = canvas.context2d
 
-fun main()
-{
-	canvas.fixBounds()
-	CanvasRenderer(context, RENDER_INTERVAL) { app() }.start()
-}
+fun main() = startOnCanvas(canvas, renderInterval = 20) { app() }
 
 class App(props: BasicProps) : WCAbstractAppComponent<BasicProps>(props)
 {

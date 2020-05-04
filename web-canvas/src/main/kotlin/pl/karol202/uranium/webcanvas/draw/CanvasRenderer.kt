@@ -1,5 +1,6 @@
-package pl.karol202.uranium.webcanvas.render
+package pl.karol202.uranium.webcanvas.draw
 
+import org.w3c.dom.HTMLCanvasElement
 import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.WCElement
 import pl.karol202.uranium.webcanvas.WCRenderManager
@@ -29,3 +30,6 @@ class CanvasRenderer(private val context: DrawContext,
 
 	private fun run() = container.draw(context)
 }
+
+fun startOnCanvas(canvas: HTMLCanvasElement, renderInterval: Int, elementProvider: WCRenderScope.() -> WCElement<*>) =
+		CanvasRenderer(canvas.also { it.fixBounds() }.context2d, renderInterval, elementProvider).start()

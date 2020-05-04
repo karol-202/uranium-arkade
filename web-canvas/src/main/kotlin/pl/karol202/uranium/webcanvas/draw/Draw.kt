@@ -1,4 +1,4 @@
-package pl.karol202.uranium.webcanvas.render
+package pl.karol202.uranium.webcanvas.draw
 
 import org.w3c.dom.CanvasRenderingContext2D
 

@@ -9,7 +9,7 @@ import pl.karol202.uranium.webcanvas.WCAbstractNativeComponent
 import pl.karol202.uranium.webcanvas.WCElement
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.native.WCNativeLeaf
-import pl.karol202.uranium.webcanvas.render.DrawOperation
+import pl.karol202.uranium.webcanvas.draw.DrawOperation
 
 class WCDrawComponent(props: Props) : WCAbstractNativeComponent<WCDrawComponent.Props>(props)
 {

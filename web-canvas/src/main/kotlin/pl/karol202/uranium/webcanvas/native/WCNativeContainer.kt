@@ -3,8 +3,8 @@ package pl.karol202.uranium.webcanvas.native
 import pl.karol202.uranium.core.native.UNative
 import pl.karol202.uranium.core.native.UNativeContainer
 import pl.karol202.uranium.webcanvas.WC
-import pl.karol202.uranium.webcanvas.render.DrawContext
-import pl.karol202.uranium.webcanvas.render.DrawOperation
+import pl.karol202.uranium.webcanvas.draw.DrawContext
+import pl.karol202.uranium.webcanvas.draw.DrawOperation
 
 class WCNativeContainer(private val beforeDrawOperation: DrawOperation = { },
                         private val afterDrawOperation: DrawOperation = { }) : WCNative, UNativeContainer<WC>

@@ -1,7 +1,7 @@
 package pl.karol202.uranium.webcanvas.native
 
-import pl.karol202.uranium.webcanvas.render.DrawContext
-import pl.karol202.uranium.webcanvas.render.DrawOperation
+import pl.karol202.uranium.webcanvas.draw.DrawContext
+import pl.karol202.uranium.webcanvas.draw.DrawOperation
 
 class WCNativeLeaf(private val drawOperation: DrawOperation) : WCNative
 {
