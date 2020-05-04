@@ -4,6 +4,7 @@ import pl.karol202.uranium.core.component.UAbstractAppComponent
 import pl.karol202.uranium.core.component.UAbstractNativeComponent
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.manager.RenderManager
+import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.core.render.URenderScope
 
 object WC
@@ -15,5 +16,7 @@ typealias WCAbstractAppComponent<P> = UAbstractAppComponent<WC, P>
 typealias WCAbstractNativeComponent<P> = UAbstractNativeComponent<WC, P>
 
 typealias WCRenderScope = URenderScope<WC>
+
+typealias WCRenderBuilder = URenderBuilder<WC>
 
 typealias WCRenderManager<P> = RenderManager<WC, P>

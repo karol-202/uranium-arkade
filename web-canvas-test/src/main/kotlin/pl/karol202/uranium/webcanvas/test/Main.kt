@@ -10,9 +10,11 @@ import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.WCAbstractAppComponent
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.rectFill
+import pl.karol202.uranium.webcanvas.component.translate
 import pl.karol202.uranium.webcanvas.render.CanvasRenderer
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Color
+import pl.karol202.uranium.webcanvas.values.Vector
 import kotlin.browser.document
 
 private const val RENDER_INTERVAL = 20
@@ -28,8 +30,10 @@ fun main()
 
 class App(props: BasicProps) : WCAbstractAppComponent<BasicProps>(props)
 {
-	override fun URenderScope<WC>.render() = rectFill(bounds = Bounds(100.0, 100.0, 100.0, 100.0),
-	                                                  style = Color.named("blue"))
+	override fun URenderScope<WC>.render() = translate(vector = Vector(200.0, 0.0)) {
+		+ rectFill(bounds = Bounds(100.0, 100.0, 100.0, 100.0),
+		           style = Color.named("blue"))
+	}
 }
 
 fun WCRenderScope.app(key: Any = AutoKey) = component(::App, BasicProps(key))
