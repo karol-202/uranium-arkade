@@ -4,6 +4,7 @@ import org.w3c.dom.CanvasImageSource
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.webcanvas.*
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
@@ -17,12 +18,17 @@ class WCImage(props: Props) : WCAbstractComponent<WCImage.Props>(props)
 	                 val drawBounds: Bounds,
 	                 val clipBounds: Bounds?) : UProps
 
-	override fun URenderScope<WC>.render() = drawComponent {
-		val bounds = props.drawBounds
-		val clip = props.clipBounds
-		if(clip == null) drawImage(props.image, bounds.x, bounds.y, bounds.width, bounds.height)
-		else drawImage(props.image, clip.x, clip.y, clip.width, clip.height, bounds.x, bounds.y, bounds.width, bounds.height)
-	}.asList()
+	private val bounds get() = props.drawBounds
+	private val clip get() = props.clipBounds
+
+	override fun URenderBuilder<WC>.render()
+	{
+		+ drawComponent {
+			val clip = clip
+			if(clip == null) drawImage(props.image, bounds.x, bounds.y, bounds.width, bounds.height)
+			else drawImage(props.image, clip.x, clip.y, clip.width, clip.height, bounds.x, bounds.y, bounds.width, bounds.height)
+		}
+	}
 }
 
 fun WCRenderScope.image(key: Any = AutoKey,

@@ -2,16 +2,14 @@ package pl.karol202.uranium.webcanvas.component.base
 
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UAbstractComponent
-import pl.karol202.uranium.webcanvas.WC
-import pl.karol202.uranium.webcanvas.WCElement
-import pl.karol202.uranium.webcanvas.WCRenderScope
-import pl.karol202.uranium.webcanvas.renderScope
+import pl.karol202.uranium.core.render.render
+import pl.karol202.uranium.webcanvas.*
 
 abstract class WCAbstractComponent<P : UProps>(props: P) : UAbstractComponent<WC, P>(props)
 {
-	final override fun render() = renderScope().render()
+	private val renderFunction: WCRenderBuilder.() -> Unit = { render() }
 
-	protected abstract fun WCRenderScope.render(): List<WCElement<*>>
+	final override fun render() = renderFunction.render()
 
-	protected fun WCElement<*>.asList() = listOf(this)
+	protected abstract fun WCRenderBuilder.render()
 }

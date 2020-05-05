@@ -3,6 +3,7 @@ package pl.karol202.uranium.webcanvas.component.containers
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.*
@@ -19,13 +20,15 @@ class WCTranslate(props: Props) : WCAbstractComponent<WCTranslate.Props>(props)
 	                 val vector: Vector,
 	                 val content: List<WCElement<*>>) : UProps
 
-	override fun URenderScope<WC>.render() =
-			drawContainer(beforeDrawOperation = { before() },
-			              afterDrawOperation = { after() }) {
-				+ eventTransformer(transform = { it.transform() }) {
-					+ props.content
-				}
-			}.asList()
+	override fun URenderBuilder<WC>.render()
+	{
+		+ drawContainer(beforeDrawOperation = { before() },
+		                afterDrawOperation = { after() }) {
+			+ eventTransformer(transform = { it.transform() }) {
+				+ props.content
+			}
+		}
+	}
 
 	private fun DrawContext.before()
 	{

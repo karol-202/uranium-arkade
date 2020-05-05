@@ -3,7 +3,9 @@ package pl.karol202.uranium.webcanvas.component.event
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.core.render.render
+import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.WCElement
 import pl.karol202.uranium.webcanvas.WCRenderBuilder
 import pl.karol202.uranium.webcanvas.WCRenderScope
@@ -19,7 +21,7 @@ class WCEventTransformer(props: Props) : WCAbstractNativeContainerComponent<WCEv
 
 	override val native = WCEventNativeContainer { props.transform(it) }
 
-	override fun WCRenderScope.render() = props.content
+	override fun URenderBuilder<WC>.render() { + props.content }
 }
 
 fun WCRenderScope.eventTransformer(key: Any = AutoKey,

@@ -3,6 +3,7 @@ package pl.karol202.uranium.webcanvas.component.draw
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.WC
@@ -23,7 +24,7 @@ class WCDrawContainer(props: Props) : WCAbstractNativeContainerComponent<WCDrawC
 	override val native = WCDrawNativeContainer(beforeDrawOperation = { props.beforeDrawOperation(this) },
 	                                            afterDrawOperation = { props.afterDrawOperation(this) })
 
-	override fun URenderScope<WC>.render() = props.content
+	override fun URenderBuilder<WC>.render() { + props.content }
 }
 
 fun WCRenderScope.drawContainer(key: Any = AutoKey,

@@ -1,6 +1,5 @@
 package pl.karol202.uranium.swing
 
-import pl.karol202.uranium.core.common.UStateful
 import pl.karol202.uranium.core.component.UAbstractComponent
 import pl.karol202.uranium.core.component.UNativeComponent
 import pl.karol202.uranium.core.element.UElement

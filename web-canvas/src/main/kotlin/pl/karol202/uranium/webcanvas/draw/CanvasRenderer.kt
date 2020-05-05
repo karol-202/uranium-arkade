@@ -17,6 +17,7 @@ class CanvasRenderer(private val canvas: HTMLCanvasElement,
 {
 	private val container = nativeContainer()
 	private val renderManager = WCRenderManager(elementProvider.render(), container)
+	private val canvasContext = canvas.context2d
 
 	private var timerHandle: Int? = null
 
@@ -40,7 +41,11 @@ class CanvasRenderer(private val canvas: HTMLCanvasElement,
 		timerHandle?.let { window.clearInterval(it) }
 	}
 
-	private fun run() = container.draw(canvas.context2d)
+	private fun run()
+	{
+		canvasContext.clearRect(0.0, 0.0, canvas.width.toDouble(), canvas.height.toDouble())
+		container.draw(canvasContext)
+	}
 
 	private fun handleMouseEvent(mouseEvent: MouseEvent) = container.handleEvent(InputEvent.from(mouseEvent))
 }

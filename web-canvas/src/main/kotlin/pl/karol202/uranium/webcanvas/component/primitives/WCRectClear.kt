@@ -4,31 +4,27 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderBuilder
-import pl.karol202.uranium.core.render.URenderScope
-import pl.karol202.uranium.webcanvas.*
+import pl.karol202.uranium.webcanvas.WC
+import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.draw.drawComponent
 import pl.karol202.uranium.webcanvas.values.Bounds
-import pl.karol202.uranium.webcanvas.values.Color
 
-class WCRectFill(props: Props) : WCAbstractComponent<WCRectFill.Props>(props)
+class WCRectClear(props: Props) : WCAbstractComponent<WCRectClear.Props>(props)
 {
 	data class Props(override val key: Any,
-	                 val bounds: Bounds,
-	                 val color: Color) : UProps
+	                 val bounds: Bounds) : UProps
 
 	private val bounds get() = props.bounds
 
 	override fun URenderBuilder<WC>.render()
 	{
 		+ drawComponent {
-			fillStyle = props.color.asStyle
-			fillRect(bounds.x, bounds.y, bounds.width, bounds.height)
+			clearRect(bounds.x, bounds.y, bounds.width, bounds.height)
 		}
 	}
 }
 
-fun WCRenderScope.rectFill(key: Any = AutoKey,
-                           bounds: Bounds,
-                           style: Color) =
-		component(::WCRectFill, WCRectFill.Props(key, bounds, style))
+fun WCRenderScope.rectClear(key: Any = AutoKey,
+                            bounds: Bounds) =
+		component(::WCRectClear, WCRectClear.Props(key, bounds))
