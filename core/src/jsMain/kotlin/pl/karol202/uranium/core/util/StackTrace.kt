@@ -1,6 +1,6 @@
 package pl.karol202.uranium.core.util
 
-actual class StackTrace(val content: dynamic)
+internal actual class StackTrace(val content: dynamic)
 {
 	actual companion object
 	{

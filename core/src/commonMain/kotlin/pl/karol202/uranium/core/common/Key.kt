@@ -2,7 +2,7 @@ package pl.karol202.uranium.core.common
 
 object AutoKey
 
-interface KeyProvider
+interface UKeyProvider
 {
 	val key: Any
 }

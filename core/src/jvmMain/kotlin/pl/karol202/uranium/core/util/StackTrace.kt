@@ -1,6 +1,6 @@
 package pl.karol202.uranium.core.util
 
-actual class StackTrace(val stackElements: List<StackTraceElement>)
+internal actual class StackTrace(val stackElements: List<StackTraceElement>)
 {
 	actual companion object
 	{

@@ -1,12 +1,11 @@
 package pl.karol202.uranium.core.tree
 
-import pl.karol202.uranium.core.common.KeyProvider
+import pl.karol202.uranium.core.common.UKeyProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
 import pl.karol202.uranium.core.component.UNativeComponent
 import pl.karol202.uranium.core.component.componentContext
 import pl.karol202.uranium.core.element.UElement
-import pl.karol202.uranium.core.native.UNative
 import pl.karol202.uranium.core.native.UNativeNode
 import pl.karol202.uranium.core.tree.TreeNodeOperation.*
 import pl.karol202.uranium.core.util.elementInserted
@@ -17,7 +16,7 @@ internal fun <N, P : UProps> UElement<N, P>.createNode(invalidateCallback: (Tree
 
 internal class TreeNode<N, P : UProps> internal constructor(private val component: UComponent<N, P>,
                                                             internal val propsClass: KClass<P>,
-                                                            private val invalidateCallback: (TreeNode<N, *>) -> Unit) : KeyProvider
+                                                            private val invalidateCallback: (TreeNode<N, *>) -> Unit) : UKeyProvider
 {
 	override val key get() = component.key
 	internal val props get() = component.props

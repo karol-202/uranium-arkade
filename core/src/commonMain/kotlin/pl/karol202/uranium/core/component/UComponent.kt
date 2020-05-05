@@ -1,10 +1,10 @@
 package pl.karol202.uranium.core.component
 
-import pl.karol202.uranium.core.common.PropsProvider
+import pl.karol202.uranium.core.common.UPropsProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.UElement
 
-interface UComponent<N, P : UProps> : PropsProvider<P>
+interface UComponent<N, P : UProps> : UPropsProvider<P>
 {
 	fun create(context: ComponentContext)
 

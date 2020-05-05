@@ -1,10 +1,10 @@
 package pl.karol202.uranium.core.common
 
-interface UProps : KeyProvider
+interface UProps : UKeyProvider
 
 data class BasicProps(override val key: Any) : UProps
 
-interface PropsProvider<P : UProps> : KeyProvider
+interface UPropsProvider<P : UProps> : UKeyProvider
 {
 	val props: P
 

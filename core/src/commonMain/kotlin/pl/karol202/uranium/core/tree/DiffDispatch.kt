@@ -1,7 +1,7 @@
 package pl.karol202.uranium.core.tree
 
 import pl.karol202.uranium.core.common.AutoKey
-import pl.karol202.uranium.core.common.KeyProvider
+import pl.karol202.uranium.core.common.UKeyProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.tree.TreeNodeOperation.CreateAndAttachNode
@@ -10,7 +10,7 @@ import pl.karol202.uranium.core.util.elementRemoved
 import kotlin.reflect.KClass
 
 private sealed class DispatchUnit<N, P : UProps>(val props: P,
-                                                 val propsClass: KClass<P>): KeyProvider
+                                                 val propsClass: KClass<P>): UKeyProvider
 {
 	override val key get() = props.key
 	val asExisting get() = this as Existing

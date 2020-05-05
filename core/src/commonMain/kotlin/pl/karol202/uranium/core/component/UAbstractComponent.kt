@@ -30,7 +30,7 @@ abstract class UAbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 		this.props = props
 	}
 
-	protected fun invalidate() = requireContext().invalidate()
+	fun invalidate() = requireContext().invalidate()
 
 	private fun requireContext() = context ?: throw IllegalStateException("Not attached")
 }

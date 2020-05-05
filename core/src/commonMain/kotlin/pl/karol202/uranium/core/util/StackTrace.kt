@@ -1,6 +1,6 @@
 package pl.karol202.uranium.core.util
 
-expect class StackTrace
+internal expect class StackTrace
 {
 	companion object
 	{
