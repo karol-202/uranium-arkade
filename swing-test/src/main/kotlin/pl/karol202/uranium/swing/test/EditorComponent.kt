@@ -1,8 +1,6 @@
 package pl.karol202.uranium.swing.test
 
-import pl.karol202.uranium.core.common.AutoKey
-import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.common.UState
+import pl.karol202.uranium.core.common.*
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.swing.control.text.onApply
 import pl.karol202.uranium.swing.control.text.onTextChange
@@ -10,16 +8,20 @@ import pl.karol202.uranium.swing.control.text.text
 import pl.karol202.uranium.swing.control.text.textField
 import pl.karol202.uranium.swing.test.EditorComponent.Props
 import pl.karol202.uranium.swing.test.EditorComponent.State
-import pl.karol202.uranium.swing.util.SwingRenderScope
-import pl.karol202.uranium.swing.util.SwingStatefulComponent
+import pl.karol202.uranium.swing.SwingRenderScope
+import pl.karol202.uranium.swing.SwingStateful
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
 
-class EditorComponent(props: Props) : SwingStatefulComponent<Props, State>(props, State(props.initialValue ?: ""))
+class EditorComponent(props: Props) : SwingAbstractAppComponent<Props>(props),
+                                      SwingStateful<State>
 {
 	data class Props(override val key: Any,
 	                 val initialValue: String?,
 	                 val onApply: (String) -> Unit): UProps
 
 	data class State(val value: String) : UState
+
+	override var state by state(State(props.initialValue ?: ""))
 
 	override fun SwingRenderScope.render() =
 			textField().text(state.value).onTextChange { setValue(it) }.onApply { onApply() }
@@ -35,6 +37,6 @@ class EditorComponent(props: Props) : SwingStatefulComponent<Props, State>(props
 }
 
 fun SwingRenderScope.editorComponent(key: Any = AutoKey,
-                                     initialValue: String?,
-                                     onApply: (String) -> Unit) =
+                                                                                  initialValue: String?,
+                                                                                  onApply: (String) -> Unit) =
 		component(::EditorComponent, Props(key, initialValue, onApply))

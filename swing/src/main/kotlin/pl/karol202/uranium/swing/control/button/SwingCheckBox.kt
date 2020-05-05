@@ -2,10 +2,12 @@ package pl.karol202.uranium.swing.control.button
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
-import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JCheckBox
 
@@ -15,7 +17,7 @@ class SwingCheckBox(private val nativeComponent: JCheckBox,
 	data class Props(override val key: Any = AutoKey,
 	                 override val toggleButtonProps: SwingToggleButton.Props = SwingToggleButton.Props(),
 	                 val borderPaintedFlat: Prop<Boolean> = Prop.NoValue) : UProps,
-	                                                                        SwingNativeComponent.PropsProvider<Props>,
+	                                                                        SwingContainerComponent.PropsProvider<Props>,
 	                                                                        SwingAbstractButton.PropsProvider<Props>,
 	                                                                        SwingToggleButton.PropsProvider<Props>,
 	                                                                        PropsProvider<Props>
@@ -24,7 +26,7 @@ class SwingCheckBox(private val nativeComponent: JCheckBox,
 		override val abstractButtonProps = toggleButtonProps.abstractButtonProps
 		override val checkBoxProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) =
 				copy(toggleButtonProps = toggleButtonProps.withSwingProps(builder))
 
 		override fun withAbstractButtonProps(builder: Builder<SwingAbstractButton.Props>) =

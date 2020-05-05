@@ -4,8 +4,11 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
-import pl.karol202.uranium.swing.native.SwingNativeComponent
-import pl.karol202.uranium.swing.native.nativeComponent
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
+import pl.karol202.uranium.swing.component.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.Container
 import java.awt.LayoutManager
@@ -14,12 +17,12 @@ import javax.swing.JPanel
 class SwingLayout(initialProps: Props) : SwingAbstractAppComponent<SwingLayout.Props>(initialProps)
 {
 	data class Props(override val key: Any,
-	                 override val swingProps: SwingNativeComponent.Props,
+	                 override val swingProps: SwingContainerComponent.Props,
 	                 val content: List<SwingElement<*>>,
 	                 val layoutUpdater: (Container, LayoutManager?) -> LayoutManager) : UProps,
-	                                                                                    SwingNativeComponent.PropsProvider<Props>
+	                                                                                    SwingContainerComponent.PropsProvider<Props>
 	{
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) = copy(swingProps = swingProps.builder())
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) = copy(swingProps = swingProps.builder())
 	}
 
 	private val nativeComponent = JPanel()
@@ -33,7 +36,7 @@ class SwingLayout(initialProps: Props) : SwingAbstractAppComponent<SwingLayout.P
 }
 
 internal fun SwingRenderScope.layout(key: Any = AutoKey,
-                                     swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+                                     swingProps: SwingContainerComponent.Props = SwingContainerComponent.Props(),
                                      content: List<SwingElement<*>>,
                                      layoutUpdater: (Container, LayoutManager?) -> LayoutManager) =
 		component(::SwingLayout, SwingLayout.Props(key, swingProps, content, layoutUpdater))

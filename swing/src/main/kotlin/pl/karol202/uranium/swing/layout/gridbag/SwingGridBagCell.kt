@@ -2,9 +2,8 @@ package pl.karol202.uranium.swing.layout.gridbag
 
 import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.swing.util.Insets
-import pl.karol202.uranium.swing.util.SwingElement
-import pl.karol202.uranium.swing.util.SwingRenderScope
-import pl.karol202.uranium.swing.util.renderScope
+import pl.karol202.uranium.swing.SwingElement
+import pl.karol202.uranium.swing.SwingRenderScope
 
 data class GridBagCell(val content: SwingElement<*>,
                        val constraints: GridBagConstraints)

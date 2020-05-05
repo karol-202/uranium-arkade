@@ -2,8 +2,8 @@ package pl.karol202.uranium.swing.layout.grid
 
 import pl.karol202.uranium.core.render.RenderDsl
 import pl.karol202.uranium.core.render.render
-import pl.karol202.uranium.swing.util.SwingElement
-import pl.karol202.uranium.swing.util.SwingRenderBuilder
+import pl.karol202.uranium.swing.SwingElement
+import pl.karol202.uranium.swing.SwingRenderBuilder
 
 // RenderDsl annotation prohibits use of nested 'column' or 'row' method
 @RenderDsl

@@ -4,8 +4,11 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
-import pl.karol202.uranium.swing.native.SwingNativeComponent
-import pl.karol202.uranium.swing.native.nativeComponent
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
+import pl.karol202.uranium.swing.component.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.Color
 import javax.swing.DropMode
@@ -17,7 +20,7 @@ class SwingList<E>(private val nativeComponent: JList<E>,
                    initialProps: Props<E>) : SwingAbstractAppComponent<SwingList.Props<E>>(initialProps)
 {
 	data class Props<E>(override val key: Any = AutoKey,
-	                    override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+	                    override val swingProps: SwingContainerComponent.Props = SwingContainerComponent.Props(),
 	                    val items: Prop<List<E>> = Prop.NoValue,
 	                    val selectedItems: Prop<List<E>> = Prop.NoValue,
 	                    val renderer: Prop<SwingRenderScope.(CustomListCellRenderer.Props<E>) -> SwingElement<*>> = Prop.NoValue,
@@ -31,12 +34,12 @@ class SwingList<E>(private val nativeComponent: JList<E>,
 	                    val selectionBackground: Prop<Color?> = Prop.NoValue,
 	                    val selectionForeground: Prop<Color?> = Prop.NoValue,
 	                    val onSelect: Prop<(List<E>) -> Unit> = Prop.NoValue) : UProps,
-	                                                                            SwingNativeComponent.PropsProvider<Props<E>>,
+	                                                                            SwingContainerComponent.PropsProvider<Props<E>>,
 	                                                                            PropsProvider<Props<E>, E>
 	{
 		override val listProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) =
 				copy(swingProps = swingProps.builder())
 
 		override fun withListProps(builder: Builder<Props<E>>) = builder()

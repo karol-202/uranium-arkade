@@ -2,7 +2,12 @@ package pl.karol202.uranium.swing.test
 
 import pl.karol202.uranium.core.common.BasicProps
 import pl.karol202.uranium.core.common.UState
+import pl.karol202.uranium.core.common.setState
+import pl.karol202.uranium.core.common.state
 import pl.karol202.uranium.core.element.component
+import pl.karol202.uranium.swing.SwingRenderScope
+import pl.karol202.uranium.swing.SwingStateful
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
 import pl.karol202.uranium.swing.control.button.*
 import pl.karol202.uranium.swing.control.combobox.*
 import pl.karol202.uranium.swing.control.label.label
@@ -20,13 +25,10 @@ import pl.karol202.uranium.swing.control.scrollpane.*
 import pl.karol202.uranium.swing.control.slider.*
 import pl.karol202.uranium.swing.control.text.*
 import pl.karol202.uranium.swing.frame.SwingFrame
-import pl.karol202.uranium.swing.layout.grid.contentColumns
-import pl.karol202.uranium.swing.layout.grid.gridLayout
 import pl.karol202.uranium.swing.layout.gridbag.cell
 import pl.karol202.uranium.swing.layout.gridbag.gridBagLayout
 import pl.karol202.uranium.swing.layout.gridbag.insets
-import pl.karol202.uranium.swing.native.alignmentX
-import pl.karol202.uranium.swing.util.*
+import pl.karol202.uranium.swing.component.alignmentX
 import javax.swing.UIManager
 
 fun main()
@@ -35,7 +37,8 @@ fun main()
 	SwingFrame.withRoot { counter(0) }.withTitle("Uranium test").withSize(640, 480).show()
 }
 
-class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, CounterComponent.State>(props, State())
+class CounterComponent(props: BasicProps) : SwingAbstractAppComponent<BasicProps>(props),
+                                            SwingStateful<CounterComponent.State>
 {
 	data class State(val text: String = "start",
 	                 val checked: Boolean = false,
@@ -44,6 +47,8 @@ class CounterComponent(props: BasicProps) : SwingStatefulComponent<BasicProps, C
 	                 val sliderValue: Int = 0,
 	                 val selectedListItems: List<String> = listOf("Koń"),
 	                 val textAreaText: String = "tekst") : UState
+
+	override var state by state(State())
 
 	override fun SwingRenderScope.render() = gridBagLayout {
 		+ cell(x = if(state.checked) 1 else 0, y = 0) {

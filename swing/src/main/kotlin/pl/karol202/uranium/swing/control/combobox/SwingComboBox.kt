@@ -2,12 +2,14 @@ package pl.karol202.uranium.swing.control.combobox
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
 import pl.karol202.uranium.swing.control.list.CustomListCellRenderer
-import pl.karol202.uranium.swing.native.SwingNativeComponent
-import pl.karol202.uranium.swing.native.nativeComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
+import pl.karol202.uranium.swing.component.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
@@ -17,7 +19,7 @@ class SwingComboBox<E>(private val nativeComponent: JComboBox<E>,
                        initialProps: Props<E>) : SwingAbstractAppComponent<SwingComboBox.Props<E>>(initialProps)
 {
 	data class Props<E>(override val key: Any = AutoKey,
-	                    override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+	                    override val swingProps: SwingContainerComponent.Props = SwingContainerComponent.Props(),
 	                    val items: Prop<List<E>> = Prop.NoValue,
 	                    val selectedItem: Prop<E?> = Prop.NoValue,
 	                    val renderer: Prop<SwingRenderScope.(CustomListCellRenderer.Props<E>) -> SwingElement<*>> = Prop.NoValue,
@@ -31,12 +33,12 @@ class SwingComboBox<E>(private val nativeComponent: JComboBox<E>,
 	                    val onPopupShow: Prop<() -> Unit> = Prop.NoValue,
 	                    val onPopupHide: Prop<() -> Unit> = Prop.NoValue,
 	                    val onPopupCancel: Prop<() -> Unit> = Prop.NoValue) : UProps,
-	                                                                          SwingNativeComponent.PropsProvider<Props<E>>,
+	                                                                          SwingContainerComponent.PropsProvider<Props<E>>,
 	                                                                          PropsProvider<Props<E>, E>
 	{
 		override val comboBoxProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) =
 				copy(swingProps = swingProps.builder())
 
 		override fun withComboBoxProps(builder: Builder<Props<E>>) = builder()

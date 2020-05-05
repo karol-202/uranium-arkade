@@ -1,7 +1,11 @@
 package pl.karol202.uranium.swing.control.list
 
 import pl.karol202.uranium.core.manager.RenderManager
+import pl.karol202.uranium.swing.SwingElement
+import pl.karol202.uranium.swing.SwingRenderManager
+import pl.karol202.uranium.swing.SwingRenderScope
 import pl.karol202.uranium.swing.native.SwingNative
+import pl.karol202.uranium.swing.renderScope
 import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout
 import javax.swing.JList
@@ -28,5 +32,6 @@ class CustomListCellRenderer<E>(var renderFunction: SwingRenderScope.(Props<E>) 
 
 	private fun render(props: Props<E>) = RenderManager(renderRoot(props), container).also { renderManager = it }.init()
 
-	private fun renderRoot(props: Props<E>) = renderScope().singleWrapper { renderFunction(props) }
+	private fun renderRoot(props: Props<E>) = renderScope()
+			.singleWrapper { renderFunction(props) }
 }

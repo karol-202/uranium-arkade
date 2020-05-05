@@ -4,6 +4,9 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.render
+import pl.karol202.uranium.swing.SwingElement
+import pl.karol202.uranium.swing.SwingRenderScope
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
 
 /*
 Component useful for being root in component hierarchies,

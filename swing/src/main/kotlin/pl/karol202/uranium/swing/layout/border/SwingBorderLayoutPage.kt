@@ -2,12 +2,14 @@ package pl.karol202.uranium.swing.layout.border
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.core.render.render
-import pl.karol202.uranium.swing.layout.constraint
-import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
+import pl.karol202.uranium.swing.component.constraint
+import pl.karol202.uranium.swing.component.SwingContainerComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.BorderLayout.*
 
@@ -20,14 +22,14 @@ class SwingBorderLayoutPage(initialProps: Props) : SwingAbstractAppComponent<Swi
 	                 val lineStart: Prop<SwingElement<*>?> = Prop.NoValue,
 	                 val lineEnd: Prop<SwingElement<*>?> = Prop.NoValue,
 	                 val pageEnd: Prop<SwingElement<*>?> = Prop.NoValue) : UProps,
-	                                                                       SwingNativeComponent.PropsProvider<Props>,
+	                                                                       SwingContainerComponent.PropsProvider<Props>,
 	                                                                       SwingBorderLayoutBase.PropsProvider<Props>,
 	                                                                       PropsProvider<Props>
 	{
 		override val swingProps = borderLayoutBaseProps.swingProps
 		override val borderLayoutCompassProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) =
 				copy(borderLayoutBaseProps = borderLayoutBaseProps.withSwingProps(builder))
 
 		override fun withBorderLayoutBaseProps(builder: Builder<SwingBorderLayoutBase.Props>) =

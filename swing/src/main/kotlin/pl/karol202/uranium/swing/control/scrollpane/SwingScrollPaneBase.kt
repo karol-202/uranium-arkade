@@ -5,10 +5,13 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.core.render.render
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
 import pl.karol202.uranium.swing.control.scrollbar.ScrollBarAxis.HORIZONTAL
 import pl.karol202.uranium.swing.control.scrollbar.ScrollBarAxis.VERTICAL
-import pl.karol202.uranium.swing.native.SwingNativeComponent
-import pl.karol202.uranium.swing.native.nativeComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
+import pl.karol202.uranium.swing.component.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import pl.karol202.uranium.swing.util.update
 import java.awt.Component
@@ -19,7 +22,7 @@ class SwingScrollPaneBase(private val nativeComponent: JScrollPane,
                           initialProps: Props) : SwingAbstractAppComponent<SwingScrollPaneBase.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
-	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+	                 override val swingProps: SwingContainerComponent.Props = SwingContainerComponent.Props(),
 	                 val content: Prop<SwingElement<*>?> = Prop.NoValue,
 	                 val columnHeader: Prop<SwingElement<*>?> = Prop.NoValue,
 	                 val rowHeader: Prop<SwingElement<*>?> = Prop.NoValue,
@@ -27,12 +30,12 @@ class SwingScrollPaneBase(private val nativeComponent: JScrollPane,
 	                 val verticalScrollBarPolicy: Prop<ScrollBarPolicy> = Prop.NoValue,
 	                 val wheelScrollingEnabled: Prop<Boolean> = Prop.NoValue,
 	                 val viewportBorder: Prop<Border?> = Prop.NoValue) : UProps,
-	                                                                            SwingNativeComponent.PropsProvider<Props>,
-	                                                                            PropsProvider<Props>
+	                                                                     SwingContainerComponent.PropsProvider<Props>,
+	                                                                     PropsProvider<Props>
 	{
 		override val scrollPaneBaseProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) = copy(swingProps = swingProps.builder())
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) = copy(swingProps = swingProps.builder())
 
 		override fun withScrollPaneBaseProps(builder: Builder<Props>) = builder()
 	}

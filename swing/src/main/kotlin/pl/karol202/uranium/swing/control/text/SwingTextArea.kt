@@ -4,7 +4,10 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
-import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JTextArea
 
@@ -18,14 +21,14 @@ class SwingTextArea(private val nativeComponent: JTextArea,
 	                 val lineWrap: Prop<Boolean> = Prop.NoValue,
 	                 val tabSize: Prop<Int> = Prop.NoValue,
 	                 val wrapOnWords: Prop<Boolean> = Prop.NoValue) : UProps,
-	                                                                  SwingNativeComponent.PropsProvider<Props>,
+	                                                                  SwingContainerComponent.PropsProvider<Props>,
 	                                                                  SwingAbstractTextComponent.PropsProvider<Props>,
 	                                                                  PropsProvider<Props>
 	{
 		override val swingProps = abstractTextProps.swingProps
 		override val textAreaProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) =
 				copy(abstractTextProps = abstractTextProps.withSwingProps(builder))
 
 		override fun withAbstractTextProps(builder: Builder<SwingAbstractTextComponent.Props>) =

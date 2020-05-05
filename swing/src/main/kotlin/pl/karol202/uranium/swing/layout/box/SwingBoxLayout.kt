@@ -2,14 +2,14 @@ package pl.karol202.uranium.swing.layout.box
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.core.render.render
-import pl.karol202.uranium.swing.layout.SwingLayout
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
 import pl.karol202.uranium.swing.layout.layout
-import pl.karol202.uranium.swing.native.SwingNativeComponent
-import pl.karol202.uranium.swing.util.*
+import pl.karol202.uranium.swing.component.SwingContainerComponent
 import java.awt.Container
 import java.awt.LayoutManager
 import javax.swing.BoxLayout
@@ -17,15 +17,15 @@ import javax.swing.BoxLayout
 class SwingBoxLayout(props: Props) : SwingAbstractAppComponent<SwingBoxLayout.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
-	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+	                 override val swingProps: SwingContainerComponent.Props = SwingContainerComponent.Props(),
 	                 val content: List<SwingElement<*>> = emptyList(),
 	                 val axis: BoxAxis) : UProps,
-	                                      SwingNativeComponent.PropsProvider<Props>,
+	                                      SwingContainerComponent.PropsProvider<Props>,
 	                                      PropsProvider<Props>
 	{
 		override val boxLayoutProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) =
 				copy(swingProps = swingProps.builder())
 
 		override fun withBoxLayoutProps(builder: Builder<Props>) = builder()

@@ -5,9 +5,11 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.core.render.render
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
 import pl.karol202.uranium.swing.layout.layout
-import pl.karol202.uranium.swing.native.SwingNativeComponent
-import pl.karol202.uranium.swing.util.*
+import pl.karol202.uranium.swing.component.SwingContainerComponent
 import java.awt.Container
 import java.awt.LayoutManager
 import javax.swing.OverlayLayout
@@ -15,14 +17,14 @@ import javax.swing.OverlayLayout
 class SwingOverlayLayout(props: Props) : SwingAbstractAppComponent<SwingOverlayLayout.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
-	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+	                 override val swingProps: SwingContainerComponent.Props = SwingContainerComponent.Props(),
 	                 val content: List<SwingElement<*>> = emptyList()) : UProps,
-	                                                                     SwingNativeComponent.PropsProvider<Props>,
+	                                                                     SwingContainerComponent.PropsProvider<Props>,
 	                                                                     PropsProvider<Props>
 	{
 		override val overlayLayoutProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) = copy(swingProps = swingProps.builder())
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) = copy(swingProps = swingProps.builder())
 
 		override fun withOverlayLayoutProps(builder: Builder<Props>) = builder()
 	}

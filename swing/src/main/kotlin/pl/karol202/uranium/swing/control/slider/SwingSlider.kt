@@ -4,8 +4,11 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
-import pl.karol202.uranium.swing.native.SwingNativeComponent
-import pl.karol202.uranium.swing.native.nativeComponent
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
+import pl.karol202.uranium.swing.component.nativeComponent
 import pl.karol202.uranium.swing.util.*
 import javax.swing.JSlider
 import javax.swing.event.ChangeListener
@@ -14,7 +17,7 @@ class SwingSlider(private val nativeComponent: JSlider,
                   initialProps: Props) : SwingAbstractAppComponent<SwingSlider.Props>(initialProps)
 {
 	data class Props(override val key: Any = AutoKey,
-	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+	                 override val swingProps: SwingContainerComponent.Props = SwingContainerComponent.Props(),
 	                 val value: Prop<Int> = Prop.NoValue,
 	                 val minimum: Prop<Int> = Prop.NoValue,
 	                 val maximum: Prop<Int> = Prop.NoValue,
@@ -29,12 +32,12 @@ class SwingSlider(private val nativeComponent: JSlider,
 	                 val orientation: Prop<Orientation> = Prop.NoValue,
 	                 val labelTable: Prop<SliderLabelTable?> = Prop.NoValue,
 	                 val onChange: Prop<(Int) -> Unit> = Prop.NoValue) : UProps,
-	                                                                     SwingNativeComponent.PropsProvider<Props>,
+	                                                                     SwingContainerComponent.PropsProvider<Props>,
 	                                                                     PropsProvider<Props>
 	{
 		override val sliderProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) =
 				copy(swingProps = swingProps.builder())
 
 		override fun withSliderBarProps(builder: Builder<Props>) = builder()

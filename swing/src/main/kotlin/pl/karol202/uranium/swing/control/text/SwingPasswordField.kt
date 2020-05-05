@@ -4,7 +4,10 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
-import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ActionListener
 import javax.swing.JPasswordField
@@ -16,7 +19,7 @@ class SwingPasswordField(private val nativeComponent: JPasswordField,
 	                 override val textFieldProps: SwingTextField.Props = SwingTextField.Props(),
 	                 val echoChar: Prop<Char?> = Prop.NoValue,
 	                 val onPasswordApply: Prop<(CharArray) -> Unit> = Prop.NoValue) : UProps,
-	                                                                                  SwingNativeComponent.PropsProvider<Props>,
+	                                                                                  SwingContainerComponent.PropsProvider<Props>,
 	                                                                                  SwingAbstractTextComponent.PropsProvider<Props>,
 	                                                                                  SwingTextField.PropsProvider<Props>,
 	                                                                                  PropsProvider<Props>
@@ -25,7 +28,7 @@ class SwingPasswordField(private val nativeComponent: JPasswordField,
 		override val abstractTextProps = textFieldProps.abstractTextProps
 		override val passwordFieldProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) =
 				copy(textFieldProps = textFieldProps.withSwingProps(builder))
 
 		override fun withAbstractTextProps(builder: Builder<SwingAbstractTextComponent.Props>) =

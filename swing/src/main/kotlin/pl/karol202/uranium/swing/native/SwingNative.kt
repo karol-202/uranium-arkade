@@ -2,7 +2,7 @@ package pl.karol202.uranium.swing.native
 
 import pl.karol202.uranium.core.native.UNative
 import pl.karol202.uranium.core.native.UNativeContainer
-import pl.karol202.uranium.swing.util.Swing
+import pl.karol202.uranium.swing.Swing
 import java.awt.Container
 
 private fun UNative<Swing>.asSwingNative() = this as SwingNative

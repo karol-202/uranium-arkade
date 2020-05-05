@@ -1,14 +1,13 @@
-package pl.karol202.uranium.swing.layout
+package pl.karol202.uranium.swing.component
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.swing.native.SwingNative
-import pl.karol202.uranium.swing.util.Swing
-import pl.karol202.uranium.swing.util.SwingAbstractNativeComponent
-import pl.karol202.uranium.swing.util.SwingElement
-import pl.karol202.uranium.swing.util.SwingRenderScope
+import pl.karol202.uranium.swing.Swing
+import pl.karol202.uranium.swing.SwingElement
+import pl.karol202.uranium.swing.SwingRenderScope
 
 class SwingConstraintComponent(constraint: Any,
                                initialProps: Props) : SwingAbstractNativeComponent<SwingConstraintComponent.Props>(initialProps)

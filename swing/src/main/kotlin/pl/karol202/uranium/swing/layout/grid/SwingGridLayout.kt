@@ -4,8 +4,11 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
 import pl.karol202.uranium.swing.layout.layout
-import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.Container
 import java.awt.GridLayout
@@ -15,18 +18,18 @@ import kotlin.math.max
 class SwingGridLayout(props: Props) : SwingAbstractAppComponent<SwingGridLayout.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
-	                 override val swingProps: SwingNativeComponent.Props = SwingNativeComponent.Props(),
+	                 override val swingProps: SwingContainerComponent.Props = SwingContainerComponent.Props(),
 	                 val content: List<SwingElement<*>> = emptyList(),
 	                 val rows: Prop<Int> = Prop.NoValue,
 	                 val columns: Prop<Int> = Prop.NoValue,
 	                 val horizontalGap: Prop<Int> = Prop.NoValue,
 	                 val verticalGap: Prop<Int> = Prop.NoValue) : UProps,
-	                                                              SwingNativeComponent.PropsProvider<Props>,
+	                                                              SwingContainerComponent.PropsProvider<Props>,
 	                                                              PropsProvider<Props>
 	{
 		override val gridLayoutProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) = copy(swingProps = swingProps.builder())
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) = copy(swingProps = swingProps.builder())
 
 		override fun withGridLayoutProps(builder: Builder<Props>) = builder()
 	}

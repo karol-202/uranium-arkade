@@ -1,9 +1,8 @@
-package pl.karol202.uranium.swing.util
+package pl.karol202.uranium.swing
 
-import pl.karol202.uranium.core.component.UAbstractAppComponent
+import pl.karol202.uranium.core.common.UStateful
 import pl.karol202.uranium.core.component.UAbstractComponent
-import pl.karol202.uranium.core.component.UAbstractNativeComponent
-import pl.karol202.uranium.core.component.UStatefulAppComponent
+import pl.karol202.uranium.core.component.UNativeComponent
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.manager.RenderManager
 import pl.karol202.uranium.core.render.URenderBuilder
@@ -13,11 +12,11 @@ object Swing
 
 typealias SwingElement<P> = UElement<Swing, P>
 
-typealias SwingAbstractAppComponent<P> = UAbstractAppComponent<Swing, P>
+typealias SwingNativeComponent<P> = UNativeComponent<Swing, P>
 
-typealias SwingAbstractNativeComponent<P> = UAbstractNativeComponent<Swing, P>
+typealias SwingAbstractComponent<P> = UAbstractComponent<Swing, P>
 
-typealias SwingStatefulComponent<P, S> = UStatefulAppComponent<Swing, P, S>
+typealias SwingStateful<S> = UStateful<S>
 
 typealias SwingRenderScope = URenderScope<Swing>
 

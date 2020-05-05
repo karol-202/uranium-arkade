@@ -1,7 +1,10 @@
 package pl.karol202.uranium.swing.util
 
 import pl.karol202.uranium.core.manager.RenderManager
+import pl.karol202.uranium.swing.SwingElement
+import pl.karol202.uranium.swing.SwingRenderManager
 import pl.karol202.uranium.swing.native.SwingNative
+import pl.karol202.uranium.swing.renderScope
 import java.awt.BorderLayout
 import javax.swing.JPanel
 
@@ -19,5 +22,6 @@ class EmbeddedRenderer
 
 	private fun render(rootElement: SwingElement<*>) = RenderManager(rootElement.wrapped, container).also { renderManager = it }.init()
 
-	private val SwingElement<*>.wrapped get() = let { element -> renderScope().singleWrapper { element } }
+	private val SwingElement<*>.wrapped get() = let { element -> renderScope()
+			.singleWrapper { element } }
 }

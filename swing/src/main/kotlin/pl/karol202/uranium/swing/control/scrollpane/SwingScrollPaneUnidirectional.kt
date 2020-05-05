@@ -5,7 +5,10 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.core.render.render
-import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
 import pl.karol202.uranium.swing.util.*
 import pl.karol202.uranium.swing.util.update
 import java.awt.Component
@@ -21,14 +24,14 @@ class SwingScrollPaneUnidirectional(private val nativeComponent: JScrollPane,
 	                 val upperRightCorner: Prop<SwingElement<*>?> = Prop.NoValue,
 	                 val lowerLeftCorner: Prop<SwingElement<*>?> = Prop.NoValue,
 	                 val lowerRightCorner: Prop<SwingElement<*>?> = Prop.NoValue) : UProps,
-	                                                                                SwingNativeComponent.PropsProvider<Props>,
+	                                                                                SwingContainerComponent.PropsProvider<Props>,
 	                                                                                SwingScrollPaneBase.PropsProvider<Props>,
 	                                                                                PropsProvider<Props>
 	{
 		override val swingProps = scrollPaneBaseProps.swingProps
 		override val scrollPaneUnidirectionalProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) =
 				copy(scrollPaneBaseProps = scrollPaneBaseProps.withSwingProps(builder))
 
 		override fun withScrollPaneBaseProps(builder: Builder<SwingScrollPaneBase.Props>) =

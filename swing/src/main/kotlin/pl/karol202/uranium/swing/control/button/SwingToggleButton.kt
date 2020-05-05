@@ -2,10 +2,12 @@ package pl.karol202.uranium.swing.control.button
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
-import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
-import pl.karol202.uranium.swing.native.SwingNativeComponent
+import pl.karol202.uranium.swing.*
+import pl.karol202.uranium.swing.Builder
+import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
+import pl.karol202.uranium.swing.component.SwingContainerComponent
 import pl.karol202.uranium.swing.util.*
 import java.awt.event.ItemEvent
 import java.awt.event.ItemListener
@@ -17,14 +19,14 @@ class SwingToggleButton(private val nativeComponent: JToggleButton,
 	data class Props(override val key: Any = AutoKey,
 	                 override val abstractButtonProps: SwingAbstractButton.Props = SwingAbstractButton.Props(),
 	                 val onSelect: Prop<(Boolean) -> Unit> = Prop.NoValue) : UProps,
-	                                                                         SwingNativeComponent.PropsProvider<Props>,
+	                                                                         SwingContainerComponent.PropsProvider<Props>,
 	                                                                         SwingAbstractButton.PropsProvider<Props>,
 	                                                                         PropsProvider<Props>
 	{
 		override val swingProps = abstractButtonProps.swingProps
 		override val toggleButtonProps = this
 
-		override fun withSwingProps(builder: Builder<SwingNativeComponent.Props>) =
+		override fun withSwingProps(builder: Builder<SwingContainerComponent.Props>) =
 				copy(abstractButtonProps = abstractButtonProps.withSwingProps(builder))
 
 		override fun withAbstractButtonProps(builder: Builder<SwingAbstractButton.Props>) =

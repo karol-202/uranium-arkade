@@ -1,9 +1,8 @@
 package pl.karol202.uranium.swing.frame
 
 import pl.karol202.uranium.core.render.render
-import pl.karol202.uranium.swing.util.SwingElement
-import pl.karol202.uranium.swing.util.SwingRenderScope
-import pl.karol202.uranium.swing.util.renderScope
+import pl.karol202.uranium.swing.SwingElement
+import pl.karol202.uranium.swing.SwingRenderScope
 import java.awt.Dimension
 import javax.swing.JFrame
 
