@@ -14,7 +14,7 @@ class WCDrawNativeContainer(private val beforeDrawOperation: DrawOperation = { }
 	}
 }
 
-class WCDrawNativeLeaf(private val drawOperation: DrawOperation) : WCNative
+class WCDrawNativeLeaf(private val drawOperation: DrawOperation) : WCNative by nativeLeaf()
 {
 	override fun draw(context: DrawContext) = context.drawOperation()
 }

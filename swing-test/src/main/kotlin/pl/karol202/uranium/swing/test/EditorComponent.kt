@@ -9,11 +9,10 @@ import pl.karol202.uranium.swing.control.text.textField
 import pl.karol202.uranium.swing.test.EditorComponent.Props
 import pl.karol202.uranium.swing.test.EditorComponent.State
 import pl.karol202.uranium.swing.SwingRenderScope
-import pl.karol202.uranium.swing.SwingStateful
 import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
 
 class EditorComponent(props: Props) : SwingAbstractAppComponent<Props>(props),
-                                      SwingStateful<State>
+                                      UStateful<State>
 {
 	data class Props(override val key: Any,
 	                 val initialValue: String?,

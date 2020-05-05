@@ -1,15 +1,17 @@
 package pl.karol202.uranium.webcanvas.draw
 
 import org.w3c.dom.HTMLCanvasElement
+import org.w3c.dom.events.MouseEvent
 import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.WCElement
 import pl.karol202.uranium.webcanvas.WCRenderManager
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.native.WCNativeContainer
 import pl.karol202.uranium.webcanvas.native.nativeContainer
+import pl.karol202.uranium.webcanvas.values.InputEvent
 import kotlin.browser.window
 
-class CanvasRenderer(private val context: DrawContext,
+class CanvasRenderer(private val canvas: HTMLCanvasElement,
                      private val renderInterval: Int,
                      elementProvider: WCRenderScope.() -> WCElement<*>)
 {
@@ -20,8 +22,17 @@ class CanvasRenderer(private val context: DrawContext,
 
 	fun start()
 	{
+		initCanvas()
 		renderManager.scheduleInit()
 		timerHandle = window.setInterval(this::run, renderInterval)
+	}
+
+	private fun initCanvas()
+	{
+		canvas.fixBounds()
+		canvas.onmousedown = ::handleMouseEvent
+		canvas.onmousemove = ::handleMouseEvent
+		canvas.onmouseup = ::handleMouseEvent
 	}
 
 	fun stop()
@@ -29,8 +40,11 @@ class CanvasRenderer(private val context: DrawContext,
 		timerHandle?.let { window.clearInterval(it) }
 	}
 
-	private fun run() = container.draw(context)
+	private fun run() = container.draw(canvas.context2d)
+
+	private fun handleMouseEvent(mouseEvent: MouseEvent) = container.handleEvent(InputEvent.from(mouseEvent))
 }
 
 fun startOnCanvas(canvas: HTMLCanvasElement, renderInterval: Int, elementProvider: WCRenderScope.() -> WCElement<*>) =
-		CanvasRenderer(canvas.also { it.fixBounds() }.context2d, renderInterval, elementProvider).start()
+		CanvasRenderer(canvas, renderInterval, elementProvider).start()
+

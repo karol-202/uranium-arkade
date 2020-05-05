@@ -9,10 +9,11 @@ import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.assets.loadImage
-import pl.karol202.uranium.webcanvas.component.WCAbstractComponent
-import pl.karol202.uranium.webcanvas.component.image
-import pl.karol202.uranium.webcanvas.component.rectFill
-import pl.karol202.uranium.webcanvas.component.translate
+import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
+import pl.karol202.uranium.webcanvas.component.primitives.image
+import pl.karol202.uranium.webcanvas.component.primitives.rectFill
+import pl.karol202.uranium.webcanvas.component.containers.translate
+import pl.karol202.uranium.webcanvas.component.ui.button
 import pl.karol202.uranium.webcanvas.draw.startOnCanvas
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Color
@@ -28,8 +29,9 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 	override fun URenderScope<WC>.render() = translate(vector = Vector(200.0, 0.0)) {
 		+ rectFill(bounds = Bounds(100.0, 100.0, 100.0, 100.0),
 		           style = Color.named("blue"))
-		+ image(image = loadImage("assets/ball.png"),
-		        drawBounds = Bounds(100.0, 100.0, 100.0, 100.0))
+		+ button(position = Vector(100.0, 200.0),
+		         size = Vector(100.0, 100.0),
+		         image = loadImage("assets/ball.png"))
 	}.asList()
 }
 

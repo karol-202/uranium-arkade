@@ -16,8 +16,6 @@ typealias SwingNativeComponent<P> = UNativeComponent<Swing, P>
 
 typealias SwingAbstractComponent<P> = UAbstractComponent<Swing, P>
 
-typealias SwingStateful<S> = UStateful<S>
-
 typealias SwingRenderScope = URenderScope<Swing>
 
 typealias SwingRenderBuilder = URenderBuilder<Swing>

@@ -1,10 +1,12 @@
-package pl.karol202.uranium.webcanvas.component
+package pl.karol202.uranium.webcanvas.component.primitives
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.webcanvas.*
+import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
+import pl.karol202.uranium.webcanvas.component.draw.drawComponent
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Color
 

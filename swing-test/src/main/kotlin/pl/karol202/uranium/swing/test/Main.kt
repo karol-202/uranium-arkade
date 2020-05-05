@@ -1,12 +1,8 @@
 package pl.karol202.uranium.swing.test
 
-import pl.karol202.uranium.core.common.BasicProps
-import pl.karol202.uranium.core.common.UState
-import pl.karol202.uranium.core.common.setState
-import pl.karol202.uranium.core.common.state
+import pl.karol202.uranium.core.common.*
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.swing.SwingRenderScope
-import pl.karol202.uranium.swing.SwingStateful
 import pl.karol202.uranium.swing.component.SwingAbstractAppComponent
 import pl.karol202.uranium.swing.control.button.*
 import pl.karol202.uranium.swing.control.combobox.*
@@ -38,7 +34,7 @@ fun main()
 }
 
 class CounterComponent(props: BasicProps) : SwingAbstractAppComponent<BasicProps>(props),
-                                            SwingStateful<CounterComponent.State>
+                                            UStateful<CounterComponent.State>
 {
 	data class State(val text: String = "start",
 	                 val checked: Boolean = false,

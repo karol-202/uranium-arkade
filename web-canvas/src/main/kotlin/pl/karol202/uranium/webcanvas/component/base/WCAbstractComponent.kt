@@ -1,4 +1,4 @@
-package pl.karol202.uranium.webcanvas.component
+package pl.karol202.uranium.webcanvas.component.base
 
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UAbstractComponent

@@ -1,13 +1,15 @@
-package pl.karol202.uranium.webcanvas.component
+package pl.karol202.uranium.webcanvas.component.draw
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
+import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.WCElement
+import pl.karol202.uranium.webcanvas.WCRenderBuilder
 import pl.karol202.uranium.webcanvas.WCRenderScope
-import pl.karol202.uranium.webcanvas.native.WCNativeContainer
+import pl.karol202.uranium.webcanvas.component.base.WCAbstractNativeContainerComponent
 import pl.karol202.uranium.webcanvas.draw.DrawOperation
 import pl.karol202.uranium.webcanvas.native.WCDrawNativeContainer
 
@@ -18,8 +20,8 @@ class WCDrawContainer(props: Props) : WCAbstractNativeContainerComponent<WCDrawC
 	                 val afterDrawOperation: DrawOperation,
 	                 val content: List<WCElement<*>>) : UProps
 
-	override val native = WCDrawNativeContainer(beforeDrawOperation = props.beforeDrawOperation,
-	                                            afterDrawOperation = props.afterDrawOperation)
+	override val native = WCDrawNativeContainer(beforeDrawOperation = { props.beforeDrawOperation(this) },
+	                                            afterDrawOperation = { props.afterDrawOperation(this) })
 
 	override fun URenderScope<WC>.render() = props.content
 }
@@ -27,5 +29,5 @@ class WCDrawContainer(props: Props) : WCAbstractNativeContainerComponent<WCDrawC
 fun WCRenderScope.drawContainer(key: Any = AutoKey,
                                 beforeDrawOperation: DrawOperation,
                                 afterDrawOperation: DrawOperation,
-                                content: List<WCElement<*>>) =
-		component(::WCDrawContainer, WCDrawContainer.Props(key, beforeDrawOperation, afterDrawOperation, content))
+                                content: WCRenderBuilder.() -> Unit) =
+		component(::WCDrawContainer, WCDrawContainer.Props(key, beforeDrawOperation, afterDrawOperation, content.render()))

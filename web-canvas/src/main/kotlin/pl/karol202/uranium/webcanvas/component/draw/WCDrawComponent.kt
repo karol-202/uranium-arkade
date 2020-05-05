@@ -1,12 +1,10 @@
-package pl.karol202.uranium.webcanvas.component
+package pl.karol202.uranium.webcanvas.component.draw
 
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
-import pl.karol202.uranium.core.render.URenderScope
-import pl.karol202.uranium.webcanvas.WC
-import pl.karol202.uranium.webcanvas.WCElement
 import pl.karol202.uranium.webcanvas.WCRenderScope
+import pl.karol202.uranium.webcanvas.component.base.WCAbstractNativeLeafComponent
 import pl.karol202.uranium.webcanvas.native.WCDrawNativeLeaf
 import pl.karol202.uranium.webcanvas.draw.DrawOperation
 

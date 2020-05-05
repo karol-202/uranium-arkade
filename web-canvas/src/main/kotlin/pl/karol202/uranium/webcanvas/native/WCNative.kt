@@ -4,17 +4,27 @@ import pl.karol202.uranium.core.native.UNative
 import pl.karol202.uranium.core.native.UNativeContainer
 import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.draw.DrawContext
+import pl.karol202.uranium.webcanvas.values.InputEvent
 
-val UNative<WC>.asWCNative get() = this as WCNative
+private val UNative<WC>.asWCNative get() = this as WCNative
 
 interface WCNative : UNative<WC>
 {
 	fun draw(context: DrawContext)
+
+	fun handleEvent(event: InputEvent)
 }
 
 interface WCNativeContainer : WCNative, UNativeContainer<WC>
 {
 	val children: List<WCNative>
+}
+
+fun nativeLeaf() = object : WCNative {
+
+	override fun draw(context: DrawContext) { }
+
+	override fun handleEvent(event: InputEvent) { }
 }
 
 fun nativeContainer() = object : WCNativeContainer {
@@ -32,4 +42,6 @@ fun nativeContainer() = object : WCNativeContainer {
 	}
 
 	override fun draw(context: DrawContext) = children.forEach { it.draw(context) }
+
+	override fun handleEvent(event: InputEvent) = children.forEach { it.handleEvent(event) }
 }
