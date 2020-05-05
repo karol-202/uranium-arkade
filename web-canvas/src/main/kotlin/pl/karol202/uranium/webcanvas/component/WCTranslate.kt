@@ -8,7 +8,7 @@ import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.*
 import pl.karol202.uranium.webcanvas.values.Vector
 
-class WCTranslate(props: Props) : WCAbstractAppComponent<WCTranslate.Props>(props)
+class WCTranslate(props: Props) : WCAbstractComponent<WCTranslate.Props>(props)
 {
 	data class Props(override val key: Any,
 	                 val vector: Vector,
@@ -19,7 +19,7 @@ class WCTranslate(props: Props) : WCAbstractAppComponent<WCTranslate.Props>(prop
 		translate(props.vector.x, props.vector.y)
 	}, afterDrawOperation = {
 		restore()
-	}, content = props.content)
+	}, content = props.content).asList()
 }
 
 fun WCRenderScope.translate(key: Any = AutoKey,

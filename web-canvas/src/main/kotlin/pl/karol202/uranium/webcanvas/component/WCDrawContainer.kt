@@ -5,21 +5,21 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.webcanvas.WC
-import pl.karol202.uranium.webcanvas.WCAbstractNativeComponent
 import pl.karol202.uranium.webcanvas.WCElement
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.native.WCNativeContainer
 import pl.karol202.uranium.webcanvas.draw.DrawOperation
+import pl.karol202.uranium.webcanvas.native.WCDrawNativeContainer
 
-class WCDrawContainer(props: Props) : WCAbstractNativeComponent<WCDrawContainer.Props>(props)
+class WCDrawContainer(props: Props) : WCAbstractNativeContainerComponent<WCDrawContainer.Props>(props)
 {
 	data class Props(override val key: Any,
 	                 val beforeDrawOperation: DrawOperation,
 	                 val afterDrawOperation: DrawOperation,
 	                 val content: List<WCElement<*>>) : UProps
 
-	override val native = WCNativeContainer(beforeDrawOperation = props.beforeDrawOperation,
-	                                        afterDrawOperation = props.afterDrawOperation)
+	override val native = WCDrawNativeContainer(beforeDrawOperation = props.beforeDrawOperation,
+	                                            afterDrawOperation = props.afterDrawOperation)
 
 	override fun URenderScope<WC>.render() = props.content
 }

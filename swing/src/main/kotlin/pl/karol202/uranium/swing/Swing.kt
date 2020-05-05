@@ -26,4 +26,4 @@ typealias SwingRenderManager<P> = RenderManager<Swing, P>
 
 internal typealias Builder<T> = T.() -> T
 
-internal fun renderScope() = object : URenderScope<Swing> { }
+internal fun renderScope() = object : SwingRenderScope { }

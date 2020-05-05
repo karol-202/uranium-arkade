@@ -6,13 +6,14 @@ import pl.karol202.uranium.webcanvas.WCElement
 import pl.karol202.uranium.webcanvas.WCRenderManager
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.native.WCNativeContainer
+import pl.karol202.uranium.webcanvas.native.nativeContainer
 import kotlin.browser.window
 
 class CanvasRenderer(private val context: DrawContext,
                      private val renderInterval: Int,
                      elementProvider: WCRenderScope.() -> WCElement<*>)
 {
-	private val container = WCNativeContainer()
+	private val container = nativeContainer()
 	private val renderManager = WCRenderManager(elementProvider.render(), container)
 
 	private var timerHandle: Int? = null

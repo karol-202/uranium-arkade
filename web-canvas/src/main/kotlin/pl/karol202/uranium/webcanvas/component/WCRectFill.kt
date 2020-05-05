@@ -8,7 +8,7 @@ import pl.karol202.uranium.webcanvas.*
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Color
 
-class WCRectFill(props: Props) : WCAbstractAppComponent<WCRectFill.Props>(props)
+class WCRectFill(props: Props) : WCAbstractComponent<WCRectFill.Props>(props)
 {
 	data class Props(override val key: Any,
 	                 val bounds: Bounds,
@@ -17,7 +17,7 @@ class WCRectFill(props: Props) : WCAbstractAppComponent<WCRectFill.Props>(props)
 	override fun URenderScope<WC>.render() = drawComponent {
 		fillStyle = props.color.asStyle
 		fillRect(props.bounds.x, props.bounds.y, props.bounds.width, props.bounds.height)
-	}
+	}.asList()
 }
 
 fun WCRenderScope.rectFill(key: Any = AutoKey,

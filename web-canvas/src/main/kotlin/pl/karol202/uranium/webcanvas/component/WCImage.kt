@@ -9,7 +9,7 @@ import pl.karol202.uranium.webcanvas.*
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Color
 
-class WCImage(props: Props) : WCAbstractAppComponent<WCImage.Props>(props)
+class WCImage(props: Props) : WCAbstractComponent<WCImage.Props>(props)
 {
 	data class Props(override val key: Any,
 	                 val image: CanvasImageSource,
@@ -21,7 +21,7 @@ class WCImage(props: Props) : WCAbstractAppComponent<WCImage.Props>(props)
 		val clip = props.clipBounds
 		if(clip == null) drawImage(props.image, bounds.x, bounds.y, bounds.width, bounds.height)
 		else drawImage(props.image, clip.x, clip.y, clip.width, clip.height, bounds.x, bounds.y, bounds.width, bounds.height)
-	}
+	}.asList()
 }
 
 fun WCRenderScope.image(key: Any = AutoKey,
