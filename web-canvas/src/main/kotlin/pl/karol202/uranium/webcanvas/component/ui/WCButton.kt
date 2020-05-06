@@ -52,15 +52,17 @@ class WCButton(props: Props) : WCAbstractComponent<WCButton.Props>(props),
 
 	private fun handleEvent(event: InputEvent)
 	{
+		fun getNonClickStatus(event: InputEvent.Mouse) =
+				if(event.location in eventBounds) ButtonStatus.HOVER else ButtonStatus.IDLE
+
 		when
 		{
 			event is InputEvent.Mouse.Down && event.location in eventBounds -> setStatus(ButtonStatus.CLICK)
 			event is InputEvent.Mouse.Up && state.status == ButtonStatus.CLICK -> {
-				setStatus(ButtonStatus.IDLE)
+				setStatus(getNonClickStatus(event))
 				props.onClick()
 			}
-			event is InputEvent.Mouse.Move && state.status != ButtonStatus.CLICK ->
-				setStatus(if(event.location in eventBounds) ButtonStatus.HOVER else ButtonStatus.IDLE)
+			event is InputEvent.Mouse.Move && state.status != ButtonStatus.CLICK -> setStatus(getNonClickStatus(event))
 		}
 	}
 

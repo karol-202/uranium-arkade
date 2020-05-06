@@ -12,6 +12,7 @@ import pl.karol202.uranium.webcanvas.assets.loadImage
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.primitives.rectFill
 import pl.karol202.uranium.webcanvas.component.containers.translate
+import pl.karol202.uranium.webcanvas.component.misc.mouseFollower
 import pl.karol202.uranium.webcanvas.component.primitives.canvasClear
 import pl.karol202.uranium.webcanvas.component.ui.button
 import pl.karol202.uranium.webcanvas.draw.startOnCanvas
@@ -29,8 +30,12 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 	override fun URenderBuilder<WC>.render()
 	{
 		+ translate(vector = Vector(200.0, 0.0)) {
-			+ rectFill(bounds = Bounds(100.0, 100.0, 100.0, 100.0),
-			           style = Color.named("blue"))
+			+ mouseFollower(minX = 0.0,
+			                minY = 0.0,
+			                maxY = 0.0) {
+				+ rectFill(bounds = Bounds(-50.0, -50.0, 100.0, 100.0),
+				           style = Color.named("blue"))
+			}
 			+ button(position = Vector(100.0, 200.0),
 			         size = Vector(100.0, 100.0),
 			         idleImage = loadImage("assets/ball.png"),
