@@ -4,28 +4,15 @@ import org.w3c.dom.events.MouseEvent
 
 sealed class InputEvent
 {
-	abstract class Mouse : InputEvent()
+	data class Mouse(val location: Vector,
+	                 val type: Type) : InputEvent()
 	{
-		abstract val location: Vector
-
-		data class Down(override val location: Vector) : Mouse()
+		enum class Type
 		{
-			override fun withLocation(location: Vector) = copy(location = location)
+			DOWN, MOVE, UP, ENTER, LEAVE
 		}
 
-		data class Move(override val location: Vector) : Mouse()
-		{
-			override fun withLocation(location: Vector) = copy(location = location)
-		}
-
-		data class Up(override val location: Vector) : Mouse()
-		{
-			override fun withLocation(location: Vector) = copy(location = location)
-		}
-
-		abstract fun withLocation(location: Vector): Mouse
-
-		fun withLocation(builder: (Vector) -> Vector) = withLocation(builder(location))
+		fun withLocation(location: Vector) = copy(location = location)
 	}
 
 	companion object
@@ -33,15 +20,21 @@ sealed class InputEvent
 		private const val TYPE_MOUSE_DOWN = "mousedown"
 		private const val TYPE_MOUSE_MOVE = "mousemove"
 		private const val TYPE_MOUSE_UP = "mouseup"
+		private const val TYPE_MOUSE_ENTER = "mouseenter"
+		private const val TYPE_MOUSE_LEAVE = "mouseleave"
 
-		fun from(mouseEvent: MouseEvent) = when(mouseEvent.type)
-		{
-			TYPE_MOUSE_DOWN -> Mouse.Down(mouseEvent.location)
-			TYPE_MOUSE_MOVE -> Mouse.Move(mouseEvent.location)
-			TYPE_MOUSE_UP -> Mouse.Up(mouseEvent.location)
-			else -> throw IllegalArgumentException("Unknown event type: ${mouseEvent.type}")
-		}
+		fun from(mouseEvent: MouseEvent) = Mouse(mouseEvent.location, mouseEvent.eventType)
 
 		private val MouseEvent.location get() = Vector(x, y)
+
+		private val MouseEvent.eventType get() = when(type)
+		{
+			TYPE_MOUSE_DOWN -> Mouse.Type.DOWN
+			TYPE_MOUSE_MOVE -> Mouse.Type.MOVE
+			TYPE_MOUSE_UP -> Mouse.Type.UP
+			TYPE_MOUSE_ENTER -> Mouse.Type.ENTER
+			TYPE_MOUSE_LEAVE -> Mouse.Type.LEAVE
+			else -> throw IllegalArgumentException("Unknown event type: $type")
+		}
 	}
 }

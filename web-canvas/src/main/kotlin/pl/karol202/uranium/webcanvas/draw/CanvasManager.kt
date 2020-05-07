@@ -42,6 +42,8 @@ class CanvasManager(private val canvas: HTMLCanvasElement,
 		canvas.onmousedown = ::handleMouseEvent
 		canvas.onmousemove = ::handleMouseEvent
 		canvas.onmouseup = ::handleMouseEvent
+		canvas.onmouseenter = ::handleMouseEvent
+		canvas.onmouseleave = ::handleMouseEvent
 	}
 
 	fun stop()

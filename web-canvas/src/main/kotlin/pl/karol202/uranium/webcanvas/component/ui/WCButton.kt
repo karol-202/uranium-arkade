@@ -12,6 +12,7 @@ import pl.karol202.uranium.webcanvas.component.event.eventHandler
 import pl.karol202.uranium.webcanvas.component.primitives.image
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.InputEvent
+import pl.karol202.uranium.webcanvas.values.InputEvent.Mouse.Type
 import pl.karol202.uranium.webcanvas.values.Vector
 
 class WCButton(props: Props) : WCAbstractComponent<WCButton.Props>(props),
@@ -45,24 +46,25 @@ class WCButton(props: Props) : WCAbstractComponent<WCButton.Props>(props),
 	override fun URenderBuilder<WC>.render()
 	{
 		+ translate(vector = props.position) {
-			+ eventHandler { handleEvent(it) }
+			+ eventHandler(mouseListener = { handleEvent(it) })
 			+ image(image = image, drawBounds = Bounds(size = props.size))
 		}
 	}
 
-	private fun handleEvent(event: InputEvent)
+	private fun handleEvent(event: InputEvent.Mouse)
 	{
 		fun getNonClickStatus(event: InputEvent.Mouse) =
 				if(event.location in eventBounds) ButtonStatus.HOVER else ButtonStatus.IDLE
 
 		when
 		{
-			event is InputEvent.Mouse.Down && event.location in eventBounds -> setStatus(ButtonStatus.CLICK)
-			event is InputEvent.Mouse.Up && state.status == ButtonStatus.CLICK -> {
+			event.type == Type.MOVE && state.status != ButtonStatus.CLICK -> setStatus(getNonClickStatus(event))
+			event.type == Type.DOWN && event.location in eventBounds -> setStatus(ButtonStatus.CLICK)
+			event.type == Type.UP && state.status == ButtonStatus.CLICK -> {
 				setStatus(getNonClickStatus(event))
 				props.onClick()
 			}
-			event is InputEvent.Mouse.Move && state.status != ButtonStatus.CLICK -> setStatus(getNonClickStatus(event))
+			event.type == Type.LEAVE && state.status == ButtonStatus.CLICK -> setStatus(ButtonStatus.IDLE)
 		}
 	}
 

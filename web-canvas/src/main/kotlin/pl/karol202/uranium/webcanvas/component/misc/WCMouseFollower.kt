@@ -13,6 +13,7 @@ import pl.karol202.uranium.webcanvas.component.event.eventHandler
 import pl.karol202.uranium.webcanvas.component.event.eventTransformer
 import pl.karol202.uranium.webcanvas.draw.DrawContext
 import pl.karol202.uranium.webcanvas.values.InputEvent
+import pl.karol202.uranium.webcanvas.values.InputEvent.Mouse.Type
 import pl.karol202.uranium.webcanvas.values.Vector
 import pl.karol202.uranium.webcanvas.values.clamp
 import kotlin.math.min
@@ -33,13 +34,13 @@ class WCMouseFollower(props: Props) : WCAbstractComponent<WCMouseFollower.Props>
 
 	override fun URenderBuilder<WC>.render()
 	{
-		+ eventHandler { handleEvent(it) }
+		+ eventHandler(mouseListener = { handleEvent(it) })
 		+ translate(vector = state.position) { + props.content }
 	}
 
-	private fun handleEvent(event: InputEvent)
+	private fun handleEvent(event: InputEvent.Mouse)
 	{
-		if(event is InputEvent.Mouse.Move) setState { copy(position = limitPosition(event.location)) }
+		if(event.type == Type.MOVE) setState { copy(position = limitPosition(event.location)) }
 	}
 
 	private fun limitPosition(position: Vector) =

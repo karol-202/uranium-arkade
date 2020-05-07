@@ -11,11 +11,19 @@ import pl.karol202.uranium.webcanvas.values.InputEvent
 class WCEventHandler(props: Props) : WCAbstractNativeLeafComponent<WCEventHandler.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
-	                 val listener: (InputEvent) -> Unit) : UProps
+	                 val mouseListener: (InputEvent.Mouse) -> Unit,
+	                 val allListener: (InputEvent) -> Unit) : UProps
 
-	override val native = WCEventNativeLeaf { props.listener(it) }
+	override val native = WCEventNativeLeaf { notify(it) }
+
+	private fun notify(event: InputEvent)
+	{
+		if(event is InputEvent.Mouse) props.mouseListener(event)
+		props.allListener(event)
+	}
 }
 
 fun WCRenderScope.eventHandler(key: Any = AutoKey,
-                               listener: (InputEvent) -> Unit) =
-		component(::WCEventHandler, WCEventHandler.Props(key, listener))
+                               mouseListener: (InputEvent.Mouse) -> Unit = { },
+                               allListener: (InputEvent) -> Unit = { }) =
+		component(::WCEventHandler, WCEventHandler.Props(key, mouseListener, allListener))

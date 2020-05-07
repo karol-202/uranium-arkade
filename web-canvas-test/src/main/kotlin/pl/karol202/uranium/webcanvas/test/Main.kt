@@ -33,20 +33,18 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 {
 	override fun URenderBuilder<WC>.render()
 	{
-		/*+ mouseFollower(minX = 0.0,
-			                minY = 100.0,
-			                maxY = 100.0) {
-				+ rectFill(bounds = Bounds(-50.0, -50.0, 100.0, 100.0),
-				             color = Color.named("blue"))
-			}
-			+ button(position = Vector(100.0, 100.0),
-			         size = Vector(100.0, 100.0),
-			         idleImage = loadImage("assets/ball.png"),
-			         hoverImage = loadImage("assets/ball_hover.png"),
-			         clickImage = loadImage("assets/ball_click.png"),
-			         onClick = { console.log("click") })*/
-
-		//+ forceField(force = GravitationalForce.homogenous(Vector(y = 0.0))) {
+		+ mouseFollower(minX = 0.0,
+		                minY = 400.0,
+		                maxY = 400.0) {
+			+ rectFill(bounds = Bounds(-50.0, -50.0, 100.0, 100.0),
+			           color = Color.named("blue"))
+		}
+		+ button(position = Vector(500.0, 100.0),
+		         size = Vector(100.0, 100.0),
+		         idleImage = loadImage("assets/ball.png"),
+		         hoverImage = loadImage("assets/ball_hover.png"),
+		         clickImage = loadImage("assets/ball_click.png"),
+		         onClick = { console.log("click") })
 
 		+ forceField(force = GravitationalForce(RadialForce(center = Vector(200.0, 250.0),
 		                                                    intensity = 500.0,
@@ -57,7 +55,7 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 			             color = Color.named("black"))
 			+ translate(vector = Vector(200.0, 0.0)) {
 				+ ball(image = loadImage("assets/ball.png"),
-				       initialPosition = Vector(200.0, 150.0),
+				       initialPosition = Vector(0.0, 150.0),
 				       initialVelocity = Vector(60.0, 0.0),
 				       size = Vector(60.0, 60.0),
 				       mass = 1.0)
