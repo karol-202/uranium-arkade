@@ -25,6 +25,6 @@ class WCPhysicsTransformer(props: Props) : WCAbstractNativeContainerComponent<WC
 }
 
 fun WCRenderScope.physicsTransformer(key: Any = AutoKey,
-                                   transform: PhysicsContext.() -> PhysicsContext,
-                                   content: WCRenderBuilder.() -> Unit) =
+                                     transform: PhysicsContext.() -> PhysicsContext,
+                                     content: WCRenderBuilder.() -> Unit) =
 		component(::WCPhysicsTransformer, WCPhysicsTransformer.Props(key, transform, content.render()))

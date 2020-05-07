@@ -56,7 +56,9 @@ class CanvasManager(private val canvas: HTMLCanvasElement,
 		container.draw(canvasContext)
 	}
 
-	private fun performPhysics() = container.performPhysics(PhysicsContext(calculateDeltaTime()))
+	private fun performPhysics() = container.performPhysics(createPhysicsContext())
+
+	private fun createPhysicsContext() = PhysicsContext(calculateDeltaTime())
 
 	private fun calculateDeltaTime(): Duration
 	{

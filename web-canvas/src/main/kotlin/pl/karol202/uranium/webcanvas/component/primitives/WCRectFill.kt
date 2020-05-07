@@ -4,7 +4,6 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderBuilder
-import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.webcanvas.*
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.draw.drawComponent
@@ -30,5 +29,5 @@ class WCRectFill(props: Props) : WCAbstractComponent<WCRectFill.Props>(props)
 
 fun WCRenderScope.rectFill(key: Any = AutoKey,
                            bounds: Bounds,
-                           style: Color) =
-		component(::WCRectFill, WCRectFill.Props(key, bounds, style))
+                           color: Color) =
+		component(::WCRectFill, WCRectFill.Props(key, bounds, color))
