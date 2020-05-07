@@ -21,5 +21,5 @@ data class RadialForce(private val center: Vector,
 		return direction * value
 	}
 
-	override fun translate(vector: Vector) = copy(center = center - vector)
+	override fun translate(vector: Vector) = copy(center = center + vector)
 }

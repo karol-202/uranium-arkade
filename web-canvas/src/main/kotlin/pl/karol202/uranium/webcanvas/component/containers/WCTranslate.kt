@@ -10,9 +10,11 @@ import pl.karol202.uranium.webcanvas.*
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.draw.drawContainer
 import pl.karol202.uranium.webcanvas.component.event.eventTransformer
+import pl.karol202.uranium.webcanvas.component.physics.collider.colliderTransformer
 import pl.karol202.uranium.webcanvas.component.physics.physicsTransformer
 import pl.karol202.uranium.webcanvas.draw.DrawContext
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
+import pl.karol202.uranium.webcanvas.physics.collider.Collider
 import pl.karol202.uranium.webcanvas.values.InputEvent
 import pl.karol202.uranium.webcanvas.values.Vector
 
@@ -28,7 +30,9 @@ class WCTranslate(props: Props) : WCAbstractComponent<WCTranslate.Props>(props)
 		                afterDrawOperation = { after() }) {
 			+ eventTransformer(transform = { it.transform() }) {
 				+ physicsTransformer(transform = { transform() }) {
-					+ props.content
+					+ colliderTransformer(transform = { transform() }) {
+						+ props.content
+					}
 				}
 			}
 		}
@@ -47,7 +51,9 @@ class WCTranslate(props: Props) : WCAbstractComponent<WCTranslate.Props>(props)
 		is InputEvent.Mouse -> withLocation(location - props.vector)
 	}
 
-	private fun PhysicsContext.transform() = mapForces { it.translate(props.vector) }
+	private fun PhysicsContext.transform() = translate(-props.vector)
+
+	private fun Collider.transform() = translate(props.vector)
 }
 
 fun WCRenderScope.translate(key: Any = AutoKey,

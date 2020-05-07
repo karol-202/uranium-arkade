@@ -14,6 +14,8 @@ data class Vector(val x: Double = 0.0,
 	val normalized get() = (this / length) ?: ZERO
 	val length get() = sqrt(x.pow(2) + y.pow(2))
 
+	operator fun unaryMinus() = Vector(-x, -y)
+
 	operator fun plus(other: Vector) = Vector(x + other.x, y + other.y)
 
 	operator fun minus(other: Vector) = Vector(x - other.x, y - other.y)

@@ -5,6 +5,7 @@ import pl.karol202.uranium.core.native.UNativeContainer
 import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.draw.DrawContext
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
+import pl.karol202.uranium.webcanvas.physics.collider.Collider
 import pl.karol202.uranium.webcanvas.values.InputEvent
 
 private val UNative<WC>.asWCNative get() = this as WCNative
@@ -16,6 +17,8 @@ interface WCNative : UNative<WC>
 	fun handleEvent(event: InputEvent)
 
 	fun performPhysics(context: PhysicsContext)
+
+	fun collectColliders(): List<Collider>
 }
 
 interface WCNativeContainer : WCNative, UNativeContainer<WC>
@@ -30,6 +33,8 @@ fun nativeLeaf() = object : WCNative {
 	override fun handleEvent(event: InputEvent) { }
 
 	override fun performPhysics(context: PhysicsContext) { }
+
+	override fun collectColliders() = emptyList<Collider>()
 }
 
 fun nativeContainer() = object : WCNativeContainer {
@@ -51,4 +56,6 @@ fun nativeContainer() = object : WCNativeContainer {
 	override fun handleEvent(event: InputEvent) = children.forEach { it.handleEvent(event) }
 
 	override fun performPhysics(context: PhysicsContext) = children.forEach { it.performPhysics(context) }
+
+	override fun collectColliders() = children.flatMap { it.collectColliders() }
 }

@@ -7,10 +7,13 @@ import pl.karol202.uranium.webcanvas.WCRenderBuilder
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.containers.translate
+import pl.karol202.uranium.webcanvas.component.physics.collider.collider
 import pl.karol202.uranium.webcanvas.component.physics.physicsPerformer
 import pl.karol202.uranium.webcanvas.component.primitives.image
 import pl.karol202.uranium.webcanvas.physics.PhysicsBody
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
+import pl.karol202.uranium.webcanvas.physics.collider.CircleCollider
+import pl.karol202.uranium.webcanvas.physics.collider.Collider
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Vector
 import pl.karol202.uranium.webcanvas.values.average
@@ -22,7 +25,7 @@ class Ball(props: Props) : WCAbstractComponent<Ball.Props>(props),
 	                 val image: CanvasImageSource,
 	                 val initialPosition: Vector,
 	                 val initialVelocity: Vector,
-	                 val size: Vector,
+	                 val radius: Double,
 	                 val mass: Double) : UProps
 
 	data class State(val position: Vector,
@@ -30,8 +33,9 @@ class Ball(props: Props) : WCAbstractComponent<Ball.Props>(props),
 
 	override var state by state(State(props.initialPosition, props.initialVelocity))
 
-	private val bounds get() = Bounds(x = -props.size.x / 2, y = -props.size.y / 2,
-	                                  width = props.size.x, height = props.size.y)
+	private val bounds get() = Bounds(x = -props.radius / 2, y = -props.radius / 2,
+	                                  width = props.radius, height = props.radius)
+	private val collider get() = CircleCollider(Vector.ZERO, props.radius)
 	private val body get() = PhysicsBody(state.position, props.mass)
 
 	override fun WCRenderBuilder.render()
@@ -39,6 +43,7 @@ class Ball(props: Props) : WCAbstractComponent<Ball.Props>(props),
 		+ physicsPerformer { performPhysics() }
 		+ translate(vector = state.position) {
 			+ image(image = props.image, drawBounds = bounds)
+			+ collider(collider = collider)
 		}
 	}
 
@@ -57,6 +62,6 @@ fun WCRenderScope.ball(key: Any = AutoKey,
                        image: CanvasImageSource,
                        initialPosition: Vector,
                        initialVelocity: Vector,
-                       size: Vector,
+                       radius: Double,
                        mass: Double) =
-		component(::Ball, Ball.Props(key, image, initialPosition, initialVelocity, size, mass))
+		component(::Ball, Ball.Props(key, image, initialPosition, initialVelocity, radius, mass))

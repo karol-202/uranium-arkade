@@ -14,5 +14,3 @@ typealias WCRenderScope = URenderScope<WC>
 typealias WCRenderBuilder = URenderBuilder<WC>
 
 typealias WCRenderManager<P> = RenderManager<WC, P>
-
-internal fun renderScope() = object : WCRenderScope { }
