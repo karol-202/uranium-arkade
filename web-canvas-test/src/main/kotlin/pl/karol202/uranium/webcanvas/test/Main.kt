@@ -10,9 +10,11 @@ import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.assets.loadImage
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
+import pl.karol202.uranium.webcanvas.component.containers.group
 import pl.karol202.uranium.webcanvas.component.primitives.rectFill
 import pl.karol202.uranium.webcanvas.component.containers.translate
 import pl.karol202.uranium.webcanvas.component.misc.mouseFollower
+import pl.karol202.uranium.webcanvas.component.physics.physicsPerformer
 import pl.karol202.uranium.webcanvas.component.primitives.canvasClear
 import pl.karol202.uranium.webcanvas.component.ui.button
 import pl.karol202.uranium.webcanvas.draw.startOnCanvas
@@ -23,7 +25,7 @@ import kotlin.browser.document
 
 private val canvas = document.body!!.append.canvas { }
 
-fun main() = startOnCanvas(canvas, renderInterval = 20) { app() }
+fun main() = startOnCanvas(canvas, renderInterval = 20, physicsInterval = 20) { app() }
 
 class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 {
@@ -43,6 +45,7 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 			         clickImage = loadImage("assets/ball_click.png"),
 			         onClick = { console.log("click") })
 		}
+		+ ball(size = Vector(x = 60.0, y = 60.0), image = loadImage("assets/ball.png"))
 	}
 }
 

@@ -8,6 +8,7 @@ import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.draw.drawComponent
+import pl.karol202.uranium.webcanvas.draw.clear
 import pl.karol202.uranium.webcanvas.values.Bounds
 
 class WCCanvasClear(props: Props) : WCAbstractComponent<WCCanvasClear.Props>(props)
@@ -16,9 +17,7 @@ class WCCanvasClear(props: Props) : WCAbstractComponent<WCCanvasClear.Props>(pro
 
 	override fun URenderBuilder<WC>.render()
 	{
-		+ drawComponent {
-			clearRect(0.0, 0.0, canvas.width.toDouble(), canvas.height.toDouble())
-		}
+		+ drawComponent { clear() }
 	}
 }
 
