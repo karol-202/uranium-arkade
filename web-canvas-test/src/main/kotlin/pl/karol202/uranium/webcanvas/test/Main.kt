@@ -13,11 +13,16 @@ import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.primitives.circleFill
 import pl.karol202.uranium.webcanvas.component.containers.translate
 import pl.karol202.uranium.webcanvas.component.misc.mouseFollower
+import pl.karol202.uranium.webcanvas.component.physics.collider.collider
+import pl.karol202.uranium.webcanvas.component.physics.collider.collisionDomain
 import pl.karol202.uranium.webcanvas.component.physics.forceField
+import pl.karol202.uranium.webcanvas.component.physics.rigidbody
 import pl.karol202.uranium.webcanvas.component.primitives.image
 import pl.karol202.uranium.webcanvas.component.primitives.rectFill
 import pl.karol202.uranium.webcanvas.component.ui.button
 import pl.karol202.uranium.webcanvas.draw.startOnCanvas
+import pl.karol202.uranium.webcanvas.physics.collider.CircleCollider
+import pl.karol202.uranium.webcanvas.physics.collider.RectCollider
 import pl.karol202.uranium.webcanvas.physics.force.GravitationalForce
 import pl.karol202.uranium.webcanvas.physics.force.RadialForce
 import pl.karol202.uranium.webcanvas.values.Bounds
@@ -33,9 +38,9 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 {
 	override fun URenderBuilder<WC>.render()
 	{
-		+ mouseFollower(minX = 0.0,
-		                minY = 400.0,
-		                maxY = 400.0) {
+		+ mouseFollower(minY = 400.0,
+		                maxY = 400.0,
+		                initialPosition = Vector(0.0, 400.0)) {
 			+ rectFill(bounds = Bounds(-50.0, -50.0, 100.0, 100.0),
 			           color = Color.named("blue"))
 		}
@@ -46,19 +51,30 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 		         clickImage = loadImage("assets/ball_click.png"),
 		         onClick = { console.log("click") })
 
-		+ forceField(force = GravitationalForce(RadialForce(center = Vector(200.0, 250.0),
-		                                                    intensity = 500.0,
-		                                                    linearAttenuation = 0.1,
-		                                                    quadraticAttenuation = 0.0))) {
-			+ circleFill(center = Vector(200.0, 250.0),
-			             radius = 10.0,
-			             color = Color.named("black"))
-			+ translate(vector = Vector(200.0, 0.0)) {
-				+ ball(image = loadImage("assets/ball.png"),
-				       initialPosition = Vector(0.0, 150.0),
-				       initialVelocity = Vector(60.0, 0.0),
-				       size = Vector(60.0, 60.0),
-				       mass = 1.0)
+		+ collisionDomain {
+			+ forceField(force = GravitationalForce(RadialForce(center = Vector(200.0, 250.0),
+			                                                    intensity = 500.0,
+			                                                    linearAttenuation = 0.1,
+			                                                    quadraticAttenuation = 0.0))) {
+				+ circleFill(center = Vector(200.0, 250.0),
+				             radius = 10.0,
+				             color = Color.named("black"))
+				+ translate(vector = Vector(200.0, 0.0)) {
+					+ rigidbody(initialPosition = Vector(0.0, 150.0),
+					            initialVelocity = Vector(60.0, 0.0),
+					            mass = 1.0,
+					            collider = CircleCollider(Vector.ZERO, 30.0)) {
+						+ image(image = loadImage("assets/ball.png"),
+						        drawBounds = Bounds(x = -30.0, y = -30.0,
+						                            width = 60.0, height = 60.0))
+					}
+				}
+			}
+			+ translate(vector = Vector(125.0, 325.0)) {
+				val bounds = Bounds(0.0, 0.0, 100.0, 40.0)
+				+ collider(collider = RectCollider(bounds))
+				+ rectFill(bounds = bounds,
+				           color = Color.named("red"))
 			}
 		}
 	}

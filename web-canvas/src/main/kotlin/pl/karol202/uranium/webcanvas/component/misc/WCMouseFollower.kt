@@ -3,21 +3,17 @@ package pl.karol202.uranium.webcanvas.component.misc
 import pl.karol202.uranium.core.common.*
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderBuilder
-import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.core.render.render
-import pl.karol202.uranium.webcanvas.*
+import pl.karol202.uranium.webcanvas.WC
+import pl.karol202.uranium.webcanvas.WCElement
+import pl.karol202.uranium.webcanvas.WCRenderBuilder
+import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.containers.translate
-import pl.karol202.uranium.webcanvas.component.draw.drawContainer
 import pl.karol202.uranium.webcanvas.component.event.eventHandler
-import pl.karol202.uranium.webcanvas.component.event.eventTransformer
-import pl.karol202.uranium.webcanvas.draw.DrawContext
-import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.InputEvent
 import pl.karol202.uranium.webcanvas.values.InputEvent.Mouse.Type
 import pl.karol202.uranium.webcanvas.values.Vector
-import pl.karol202.uranium.webcanvas.values.clamp
-import kotlin.math.min
 
 class WCMouseFollower(props: Props) : WCAbstractComponent<WCMouseFollower.Props>(props),
                                       UStateful<WCMouseFollower.State>
@@ -46,7 +42,7 @@ class WCMouseFollower(props: Props) : WCAbstractComponent<WCMouseFollower.Props>
 	}
 
 	private fun limitPosition(position: Vector) =
-			Vector(clamp(position.x, props.minX, props.maxX), clamp(position.y, props.minY, props.maxY))
+			Vector(position.x.coerceIn(props.minX, props.maxX), position.y.coerceIn(props.minY, props.maxY))
 }
 
 fun WCRenderScope.mouseFollower(key: Any = AutoKey,

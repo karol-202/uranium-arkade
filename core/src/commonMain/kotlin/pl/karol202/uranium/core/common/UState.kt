@@ -18,7 +18,6 @@ fun <S : UState> UStateful<S>.setState(builder: S.() -> S)
 
 fun <S : UState> UAbstractComponent<*, *>.state(initialState: S) = object : ReadWriteProperty<Any, S>
 {
-
 	private var state = initialState
 
 	override fun getValue(thisRef: Any, property: KProperty<*>) = state
