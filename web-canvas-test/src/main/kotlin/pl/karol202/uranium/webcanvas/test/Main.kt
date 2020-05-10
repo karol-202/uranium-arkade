@@ -24,6 +24,7 @@ import pl.karol202.uranium.webcanvas.draw.startOnCanvas
 import pl.karol202.uranium.webcanvas.physics.collider.CircleCollider
 import pl.karol202.uranium.webcanvas.physics.collider.RectCollider
 import pl.karol202.uranium.webcanvas.physics.force.GravitationalForce
+import pl.karol202.uranium.webcanvas.physics.force.HomogenousForce
 import pl.karol202.uranium.webcanvas.physics.force.RadialForce
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Color
@@ -38,7 +39,7 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 {
 	override fun URenderBuilder<WC>.render()
 	{
-		+ mouseFollower(minY = 400.0,
+		/*+ mouseFollower(minY = 400.0,
 		                maxY = 400.0,
 		                initialPosition = Vector(0.0, 400.0)) {
 			+ rectFill(bounds = Bounds(-50.0, -50.0, 100.0, 100.0),
@@ -49,10 +50,10 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 		         idleImage = loadImage("assets/ball.png"),
 		         hoverImage = loadImage("assets/ball_hover.png"),
 		         clickImage = loadImage("assets/ball_click.png"),
-		         onClick = { console.log("click") })
+		         onClick = { console.log("click") })*/
 
 		+ collisionDomain {
-			+ forceField(force = GravitationalForce(RadialForce(center = Vector(200.0, 250.0),
+			/*+ forceField(force = GravitationalForce(RadialForce(center = Vector(200.0, 250.0),
 			                                                    intensity = 500.0,
 			                                                    linearAttenuation = 0.1,
 			                                                    quadraticAttenuation = 0.0))) {
@@ -63,18 +64,37 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 					+ rigidbody(initialPosition = Vector(0.0, 150.0),
 					            initialVelocity = Vector(60.0, 0.0),
 					            mass = 1.0,
-					            collider = CircleCollider(Vector.ZERO, 30.0)) {
+					            collider = CircleCollider(Vector.ZERO, 30.0),
+					            onCollision = { bounce(it.selfNormal) }) {
 						+ image(image = loadImage("assets/ball.png"),
 						        drawBounds = Bounds(x = -30.0, y = -30.0,
 						                            width = 60.0, height = 60.0))
 					}
 				}
 			}
-			+ translate(vector = Vector(125.0, 325.0)) {
+			+ translate(vector = Vector(150.0, 350.0)) {
 				val bounds = Bounds(0.0, 0.0, 100.0, 40.0)
 				+ collider(collider = RectCollider(bounds))
 				+ rectFill(bounds = bounds,
 				           color = Color.named("red"))
+			}*/
+
+			+ forceField(force = GravitationalForce(HomogenousForce(Vector(0.0, 50.0)))) {
+				+ rigidbody(initialPosition = Vector(0.0, 0.0),
+				            initialVelocity = Vector(100.0, 0.0),
+				            mass = 1.0,
+				            collider = CircleCollider(Vector.ZERO, 30.0),
+				            onCollision = { bounce(it.selfNormal, 0.5) }) {
+					+ image(image = loadImage("assets/ball.png"),
+					        drawBounds = Bounds(x = -30.0, y = -30.0,
+					                            width = 60.0, height = 60.0))
+				}
+				+ translate(vector = Vector(100.0, 700.0)) {
+					val bounds = Bounds(0.0, 0.0, 1000.0, 40.0)
+					+ collider(collider = RectCollider(bounds))
+					+ rectFill(bounds = bounds,
+					           color = Color.named("red"))
+				}
 			}
 		}
 	}

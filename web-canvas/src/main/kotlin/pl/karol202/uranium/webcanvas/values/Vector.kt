@@ -33,6 +33,8 @@ data class Vector(val x: Double = 0.0,
 
 	infix fun clampIn(bounds: Bounds) =
 			Vector(x.coerceIn(bounds.start.x, bounds.end.x), y.coerceIn(bounds.start.y, bounds.end.y))
+
+	infix fun dot(other: Vector) = (x * other.x) + (y * other.y)
 }
 
 fun Iterable<Vector>.average() = Vector(map { it.x }.average(), map { it.y }.average())

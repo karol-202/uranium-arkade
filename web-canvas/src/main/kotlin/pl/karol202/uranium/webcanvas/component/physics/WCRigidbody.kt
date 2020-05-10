@@ -9,6 +9,7 @@ import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.containers.translate
 import pl.karol202.uranium.webcanvas.component.physics.collider.collider
+import pl.karol202.uranium.webcanvas.physics.Collision
 import pl.karol202.uranium.webcanvas.physics.PhysicsBody
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
 import pl.karol202.uranium.webcanvas.physics.collider.Collider
@@ -23,39 +24,48 @@ class WCRigidbody(props: Props) : WCAbstractComponent<WCRigidbody.Props>(props),
 	                 val initialVelocity: Vector,
 	                 val mass: Double,
 	                 val collider: Collider,
+	                 val onCollision: (State.(Collision) -> State)?,
 	                 val content: List<WCElement<*>>) : UProps
 
 	data class State(val position: Vector,
 	                 val velocity: Vector) : UState
+	{
+		fun bounce(normal: Vector, factor: Double = 1.0) = copy(velocity = bouncedVelocity(normal) * factor)
+
+		// Law of reflection formula (inverted velocity)
+		private fun bouncedVelocity(normal: Vector) = normal * 2.0 * (normal dot -velocity) + velocity
+	}
 
 	override var state by state(State(props.initialPosition, props.initialVelocity))
 
-	private val body get() = PhysicsBody(Vector.ZERO, props.mass)
+	private val body get() = PhysicsBody(Vector.ZERO, state.velocity, props.mass)
 
 	override fun WCRenderBuilder.render()
 	{
 		+ translate(vector = state.position) {
-			+ physicsPerformer { performPhysics() }
+			+ physicsPerformer { performPhysics(this) }
 			+ collider(collider = props.collider)
 			+ props.content
 		}
 	}
 
-	private fun PhysicsContext.performPhysics()
+	private fun performPhysics(context: PhysicsContext)
 	{
-		val force = getForceAt(body)
-		val acceleration = force / props.mass ?: return
-		val oldVelocity = state.velocity
-		val newVelocity = oldVelocity + (acceleration * deltaTime.inSeconds)
-		val offset = listOf(oldVelocity, newVelocity).average() * deltaTime.inSeconds
-		val newState = state.copy(position = state.position + offset, velocity = newVelocity)
-		state = resolveCollisions(offset, newState)
+		val newBody = context.processBody(body)
+		val offset = newBody.position
+		val newState = state.copy(position = state.position + offset, velocity = newBody.velocity)
+		val newContext = context.excludeCollider(props.collider).translate(-offset)
+		state = newContext.resolveCollisions(newState)
 	}
 
-	private fun PhysicsContext.resolveCollisions(moveOffset: Vector, state: State) =
-			checkForCollisions(props.collider).fold(state) { current, collision ->
-				current.copy(position = current.position + collision.penetration)
-			}
+	private fun PhysicsContext.resolveCollisions(state: State) =
+			checkForCollisions(props.collider).fold(state) { current, collision -> current.resolveCollision(collision) }
+
+	private fun State.resolveCollision(collision: Collision): State
+	{
+		val resolved = copy(position = position + collision.penetration)
+		return props.onCollision?.let { resolved.it(collision) } ?: resolved
+	}
 }
 
 fun WCRenderScope.rigidbody(key: Any = AutoKey,
@@ -63,5 +73,7 @@ fun WCRenderScope.rigidbody(key: Any = AutoKey,
                             initialVelocity: Vector,
                             mass: Double,
                             collider: Collider,
+                            onCollision: (WCRigidbody.State.(Collision) -> WCRigidbody.State)?,
                             content: WCRenderBuilder.() -> Unit) =
-		component(::WCRigidbody, WCRigidbody.Props(key, initialPosition, initialVelocity, mass, collider, content.render()))
+		component(::WCRigidbody, WCRigidbody.Props(key, initialPosition, initialVelocity,
+		                                           mass, collider, onCollision, content.render()))

@@ -27,24 +27,20 @@ class WCParticle(props: Props) : WCAbstractComponent<WCParticle.Props>(props),
 
 	override var state by state(State(props.initialPosition, props.initialVelocity))
 
-	private val body get() = PhysicsBody(state.position, props.mass)
+	private val body get() = PhysicsBody(Vector.ZERO, state.velocity, props.mass)
 
 	override fun WCRenderBuilder.render()
 	{
-		+ physicsPerformer { performPhysics() }
 		+ translate(vector = state.position) {
+			+ physicsPerformer { performPhysics(this) }
 			+ props.content
 		}
 	}
 
-	private fun PhysicsContext.performPhysics()
+	private fun performPhysics(context: PhysicsContext)
 	{
-		val force = getForceAt(body)
-		val acceleration = force / props.mass ?: return
-		val oldVelocity = state.velocity
-		val newVelocity = oldVelocity + (acceleration * deltaTime.inSeconds)
-		val offset = listOf(oldVelocity, newVelocity).average() * deltaTime.inSeconds
-		setState { copy(position = position + offset, velocity = newVelocity) }
+		val newBody = context.processBody(body)
+		setState { copy(position = state.position + newBody.position, velocity = newBody.velocity) }
 	}
 }
 
