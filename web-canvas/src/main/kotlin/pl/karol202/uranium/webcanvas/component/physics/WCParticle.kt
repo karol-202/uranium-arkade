@@ -13,20 +13,18 @@ import pl.karol202.uranium.webcanvas.physics.PhysicsContext
 import pl.karol202.uranium.webcanvas.values.Vector
 import pl.karol202.uranium.webcanvas.values.average
 
-class WCParticle(props: Props) : WCAbstractComponent<WCParticle.Props>(props),
-                                 UStateful<WCParticle.State>
+class WCParticle(props: Props) : WCAbstractComponent<WCParticle.Props>(props)
 {
 	data class Props(override val key: Any,
-	                 val initialPosition: Vector,
-	                 val initialVelocity: Vector,
+	                 val state: State,
 	                 val mass: Double,
+	                 val onStateChange: (State) -> Unit,
 	                 val content: List<WCElement<*>>) : UProps
 
 	data class State(val position: Vector,
-	                 val velocity: Vector) : UState
+	                 val velocity: Vector)
 
-	override var state by state(State(props.initialPosition, props.initialVelocity))
-
+	private val state get() = props.state
 	private val body get() = PhysicsBody(Vector.ZERO, state.velocity, props.mass)
 
 	override fun WCRenderBuilder.render()
@@ -40,13 +38,13 @@ class WCParticle(props: Props) : WCAbstractComponent<WCParticle.Props>(props),
 	private fun performPhysics(context: PhysicsContext)
 	{
 		val newBody = context.processBody(body)
-		setState { copy(position = state.position + newBody.position, velocity = newBody.velocity) }
+		props.onStateChange(state.copy(position = state.position + newBody.position, velocity = newBody.velocity))
 	}
 }
 
 fun WCRenderScope.particle(key: Any = AutoKey,
-                           initialPosition: Vector,
-                           initialVelocity: Vector,
+                           state: WCParticle.State,
                            mass: Double,
+                           onStateChange: (WCParticle.State) -> Unit,
                            content: WCRenderBuilder.() -> Unit) =
-		component(::WCParticle, WCParticle.Props(key, initialPosition, initialVelocity, mass, content.render()))
+		component(::WCParticle, WCParticle.Props(key, state, mass, onStateChange, content.render()))

@@ -2,8 +2,7 @@ package pl.karol202.uranium.webcanvas.test
 
 import kotlinx.html.dom.append
 import kotlinx.html.js.canvas
-import pl.karol202.uranium.core.common.AutoKey
-import pl.karol202.uranium.core.common.BasicProps
+import pl.karol202.uranium.core.common.*
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.webcanvas.WC
@@ -13,6 +12,7 @@ import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.primitives.circleFill
 import pl.karol202.uranium.webcanvas.component.containers.translate
 import pl.karol202.uranium.webcanvas.component.misc.mouseFollower
+import pl.karol202.uranium.webcanvas.component.physics.WCRigidbody
 import pl.karol202.uranium.webcanvas.component.physics.collider.collider
 import pl.karol202.uranium.webcanvas.component.physics.collider.collisionDomain
 import pl.karol202.uranium.webcanvas.component.physics.forceField
@@ -35,8 +35,14 @@ private val canvas = document.body!!.append.canvas { }
 
 fun main() = startOnCanvas(canvas, renderInterval = 20, physicsInterval = 20) { app() }
 
-class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
+class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props),
+                               UStateful<App.State>
 {
+	data class State(val ballState: WCRigidbody.State) : UState
+
+	override var state by state(State(WCRigidbody.State(position = Vector(0.0, 0.0),
+	                                                   velocity = Vector(100.0, 0.0))))
+
 	override fun URenderBuilder<WC>.render()
 	{
 		/*+ mouseFollower(minY = 400.0,
@@ -79,11 +85,11 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props)
 				           color = Color.named("red"))
 			}*/
 
-			+ forceField(force = GravitationalForce(HomogenousForce(Vector(0.0, 50.0)))) {
-				+ rigidbody(initialPosition = Vector(0.0, 0.0),
-				            initialVelocity = Vector(100.0, 0.0),
+			+ forceField(force = GravitationalForce(HomogenousForce(Vector(0.0, 300.0)))) {
+				+ rigidbody(state = state.ballState,
 				            mass = 1.0,
 				            collider = CircleCollider(Vector.ZERO, 30.0),
+				            onStateChange = { setState { copy(ballState = it) } },
 				            onCollision = { bounce(it.selfNormal, 0.5) }) {
 					+ image(image = loadImage("assets/ball.png"),
 					        drawBounds = Bounds(x = -30.0, y = -30.0,

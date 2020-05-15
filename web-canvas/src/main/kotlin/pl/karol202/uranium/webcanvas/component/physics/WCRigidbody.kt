@@ -16,19 +16,18 @@ import pl.karol202.uranium.webcanvas.physics.collider.Collider
 import pl.karol202.uranium.webcanvas.values.Vector
 import pl.karol202.uranium.webcanvas.values.average
 
-class WCRigidbody(props: Props) : WCAbstractComponent<WCRigidbody.Props>(props),
-                                  UStateful<WCRigidbody.State>
+class WCRigidbody(props: Props) : WCAbstractComponent<WCRigidbody.Props>(props)
 {
 	data class Props(override val key: Any,
-	                 val initialPosition: Vector,
-	                 val initialVelocity: Vector,
+	                 val state: State,
 	                 val mass: Double,
 	                 val collider: Collider,
+	                 val onStateChange: (State) -> Unit,
 	                 val onCollision: (State.(Collision) -> State)?,
 	                 val content: List<WCElement<*>>) : UProps
 
 	data class State(val position: Vector,
-	                 val velocity: Vector) : UState
+	                 val velocity: Vector)
 	{
 		fun bounce(normal: Vector, factor: Double = 1.0) = copy(velocity = bouncedVelocity(normal) * factor)
 
@@ -36,8 +35,7 @@ class WCRigidbody(props: Props) : WCAbstractComponent<WCRigidbody.Props>(props),
 		private fun bouncedVelocity(normal: Vector) = normal * 2.0 * (normal dot -velocity) + velocity
 	}
 
-	override var state by state(State(props.initialPosition, props.initialVelocity))
-
+	private val state get() = props.state
 	private val body get() = PhysicsBody(Vector.ZERO, state.velocity, props.mass)
 
 	override fun WCRenderBuilder.render()
@@ -55,7 +53,7 @@ class WCRigidbody(props: Props) : WCAbstractComponent<WCRigidbody.Props>(props),
 		val offset = newBody.position
 		val newState = state.copy(position = state.position + offset, velocity = newBody.velocity)
 		val newContext = context.excludeCollider(props.collider).translate(-offset)
-		state = newContext.resolveCollisions(newState)
+		props.onStateChange(newContext.resolveCollisions(newState))
 	}
 
 	private fun PhysicsContext.resolveCollisions(state: State) =
@@ -69,11 +67,10 @@ class WCRigidbody(props: Props) : WCAbstractComponent<WCRigidbody.Props>(props),
 }
 
 fun WCRenderScope.rigidbody(key: Any = AutoKey,
-                            initialPosition: Vector,
-                            initialVelocity: Vector,
+                            state: WCRigidbody.State,
                             mass: Double,
                             collider: Collider,
-                            onCollision: (WCRigidbody.State.(Collision) -> WCRigidbody.State)?,
+                            onStateChange: (WCRigidbody.State) -> Unit,
+                            onCollision: (WCRigidbody.State.(Collision) -> WCRigidbody.State)? = null,
                             content: WCRenderBuilder.() -> Unit) =
-		component(::WCRigidbody, WCRigidbody.Props(key, initialPosition, initialVelocity,
-		                                           mass, collider, onCollision, content.render()))
+		component(::WCRigidbody, WCRigidbody.Props(key, state, mass, collider, onStateChange, onCollision, content.render()))
