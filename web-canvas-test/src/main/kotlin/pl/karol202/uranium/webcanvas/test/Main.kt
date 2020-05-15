@@ -9,6 +9,7 @@ import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.assets.loadImage
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
+import pl.karol202.uranium.webcanvas.component.containers.flip
 import pl.karol202.uranium.webcanvas.component.containers.scale
 import pl.karol202.uranium.webcanvas.component.containers.translate
 import pl.karol202.uranium.webcanvas.component.physics.WCRigidbody
@@ -90,9 +91,11 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props),
 						            collider = CircleCollider(Vector.ZERO, 30.0),
 						            onStateChange = { setState { copy(ballState = it) } },
 						            onCollision = { bounce(it.selfNormal, 0.5) }) {
-							+ image(image = loadImage("assets/ball.png"),
-							        drawBounds = Bounds(x = -30.0, y = -30.0,
-							                            width = 60.0, height = 60.0))
+							+ flip(horizontal = true) {
+								+ image(image = loadImage("assets/ball.png"),
+								        drawBounds = Bounds(x = -30.0, y = -30.0,
+								                            width = 60.0, height = 60.0))
+							}
 						}
 						+ scale(vector = Vector(0.5, 0.5)) {
 							+ translate(vector = Vector(100.0, 700.0)) {
