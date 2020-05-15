@@ -3,6 +3,7 @@ package pl.karol202.uranium.webcanvas.values
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
+import kotlin.random.Random
 
 private const val EPSILON = 0.0001
 
@@ -12,6 +13,10 @@ data class Vector(val x: Double = 0.0,
 	companion object
 	{
 		val ZERO = Vector()
+
+		fun randomFraction() = Vector(Random.nextDouble(), Random.nextDouble())
+
+		fun randomDirection() = PolarVector.randomDirection().asCartesian
 	}
 
 	val normalized get() = (this / length) ?: ZERO
@@ -25,7 +30,11 @@ data class Vector(val x: Double = 0.0,
 
 	operator fun plus(other: Vector) = Vector(x + other.x, y + other.y)
 
+	operator fun plus(factor: Double) = Vector(x + factor, y + factor)
+
 	operator fun minus(other: Vector) = Vector(x - other.x, y - other.y)
+
+	operator fun minus(factor: Double) = Vector(x - factor, y - factor)
 
 	operator fun times(other: Vector) = Vector(x * other.x, y * other.y)
 
