@@ -10,6 +10,8 @@ interface Collider
 
 	fun translate(vector: Vector): Collider
 
+	fun scale(vector: Vector): Collider
+
 	fun accept(collider: Collider): Collision?
 
 	fun visit(collider: RectCollider): Collision?

@@ -27,7 +27,11 @@ data class Vector(val x: Double = 0.0,
 
 	operator fun minus(other: Vector) = Vector(x - other.x, y - other.y)
 
+	operator fun times(other: Vector) = Vector(x * other.x, y * other.y)
+
 	operator fun times(factor: Double) = Vector(x * factor, y * factor)
+
+	operator fun div(other: Vector) = if(other.x != 0.0 && other.y != 0.0) Vector(x * other.x, y * other.y) else null
 
 	operator fun div(factor: Double) = if(factor != 0.0) Vector(x / factor, y / factor) else null
 
@@ -36,5 +40,8 @@ data class Vector(val x: Double = 0.0,
 
 	infix fun dot(other: Vector) = (x * other.x) + (y * other.y)
 }
+
+operator fun Double.div(vector: Vector) =
+		if(vector.x != 0.0 && vector.y != 0.0) Vector(this / vector.x, this / vector.y) else null
 
 fun Iterable<Vector>.average() = Vector(map { it.x }.average(), map { it.y }.average())

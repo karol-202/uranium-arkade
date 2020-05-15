@@ -13,4 +13,6 @@ data class GravitationalForce(private val force: Force) : Force
 	override fun getForceAt(body: PhysicsBody) = force.getForceAt(body) * body.mass
 
 	override fun translate(vector: Vector) = copy(force = force.translate(vector))
+
+	override fun scale(vector: Vector) = copy(force = force.scale(vector))
 }

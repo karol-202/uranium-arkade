@@ -8,4 +8,6 @@ interface Force
 	fun getForceAt(body: PhysicsBody): Vector
 
 	fun translate(vector: Vector): Force
+
+	fun scale(vector: Vector): Force
 }

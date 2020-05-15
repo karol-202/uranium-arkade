@@ -1,5 +1,8 @@
 package pl.karol202.uranium.webcanvas.values
 
+import kotlin.math.abs
+import kotlin.math.min
+
 data class Bounds(val start: Vector = Vector.ZERO,
                   val size: Vector = Vector.ZERO)
 {
@@ -23,4 +26,9 @@ data class Bounds(val start: Vector = Vector.ZERO,
 	operator fun plus(vector: Vector) = Bounds(start + vector, size)
 
 	operator fun minus(vector: Vector) = Bounds(start - vector, size)
+
+	operator fun times(vector: Vector) = Bounds(start * vector, size * vector).fixNegativeSize()
+
+	private fun fixNegativeSize() = Bounds(start = Vector(min(start.x, end.x), min(start.y, end.y)),
+	                                       size = Vector(abs(size.x), abs(size.y)))
 }

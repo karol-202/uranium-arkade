@@ -34,4 +34,11 @@ data class PhysicsContext(val deltaTime: Duration,
 
 	fun translate(vector: Vector) = copy(forces = forces.map { it.translate(vector) },
 	                                     colliders = colliders.map { it.translate(vector) })
+
+	fun scale(vector: Vector) = copy(forces = forces.map { it.scale(vector) },
+	                                 colliders = colliders.map { it.scale(vector) })
+
+	fun noForces() = copy(forces = emptyList())
+
+	fun noColliders() = copy(colliders = emptyList())
 }

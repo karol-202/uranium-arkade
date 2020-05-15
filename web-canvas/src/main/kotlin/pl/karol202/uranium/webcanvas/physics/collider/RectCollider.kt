@@ -9,6 +9,8 @@ data class RectCollider(val bounds: Bounds) : Collider
 
 	override fun translate(vector: Vector) = copy(bounds = bounds + vector)
 
+	override fun scale(vector: Vector) = copy(bounds = bounds * vector)
+
 	override fun accept(collider: Collider) = collider.visit(this)
 
 	override fun visit(collider: RectCollider) = detectCollision(this, collider)

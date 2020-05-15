@@ -8,4 +8,6 @@ data class HomogenousForce(private val force: Vector) : Force
 	override fun getForceAt(body: PhysicsBody) = force
 
 	override fun translate(vector: Vector) = this
+
+	override fun scale(vector: Vector) = this
 }
