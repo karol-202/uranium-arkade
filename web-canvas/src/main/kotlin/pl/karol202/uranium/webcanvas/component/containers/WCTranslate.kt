@@ -49,6 +49,7 @@ class WCTranslate(props: Props) : WCAbstractComponent<WCTranslate.Props>(props)
 	private fun InputEvent.transform() = when(this)
 	{
 		is InputEvent.Mouse -> withLocation(location - props.vector)
+		is InputEvent.Key -> this
 	}
 
 	private fun PhysicsContext.transform() = translate(-props.vector)

@@ -12,6 +12,7 @@ class WCEventHandler(props: Props) : WCAbstractNativeLeafComponent<WCEventHandle
 {
 	data class Props(override val key: Any = AutoKey,
 	                 val mouseListener: (InputEvent.Mouse) -> Unit,
+	                 val keyListener: (InputEvent.Key) -> Unit,
 	                 val allListener: (InputEvent) -> Unit) : UProps
 
 	override val native = WCEventNativeLeaf { notify(it) }
@@ -19,11 +20,13 @@ class WCEventHandler(props: Props) : WCAbstractNativeLeafComponent<WCEventHandle
 	private fun notify(event: InputEvent)
 	{
 		if(event is InputEvent.Mouse) props.mouseListener(event)
+		else if(event is InputEvent.Key) props.keyListener(event)
 		props.allListener(event)
 	}
 }
 
 fun WCRenderScope.eventHandler(key: Any = AutoKey,
                                mouseListener: (InputEvent.Mouse) -> Unit = { },
+                               keyListener: (InputEvent.Key) -> Unit = { },
                                allListener: (InputEvent) -> Unit = { }) =
-		component(::WCEventHandler, WCEventHandler.Props(key, mouseListener, allListener))
+		component(::WCEventHandler, WCEventHandler.Props(key, mouseListener, keyListener, allListener))

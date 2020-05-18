@@ -1,6 +1,7 @@
 package pl.karol202.uranium.webcanvas.draw
 
 import org.w3c.dom.HTMLCanvasElement
+import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.WCElement
@@ -43,6 +44,9 @@ class CanvasManager(private val canvas: HTMLCanvasElement,
 		canvas.onmouseup = ::handleMouseEvent
 		canvas.onmouseenter = ::handleMouseEvent
 		canvas.onmouseleave = ::handleMouseEvent
+		window.onkeydown = ::handleKeyEvent
+		window.onkeypress = ::handleKeyEvent
+		window.onkeyup = ::handleKeyEvent
 	}
 
 	fun stop()
@@ -70,6 +74,8 @@ class CanvasManager(private val canvas: HTMLCanvasElement,
 	}
 
 	private fun handleMouseEvent(mouseEvent: MouseEvent) = container.handleEvent(InputEvent.from(mouseEvent))
+
+	private fun handleKeyEvent(keyEvent: KeyboardEvent) = container.handleEvent(InputEvent.from(keyEvent))
 }
 
 fun startOnCanvas(canvas: HTMLCanvasElement,

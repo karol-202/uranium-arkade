@@ -50,6 +50,7 @@ class WCScale(props: Props) : WCAbstractComponent<WCScale.Props>(props)
 	private fun InputEvent.transform() = when(this)
 	{
 		is InputEvent.Mouse -> withLocation(location / props.vector ?: Vector.ZERO)
+		is InputEvent.Key -> this
 	}
 
 	private fun PhysicsContext.transform(): PhysicsContext
