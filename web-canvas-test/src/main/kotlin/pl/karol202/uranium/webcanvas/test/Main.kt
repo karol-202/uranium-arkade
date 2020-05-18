@@ -19,6 +19,7 @@ import pl.karol202.uranium.webcanvas.component.physics.forceField
 import pl.karol202.uranium.webcanvas.component.physics.rigidbody
 import pl.karol202.uranium.webcanvas.component.primitives.image
 import pl.karol202.uranium.webcanvas.component.primitives.rectFill
+import pl.karol202.uranium.webcanvas.component.primitives.text
 import pl.karol202.uranium.webcanvas.draw.startOnCanvas
 import pl.karol202.uranium.webcanvas.physics.collider.CircleCollider
 import pl.karol202.uranium.webcanvas.physics.collider.RectCollider
@@ -26,6 +27,7 @@ import pl.karol202.uranium.webcanvas.physics.force.GravitationalForce
 import pl.karol202.uranium.webcanvas.physics.force.HomogenousForce
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Color
+import pl.karol202.uranium.webcanvas.values.Font
 import pl.karol202.uranium.webcanvas.values.Vector
 import kotlin.browser.document
 
@@ -109,6 +111,10 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props),
 				//}
 			//}
 		}
+		+ text(position = Vector(x = 100.0, y = 100.0),
+		       text = "Hell'o world!",
+		       font = Font.create(20, "Times New Roman", "monospace"),
+		       color = Color.raw("green"))
 	}
 }
 
