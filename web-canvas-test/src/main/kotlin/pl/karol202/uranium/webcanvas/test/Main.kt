@@ -102,7 +102,7 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props),
 								val bounds = Bounds(0.0, 0.0, 1000.0, 40.0)
 								+ collider(collider = RectCollider(bounds))
 								+ rectFill(bounds = bounds,
-								           color = Color.named("red"))
+								           color = Color.raw("red"))
 							}
 						}
 					}

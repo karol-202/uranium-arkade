@@ -10,7 +10,6 @@ import pl.karol202.uranium.webcanvas.native.nativeContainer
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
 import pl.karol202.uranium.webcanvas.values.InputEvent
 import kotlin.browser.window
-import kotlin.js.Date
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
@@ -19,9 +18,9 @@ class CanvasManager(private val canvas: HTMLCanvasElement,
                     private val physicsInterval: Int,
                     elementProvider: WCRenderScope.() -> WCElement<*>)
 {
-	private val container = nativeContainer()
-	private val renderManager = WCRenderManager(elementProvider.render(), container)
 	private val canvasContext = canvas.context2d
+	private val container = nativeContainer()
+	private val renderManager by lazy { WCRenderManager(elementProvider.render(), container) }
 
 	private var renderTimer: Int? = null
 	private var physicsTimer: Int? = null

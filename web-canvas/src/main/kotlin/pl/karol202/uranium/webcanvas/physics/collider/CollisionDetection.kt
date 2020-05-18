@@ -28,12 +28,11 @@ fun detectCollision(rect1: RectCollider, rect2: RectCollider): Collision?
 {
 	val bounds1 = rect1.bounds
 	val bounds2 = rect2.bounds
-	if(bounds1 intersectsWith bounds2) return null
+	if(!(bounds1 intersectsWith bounds2)) return null
 	val (direction, penetrationDepth) = mapOf(Direction.LEFT to bounds1.end.x - bounds2.start.x,
 	                                          Direction.TOP to bounds1.end.y - bounds2.start.y,
 	                                          Direction.RIGHT to bounds2.end.x - bounds1.start.x,
-	                                          Direction.BOTTOM to bounds2.end.y - bounds1.start.y)
-			.minBy { it.value }!!
+	                                          Direction.BOTTOM to bounds2.end.y - bounds1.start.y).minBy { it.value }!!
 	val penetration = direction.vector * penetrationDepth
 	return Collision(selfCollider = rect1, otherCollider = rect2,
 	                 penetration = penetration,
