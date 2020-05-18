@@ -1,4 +1,4 @@
-package pl.karol202.uranium.webcanvas.component.misc
+package pl.karol202.uranium.webcanvas.test
 
 import pl.karol202.uranium.core.common.*
 import pl.karol202.uranium.core.element.component
@@ -15,8 +15,8 @@ import pl.karol202.uranium.webcanvas.values.InputEvent
 import pl.karol202.uranium.webcanvas.values.InputEvent.Mouse.Type
 import pl.karol202.uranium.webcanvas.values.Vector
 
-class WCMouseFollower(props: Props) : WCAbstractComponent<WCMouseFollower.Props>(props),
-                                      UStateful<WCMouseFollower.State>
+class MouseFollower(props: Props) : WCAbstractComponent<MouseFollower.Props>(props),
+                                    UStateful<MouseFollower.State>
 {
 	data class Props(override val key: Any,
 	                 val minX: Double,
@@ -52,4 +52,4 @@ fun WCRenderScope.mouseFollower(key: Any = AutoKey,
                                 maxY: Double = Double.POSITIVE_INFINITY,
                                 initialPosition: Vector = Vector.ZERO,
                                 content: WCRenderBuilder.() -> Unit) =
-		component(::WCMouseFollower, WCMouseFollower.Props(key, minX, maxX, minY, maxY, initialPosition, content.render()))
+		component(::MouseFollower, MouseFollower.Props(key, minX, maxX, minY, maxY, initialPosition, content.render()))

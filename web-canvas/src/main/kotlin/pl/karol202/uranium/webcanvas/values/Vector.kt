@@ -40,7 +40,7 @@ data class Vector(val x: Double = 0.0,
 
 	operator fun times(factor: Double) = Vector(x * factor, y * factor)
 
-	operator fun div(other: Vector) = if(other.x != 0.0 && other.y != 0.0) Vector(x * other.x, y * other.y) else null
+	operator fun div(other: Vector) = if(other.x != 0.0 && other.y != 0.0) Vector(x / other.x, y / other.y) else null
 
 	operator fun div(factor: Double) = if(factor != 0.0) Vector(x / factor, y / factor) else null
 

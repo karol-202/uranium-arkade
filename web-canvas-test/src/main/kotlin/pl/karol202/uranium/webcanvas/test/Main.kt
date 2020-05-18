@@ -45,13 +45,7 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props),
 
 	override fun URenderBuilder<WC>.render()
 	{
-		/*+ mouseFollower(minY = 400.0,
-		                maxY = 400.0,
-		                initialPosition = Vector(0.0, 400.0)) {
-			+ rectFill(bounds = Bounds(-50.0, -50.0, 100.0, 100.0),
-			           color = Color.named("blue"))
-		}
-		+ button(position = Vector(500.0, 100.0),
+		/*+ button(position = Vector(500.0, 100.0),
 		         size = Vector(100.0, 100.0),
 		         idleImage = loadImage("assets/ball.png"),
 		         hoverImage = loadImage("assets/ball_hover.png"),
@@ -105,6 +99,12 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props),
 								+ collider(collider = RectCollider(bounds))
 								+ rectFill(bounds = bounds,
 								           color = Color.raw("red"))
+								+ mouseFollower(minY = 400.0,
+								                maxY = 400.0,
+								                initialPosition = Vector(0.0, 400.0)) {
+									+ rectFill(bounds = Bounds(-50.0, -50.0, 100.0, 100.0),
+									           color = Color.raw("blue"))
+								}
 							}
 						}
 					}

@@ -53,7 +53,7 @@ class CanvasManager(private val canvas: HTMLCanvasElement,
 
 	private fun draw()
 	{
-		canvasContext.clear()
+		canvasContext.clearCanvas()
 		container.draw(canvasContext)
 	}
 
