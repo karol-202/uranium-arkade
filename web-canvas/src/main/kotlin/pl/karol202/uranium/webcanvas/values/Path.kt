@@ -1,12 +1,12 @@
 package pl.karol202.uranium.webcanvas.values
 
 data class Path(val points: List<Vector>,
-                val close: Boolean)
+                val closed: Boolean)
 {
 	companion object
 	{
-		fun closed(vararg points: Vector) = Path(points.toList(), close = true)
+		fun closed(vararg points: Vector) = Path(points.toList(), closed = true)
 
-		fun open(vararg points: Vector) = Path(points.toList(), close = false)
+		fun open(vararg points: Vector) = Path(points.toList(), closed = false)
 	}
 }

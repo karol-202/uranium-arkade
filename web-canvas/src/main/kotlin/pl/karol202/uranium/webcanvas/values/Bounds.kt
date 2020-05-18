@@ -29,6 +29,14 @@ data class Bounds(val start: Vector = Vector.ZERO,
 
 	operator fun times(vector: Vector) = Bounds(start * vector, size * vector).fixNegativeSize()
 
+	operator fun times(factor: Double) = Bounds(start * factor, size * factor).fixNegativeSize()
+
+	operator fun div(vector: Vector) =
+			if(vector.x != 0.0 && vector.y != 0.0) Bounds((start / vector)!!, (size / vector)!!) else null
+
+	operator fun div(factor: Double) =
+			if(factor != 0.0) Bounds((start / factor)!!, (size / factor)!!) else null
+
 	private fun fixNegativeSize() = Bounds(start = Vector(min(start.x, end.x), min(start.y, end.y)),
 	                                       size = Vector(abs(size.x), abs(size.y)))
 }

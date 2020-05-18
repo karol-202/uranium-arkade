@@ -33,6 +33,7 @@ class WCPath(props: Props) : WCAbstractComponent<WCPath.Props>(props)
 			if(index == 0) moveTo(point.x, point.y)
 			else lineTo(point.x, point.y)
 		}
+		if(props.path.closed) closePath()
 		props.finishOperation(this)
 	}
 }
