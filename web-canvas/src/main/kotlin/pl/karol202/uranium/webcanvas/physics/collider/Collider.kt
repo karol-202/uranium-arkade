@@ -7,6 +7,7 @@ import pl.karol202.uranium.webcanvas.values.Vector
 interface Collider
 {
 	val boundingBox: Bounds
+	val payload: Any?
 
 	fun translate(vector: Vector): Collider
 

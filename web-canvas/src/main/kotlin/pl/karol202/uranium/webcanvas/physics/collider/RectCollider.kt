@@ -3,7 +3,8 @@ package pl.karol202.uranium.webcanvas.physics.collider
 import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Vector
 
-data class RectCollider(val bounds: Bounds) : Collider
+data class RectCollider(val bounds: Bounds,
+                        override val payload: Any? = null) : Collider
 {
 	override val boundingBox = bounds
 

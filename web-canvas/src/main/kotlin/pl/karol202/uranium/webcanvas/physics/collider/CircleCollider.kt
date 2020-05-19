@@ -4,7 +4,8 @@ import pl.karol202.uranium.webcanvas.values.Bounds
 import pl.karol202.uranium.webcanvas.values.Vector
 
 data class CircleCollider(val center: Vector = Vector.ZERO,
-                          val radius: Double) : Collider
+                          val radius: Double,
+                          override val payload: Any? = null) : Collider
 {
 	override val boundingBox = Bounds(center.x - radius, center.y - radius, 2 * radius, 2 * radius)
 
