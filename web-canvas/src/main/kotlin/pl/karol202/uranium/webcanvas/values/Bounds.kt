@@ -6,14 +6,14 @@ import kotlin.math.min
 data class Bounds(val start: Vector = Vector.ZERO,
                   val size: Vector = Vector.ZERO)
 {
-	val halfSize get() = (size / 2.0)!!
-	val center get() = start + halfSize
-	val end get() = start + size
+	val halfSize by lazy { (size / 2.0)!! }
+	val center by lazy { start + halfSize }
+	val end by lazy { start + size }
 
-	val x get() = start.x
-	val y get() = start.y
-	val width get() = size.x
-	val height get() = size.y
+	val x by lazy { start.x }
+	val y by lazy { start.y }
+	val width by lazy { size.x }
+	val height by lazy { size.y }
 
 	constructor(x: Double, y: Double, width: Double, height: Double) : this(Vector(x, y), Vector(width, height))
 

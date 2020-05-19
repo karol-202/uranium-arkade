@@ -19,8 +19,8 @@ data class Vector(val x: Double = 0.0,
 		fun randomDirection() = PolarVector.randomDirection().asCartesian
 	}
 
-	val normalized get() = (this / length) ?: ZERO
-	val length get() = sqrt(x.pow(2) + y.pow(2))
+	val normalized by lazy { (this / length) ?: ZERO }
+	val length by lazy { sqrt(x.pow(2) + y.pow(2)) }
 
 	override fun equals(other: Any?) = other is Vector && abs(other.x - x) <= EPSILON && abs(other.y - y) <= EPSILON
 
