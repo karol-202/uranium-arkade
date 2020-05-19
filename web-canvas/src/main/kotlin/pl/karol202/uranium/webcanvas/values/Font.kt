@@ -41,7 +41,7 @@ data class Font(val style: Style? = null,
 		fun create(size: Int, vararg family: String) = Font(size = size, families = family.toList())
 	}
 
-	val asText get() = "$styleAsText$variantAsText$weightAsText$sizeAsText$familiesAsText"
+	val asText by lazy { "$styleAsText$variantAsText$weightAsText$sizeAsText$familiesAsText" }
 	private val styleAsText get() = style?.native?.let { "$it " } ?: ""
 	private val variantAsText get() = variant?.native?.let { "$it " } ?: ""
 	private val weightAsText get() = weight?.native?.let { "$it " } ?: ""

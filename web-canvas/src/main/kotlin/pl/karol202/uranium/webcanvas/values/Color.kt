@@ -1,6 +1,8 @@
 package pl.karol202.uranium.webcanvas.values
 
-sealed class Color(val asStyle: String)
+import pl.karol202.uranium.webcanvas.draw.DrawContext
+
+sealed class Color(val asText: String) : FillStyle
 {
 	companion object
 	{
@@ -21,4 +23,6 @@ sealed class Color(val asStyle: String)
 	                     val green: Int,
 	                     val blue: Int,
 	                     val alpha: Int) : Color("rgb($red,$green,$blue,$alpha)")
+
+	override fun createNativeStyle(context: DrawContext) = asText
 }

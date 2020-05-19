@@ -12,14 +12,15 @@ import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.draw.DrawContext
 import pl.karol202.uranium.webcanvas.values.Color
+import pl.karol202.uranium.webcanvas.values.FillStyle
 import pl.karol202.uranium.webcanvas.values.Path
 
 class WCPathFill(props: Props) : WCAbstractComponent<WCPathFill.Props>(props)
 {
 	data class Props(override val key: Any,
 	                 val path: Path,
-	                 val color: Color,
-	                 val fillRule: FillRule?) : UProps
+	                 val fillRule: FillRule?,
+	                 val fillStyle: FillStyle) : UProps
 
 	enum class FillRule(val native: CanvasFillRule)
 	{
@@ -35,7 +36,7 @@ class WCPathFill(props: Props) : WCAbstractComponent<WCPathFill.Props>(props)
 
 	private fun DrawContext.finish()
 	{
-		fillStyle = props.color.asStyle
+		fillStyle = props.fillStyle.createNativeStyle(this)
 		fillPath()
 	}
 
@@ -44,6 +45,6 @@ class WCPathFill(props: Props) : WCAbstractComponent<WCPathFill.Props>(props)
 
 fun WCRenderScope.pathFill(key: Any = AutoKey,
                            path: Path,
-                           color: Color,
-                           fillRule: WCPathFill.FillRule? = null) =
-		component(::WCPathFill, WCPathFill.Props(key, path, color, fillRule))
+                           fillRule: WCPathFill.FillRule? = null,
+                           fillStyle: FillStyle) =
+		component(::WCPathFill, WCPathFill.Props(key, path, fillRule, fillStyle))

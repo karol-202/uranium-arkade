@@ -10,20 +10,21 @@ import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.draw.drawComponent
 import pl.karol202.uranium.webcanvas.draw.fillCanvas
 import pl.karol202.uranium.webcanvas.values.Color
+import pl.karol202.uranium.webcanvas.values.FillStyle
 
 class WCCanvasFill(props: Props) : WCAbstractComponent<WCCanvasFill.Props>(props)
 {
 	data class Props(override val key: Any,
-	                 val color: Color) : UProps
+	                 val fillStyle: FillStyle) : UProps
 
 	override fun URenderBuilder<WC>.render()
 	{
 		+ drawComponent {
-			fillStyle = props.color.asStyle
+			fillStyle = props.fillStyle.createNativeStyle(this)
 			fillCanvas()
 		}
 	}
 }
 
 fun WCRenderScope.canvasFill(key: Any = AutoKey,
-                             color: Color) = component(::WCCanvasFill, WCCanvasFill.Props(key, color))
+                             fillStyle: FillStyle) = component(::WCCanvasFill, WCCanvasFill.Props(key, fillStyle))

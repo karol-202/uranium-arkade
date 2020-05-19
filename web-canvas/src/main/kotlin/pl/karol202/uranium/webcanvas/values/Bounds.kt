@@ -23,9 +23,9 @@ data class Bounds(val start: Vector = Vector.ZERO,
 	infix fun intersectsWith(other: Bounds) =
 			other.start.x <= end.x && other.start.y <= end.y && other.end.x >= start.x && other.end.y >= start.y
 
-	operator fun plus(vector: Vector) = Bounds(start + vector, size)
+	operator fun plus(offset: Vector) = Bounds(start + offset, size)
 
-	operator fun minus(vector: Vector) = Bounds(start - vector, size)
+	operator fun minus(offset: Vector) = Bounds(start - offset, size)
 
 	operator fun times(vector: Vector) = Bounds(start * vector, size * vector).fixNegativeSize()
 

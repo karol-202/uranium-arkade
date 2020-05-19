@@ -8,6 +8,7 @@ import pl.karol202.uranium.webcanvas.*
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.draw.drawComponent
 import pl.karol202.uranium.webcanvas.values.Color
+import pl.karol202.uranium.webcanvas.values.FillStyle
 import pl.karol202.uranium.webcanvas.values.Vector
 import kotlin.math.PI
 
@@ -18,12 +19,12 @@ class WCCircleFill(props: Props) : WCAbstractComponent<WCCircleFill.Props>(props
 	                 val radius: Double,
 	                 val startAngle: Double,
 	                 val endAngle: Double,
-	                 val color: Color) : UProps
+	                 val fillStyle: FillStyle) : UProps
 
 	override fun URenderBuilder<WC>.render()
 	{
 		+ drawComponent {
-			fillStyle = props.color.asStyle
+			fillStyle = props.fillStyle.createNativeStyle(this)
 			beginPath()
 			arc(props.center.x, props.center.y, props.radius, props.startAngle, props.endAngle, false)
 			fill()
@@ -36,5 +37,5 @@ fun WCRenderScope.circleFill(key: Any = AutoKey,
                              radius: Double,
                              startAngle: Double = 0.0,
                              endAngle: Double = 2 * PI,
-                             color: Color) =
-		component(::WCCircleFill, WCCircleFill.Props(key, center, radius, startAngle, endAngle, color))
+                             fillStyle: FillStyle) =
+		component(::WCCircleFill, WCCircleFill.Props(key, center, radius, startAngle, endAngle, fillStyle))
