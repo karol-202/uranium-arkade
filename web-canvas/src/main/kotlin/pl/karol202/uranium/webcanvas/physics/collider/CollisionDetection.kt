@@ -3,8 +3,6 @@ package pl.karol202.uranium.webcanvas.physics.collider
 import pl.karol202.uranium.webcanvas.physics.Collision
 import pl.karol202.uranium.webcanvas.values.Direction
 import pl.karol202.uranium.webcanvas.values.Vector
-import kotlin.math.abs
-import kotlin.math.sign
 
 fun checkForCollisions(selfCollider: Collider, otherColliders: List<Collider>) =
 		otherColliders.filterPossiblyCollidingColliders(selfCollider).detectCollisions(selfCollider)
@@ -55,21 +53,30 @@ fun detectCollision(circle1: CircleCollider, circle2: CircleCollider): Collision
 
 fun detectCollision(rect: RectCollider, circle: CircleCollider): Collision?
 {
-	val rectCenter = rect.bounds.center
-	val rectCentricBounds = rect.bounds - rectCenter
-	val offset = circle.center - rectCenter
-	val closestPointInRect = (offset clampIn rectCentricBounds) + rectCenter
-	val circleToRect = closestPointInRect - circle.center
-	val circleToRectNormalized = circleToRect.normalized
-	val penetrationDepth = circle.radius - circleToRect.length
-	if(penetrationDepth < 0) return null
-	val penetration = circleToRectNormalized * penetrationDepth
-	val selfNormal = mapOf(Direction.LEFT to circle.center.x - rect.bounds.start.x,
-	                       Direction.TOP to circle.center.y - rect.bounds.start.y,
-	                       Direction.RIGHT to rect.bounds.end.x - circle.center.x,
-	                       Direction.BOTTOM to rect.bounds.end.y - circle.center.y)
-			.minBy { it.value }!!.key.vector
+	val (selfNormalDir, centerToEdgeDist) = mapOf(Direction.LEFT to circle.center.x - rect.bounds.start.x,
+	                                              Direction.TOP to circle.center.y - rect.bounds.start.y,
+	                                              Direction.RIGHT to rect.bounds.end.x - circle.center.x,
+	                                              Direction.BOTTOM to rect.bounds.end.y - circle.center.y).minBy { it.value }!!
+
+	val (penetrationDepth, penetrationDir) = if(circle.center !in rect.bounds)
+	{
+		val closestPointInRect = Vector(x = circle.center.x.coerceIn(rect.bounds.start.x, rect.bounds.end.x),
+		                                y = circle.center.y.coerceIn(rect.bounds.start.y, rect.bounds.end.y))
+		val circleToRect = closestPointInRect - circle.center
+		val penetrationDepth = circle.radius - circleToRect.length
+		if(penetrationDepth < 0) return null
+		val penetrationDir = circleToRect.normalized
+		penetrationDepth to penetrationDir
+	}
+	else
+	{
+		val penetrationDepth = centerToEdgeDist + circle.radius
+		val penetrationDir = -selfNormalDir.vector
+		penetrationDepth to penetrationDir
+	}
+
+	val penetration = penetrationDir * penetrationDepth
 	return Collision(selfCollider = rect, otherCollider = circle,
 	                 penetration = penetration,
-	                 selfNormal = selfNormal, otherNormal = circleToRectNormalized)
+	                 selfNormal = selfNormalDir.vector, otherNormal = penetrationDir)
 }
