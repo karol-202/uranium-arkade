@@ -7,7 +7,6 @@ import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.tree.TreeNodeOperation.CreateAndAttachNode
 import pl.karol202.uranium.core.util.*
 import pl.karol202.uranium.core.util.NativeList
-import pl.karol202.uranium.core.util.inserted
 import pl.karol202.uranium.core.util.removed
 import kotlin.reflect.KClass
 
@@ -68,10 +67,9 @@ private fun <N, P : UProps> NativeList<DispatchUnit<N, *>>.findCorrespondingUnit
 
 private fun <N> DispatchUnit<N, *>.isCorrespondingTo(unit: DispatchUnit<N, *>) = when
 {
-	propsClass != unit.propsClass -> false
-	key == AutoKey && unit.key != AutoKey -> false
-	key == AutoKey && unit.key == AutoKey -> true // TODO Handle case of multiple AutoKeys in one component
-	else -> unit.key == key
+	propsClass !== unit.propsClass -> false
+	key === AutoKey -> unit.key === AutoKey // TODO Handle case of multiple AutoKeys in one component
+	else -> unit.key === key
 }
 
 private fun <N> DispatchingState<N>.destroyExcessiveUnits(limit: Int) =

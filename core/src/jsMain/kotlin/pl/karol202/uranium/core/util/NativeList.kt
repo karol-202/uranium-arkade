@@ -1,114 +1,99 @@
 package pl.karol202.uranium.core.util
 
-import kotlin.time.ExperimentalTime
-import kotlin.time.measureTime
-
-@OptIn(ExperimentalTime::class)
-actual class NativeList<out T> : Iterable<T>
+private inline class NativeListImpl<out T>(private val array: dynamic) : NativeList<T>
 {
-	private val array: dynamic
+	override val size get() = array.length
 
-	actual val size get() = array.length
+	override operator fun get(index: Int) = array[index]
 
-	actual constructor()
-	{
-		measureTime {
-			array = js("[]")
-		}.also { console.log(1, it.inMilliseconds) }
-	}
+	override operator fun iterator() = array.iterator()
 
-	actual constructor(source: Iterable<T>) : this()
-	{
-		measureTime {
-			for(element in source) array.push(element)
-		}.also { console.log(2, it.inMilliseconds) }
-	}
+	override operator fun plus(element: @UnsafeVariance T) = NativeListImpl<T>(js("[]").concat(array, element))
 
-	private constructor(array: Array<T>)
-	{
-		measureTime {
-			this.array = array
-		}.also { console.log(3, it.inMilliseconds) }
-	}
+	override operator fun plus(elements: NativeList<@UnsafeVariance T>) =
+			NativeListImpl<T>(js("[]").concat(array, elements.asImpl().array))
 
-	actual operator fun get(index: Int) = array[index]
+	override operator fun minus(element: @UnsafeVariance T) = (this.asIterable() - element).toNativeList()
 
-	actual override operator fun iterator() = array.iterator()
+	override operator fun minus(elements: NativeList<@UnsafeVariance T>) = (this.asIterable() - elements).toNativeList()
 
-	actual operator fun plus(element: @UnsafeVariance T) = NativeList(js("[]").concat(array, element) as Array<T>)
-
-	actual operator fun plus(elements: NativeList<@UnsafeVariance T>) = NativeList(js("[]").concat(array, elements.array) as Array<T>)
-
-	actual operator fun minus(element: @UnsafeVariance T) = (this.asIterable() - element).toNativeList()
-
-	actual operator fun minus(elements: NativeList<@UnsafeVariance T>) = (this.asIterable() - elements).toNativeList()
-
-	actual fun <R> map(transform: (T) -> R): NativeList<R>
+	override fun <R> map(transform: (T) -> R): NativeList<R>
 	{
 		val dest = js("[]")
 		for(element in asIterable())
 			dest.push(transform(element))
-		return NativeList(dest as Array<R>)
+
+		return NativeListImpl(dest)
 	}
 
-	actual fun <R> mapIndexed(transform: (Int, T) -> R): NativeList<R>
+	override fun <R> mapIndexed(transform: (Int, T) -> R): NativeList<R>
 	{
 		var index = 0
 		val dest = js("[]")
 		for(element in asIterable())
 			dest.push(transform(index++, element))
-		return NativeList(dest as Array<R>)
+		return NativeListImpl(dest)
 	}
 
-	actual fun <R : Any> mapIndexedNotNull(transform: (Int, T) -> R?): NativeList<R>
+	override fun <R : Any> mapIndexedNotNull(transform: (Int, T) -> R?): NativeList<R>
 	{
 		var index = 0
 		val dest = js("[]")
 		for(element in asIterable())
 		{
-			val transformed = transform(index++, element) ?: continue
-			dest.push(transformed)
+			val transformed = transform(index++, element)
+			if(transformed != null) dest.push(transformed)
 		}
-		return NativeList(dest as Array<R>)
+		return NativeListImpl(dest)
 	}
 
-	actual fun <R> flatMap(transform: (T) -> Iterable<R>): NativeList<R>
+	override fun <R> flatMap(transform: (T) -> NativeList<R>): NativeList<R>
 	{
 		val dest = js("[]")
 		for(element in asIterable())
 			for(newElement in transform(element))
 				dest.push(newElement)
-		return NativeList(dest as Array<R>)
+		return NativeListImpl(dest)
 	}
 
-	actual fun filter(predicate: (T) -> Boolean): NativeList<T>
+	override fun filter(predicate: (T) -> Boolean): NativeList<T>
 	{
 		val dest = js("[]")
 		for(element in asIterable())
 			if(predicate(element)) dest.push(element)
-		return NativeList(dest as Array<T>)
+		return NativeListImpl(dest)
 	}
 
-	actual fun filterNot(predicate: (T) -> Boolean) = filter { !predicate(it) }
+	override fun filterNot(predicate: (T) -> Boolean) = filter { !predicate(it) }
 
-	actual fun take(n: Int): NativeList<T>
+	override fun take(n: Int): NativeList<T> = NativeListImpl(array.slice(0, n))
+
+	override fun drop(n: Int): NativeList<T> = NativeListImpl(array.slice(n))
+
+	override fun inserted(element: @UnsafeVariance T, index: Int): NativeList<T>
 	{
-		var currentCount = 0
-		val dest = js("[]")
-		for(element in asIterable())
-		{
-			dest.push(element)
-			if(++currentCount == n) break
-		}
-		return NativeList(dest as Array<T>)
+		val newArray = array.slice(0)
+		newArray.splice(index, 0, element)
+		return NativeListImpl(newArray)
 	}
 
-	actual fun drop(n: Int): NativeList<T>
+	override fun replaced(newElement: @UnsafeVariance T, index: Int): NativeList<T>
 	{
-		var currentCount = 0
-		val dest = js("[]")
-		for(element in asIterable())
-			if (currentCount >= n) dest.push(element) else ++currentCount
-		return NativeList(dest as Array<T>)
+		val newArray = array.slice(0)
+		newArray.splice(index, 1, newElement)
+		return NativeListImpl(newArray)
 	}
 }
+
+actual fun <T> emptyNativeList(): NativeList<T> = NativeListImpl(js("[]"))
+
+actual fun <T> nativeListOf(vararg elements: T): NativeList<T> = NativeListImpl(elements)
+
+actual fun <T> Iterable<T>.toNativeList(): NativeList<T>
+{
+	val array = js("[]")
+	for(element in this) array.push(element)
+	return NativeListImpl(array)
+}
+
+private fun <T> NativeList<T>.asImpl() = this as NativeListImpl<T>

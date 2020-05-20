@@ -4,7 +4,11 @@ import pl.karol202.uranium.webcanvas.values.InputEvent
 
 class WCEventNativeContainer(private val transform: (InputEvent) -> InputEvent) : WCNativeContainer by nativeContainer()
 {
-	override fun handleEvent(event: InputEvent) = children.forEach { it.handleEvent(transform(event)) }
+	override fun handleEvent(event: InputEvent)
+	{
+		val transformedEvent = transform(event)
+		children.forEach { it.handleEvent(transformedEvent) }
+	}
 }
 
 class WCEventNativeLeaf(private val listener: (InputEvent) -> Unit) : WCNative by nativeLeaf()

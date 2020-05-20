@@ -4,8 +4,6 @@ import pl.karol202.uranium.core.native.UNative
 import pl.karol202.uranium.core.native.UNativeContainer
 import pl.karol202.uranium.core.util.NativeList
 import pl.karol202.uranium.core.util.emptyNativeList
-import pl.karol202.uranium.core.util.inserted
-import pl.karol202.uranium.core.util.removed
 import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.draw.DrawContext
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext

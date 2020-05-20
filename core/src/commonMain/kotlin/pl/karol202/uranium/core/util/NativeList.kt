@@ -1,14 +1,15 @@
+@file:JvmName("NativeListCommonKt") // Workaround for bug "JVM class name duplication"
 package pl.karol202.uranium.core.util
 
-expect class NativeList<out T>() : Iterable<T>
+import kotlin.jvm.JvmName
+
+interface NativeList<out T> : Iterable<T>
 {
 	val size: Int
 
-	constructor(source: Iterable<T>)
+	override operator fun iterator(): Iterator<T>
 
 	operator fun get(index: Int): T
-
-	override operator fun iterator(): Iterator<T>
 
 	operator fun plus(element: @UnsafeVariance T): NativeList<T>
 
@@ -24,7 +25,7 @@ expect class NativeList<out T>() : Iterable<T>
 
 	fun <R : Any> mapIndexedNotNull(transform: (Int, T) -> R?): NativeList<R>
 
-	fun <R> flatMap(transform: (T) -> Iterable<R>): NativeList<R>
+	fun <R> flatMap(transform: (T) -> NativeList<R>): NativeList<R>
 
 	fun filter(predicate: (T) -> Boolean): NativeList<T>
 
@@ -33,16 +34,16 @@ expect class NativeList<out T>() : Iterable<T>
 	fun take(n: Int): NativeList<T>
 
 	fun drop(n: Int): NativeList<T>
+
+	fun inserted(element: @UnsafeVariance T, index: Int): NativeList<T>
+
+	fun replaced(newElement: @UnsafeVariance T, index: Int): NativeList<T>
 }
 
-fun <T> emptyNativeList() = NativeList<T>()
+expect fun <T> emptyNativeList(): NativeList<T>
 
-fun <T> nativeListOf(vararg elements: T) = elements.asIterable().toNativeList()
+expect fun <T> nativeListOf(vararg elements: T): NativeList<T>
 
-fun <T> Iterable<T>.toNativeList() = NativeList(this)
-
-fun <T> NativeList<T>.inserted(element: T, index: Int) = take(index) + element + drop(index)
+expect fun <T> Iterable<T>.toNativeList(): NativeList<T>
 
 fun <T> NativeList<T>.removed(element: T) = filterNot { it == element }
-
-fun <T> NativeList<T>.replaced(oldElement: T, newElement: T) = map { if(it == oldElement) newElement else it }

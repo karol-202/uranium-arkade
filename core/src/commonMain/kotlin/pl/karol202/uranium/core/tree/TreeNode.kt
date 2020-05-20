@@ -10,7 +10,6 @@ import pl.karol202.uranium.core.native.UNativeNode
 import pl.karol202.uranium.core.tree.TreeNodeOperation.*
 import pl.karol202.uranium.core.util.*
 import pl.karol202.uranium.core.util.NativeList
-import pl.karol202.uranium.core.util.inserted
 import pl.karol202.uranium.core.util.emptyNativeList
 import pl.karol202.uranium.core.util.nativeListOf
 import kotlin.collections.fold

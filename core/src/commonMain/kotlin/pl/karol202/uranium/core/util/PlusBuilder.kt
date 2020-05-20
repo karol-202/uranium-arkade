@@ -10,15 +10,15 @@ interface PlusBuilder<T>
 abstract class PlusBuilderImpl<T> : PlusBuilder<T>
 {
 	private val _elements = arrayListOf<T>()
-	val elements = _elements as List<T>
+	val elements: List<T> = _elements
 
 	override operator fun T.unaryPlus()
 	{
-		_elements += this
+		_elements.add(this)
 	}
 
 	override fun List<T>.unaryPlus()
 	{
-		_elements += this
+		_elements.addAll(this)
 	}
 }

@@ -2,9 +2,7 @@ package pl.karol202.uranium.core.native
 
 import pl.karol202.uranium.core.util.*
 import pl.karol202.uranium.core.util.NativeList
-import pl.karol202.uranium.core.util.inserted
 import pl.karol202.uranium.core.util.removed
-import pl.karol202.uranium.core.util.replaced
 
 internal class UNativeNode<N>(private val native: UNative<N>,
                               private val children: NativeList<UNativeNode<N>> = emptyNativeList())
@@ -28,7 +26,7 @@ internal class UNativeNode<N>(private val native: UNative<N>,
 			old == null -> nodeAttached(transformedNode, targetIndex)
 			old.index > targetIndex -> nodeReattached(old.value, transformedNode, targetIndex)
 			old.index < targetIndex -> throw IllegalStateException("Diffing algorithm bug!")
-			else -> replaced(old.value, transformedNode)
+			else -> replaced(transformedNode, targetIndex)
 		}
 	}
 
