@@ -9,16 +9,16 @@ interface PlusBuilder<T>
 
 abstract class PlusBuilderImpl<T> : PlusBuilder<T>
 {
-	var elements = emptyList<T>()
-		private set
+	private val _elements = arrayListOf<T>()
+	val elements = _elements as List<T>
 
 	override operator fun T.unaryPlus()
 	{
-		this@PlusBuilderImpl.elements += this
+		_elements += this
 	}
 
 	override fun List<T>.unaryPlus()
 	{
-		this@PlusBuilderImpl.elements += this
+		_elements += this
 	}
 }

@@ -2,6 +2,10 @@ package pl.karol202.uranium.webcanvas.native
 
 import pl.karol202.uranium.core.native.UNative
 import pl.karol202.uranium.core.native.UNativeContainer
+import pl.karol202.uranium.core.util.NativeList
+import pl.karol202.uranium.core.util.emptyNativeList
+import pl.karol202.uranium.core.util.inserted
+import pl.karol202.uranium.core.util.removed
 import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.draw.DrawContext
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
@@ -18,12 +22,12 @@ interface WCNative : UNative<WC>
 
 	fun performPhysics(context: PhysicsContext)
 
-	fun collectColliders(): List<Collider>
+	fun collectColliders(): NativeList<Collider>
 }
 
 interface WCNativeContainer : WCNative, UNativeContainer<WC>
 {
-	val children: List<WCNative>
+	val children: NativeList<WCNative>
 }
 
 fun nativeLeaf() = object : WCNative {
@@ -34,21 +38,21 @@ fun nativeLeaf() = object : WCNative {
 
 	override fun performPhysics(context: PhysicsContext) { }
 
-	override fun collectColliders() = emptyList<Collider>()
+	override fun collectColliders() = emptyNativeList<Collider>()
 }
 
 fun nativeContainer() = object : WCNativeContainer {
 
-	override val children = mutableListOf<WCNative>()
+	override var children = emptyNativeList<WCNative>()
 
 	override fun attach(native: UNative<WC>, index: Int)
 	{
-		children.add(index, native.asWCNative)
+		children = children.inserted(native.asWCNative, index)
 	}
 
 	override fun detach(native: UNative<WC>)
 	{
-		children.remove(native)
+		children -= native.asWCNative
 	}
 
 	override fun draw(context: DrawContext) = children.forEach { it.draw(context) }

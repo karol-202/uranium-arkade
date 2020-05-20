@@ -1,23 +1,25 @@
 package pl.karol202.uranium.core.native
 
-import pl.karol202.uranium.core.util.elementInserted
-import pl.karol202.uranium.core.util.elementRemoved
-import pl.karol202.uranium.core.util.elementReplaced
+import pl.karol202.uranium.core.util.*
+import pl.karol202.uranium.core.util.NativeList
+import pl.karol202.uranium.core.util.inserted
+import pl.karol202.uranium.core.util.removed
+import pl.karol202.uranium.core.util.replaced
 
 internal class UNativeNode<N>(private val native: UNative<N>,
-                              private val children: List<UNativeNode<N>> = emptyList())
+                              private val children: NativeList<UNativeNode<N>> = emptyNativeList())
 {
 	private val nativeAsContainer get() = native as UNativeContainer
 
-	fun transformedTo(targetChildren: List<UNativeNode<N>>) =
+	fun transformedTo(targetChildren: NativeList<UNativeNode<N>>) =
 			UNativeNode(native, children.childrenTransformedTo(targetChildren).detachExcessiveNodes(targetChildren.size))
 
-	private fun List<UNativeNode<N>>.childrenTransformedTo(targetChildren: List<UNativeNode<N>>) =
+	private fun NativeList<UNativeNode<N>>.childrenTransformedTo(targetChildren: NativeList<UNativeNode<N>>) =
 			targetChildren.foldIndexed(this) { targetIndex, currentChildren, targetNode ->
 				currentChildren.childTransformedTo(targetNode, targetIndex)
 			}
 
-	private fun List<UNativeNode<N>>.childTransformedTo(targetNode: UNativeNode<N>, targetIndex: Int): List<UNativeNode<N>>
+	private fun NativeList<UNativeNode<N>>.childTransformedTo(targetNode: UNativeNode<N>, targetIndex: Int): NativeList<UNativeNode<N>>
 	{
 		val old = withIndex().find { it.value.native == targetNode.native }
 		val transformedNode = (old?.value ?: UNativeNode(targetNode.native)).transformedTo(targetNode.children)
@@ -26,23 +28,23 @@ internal class UNativeNode<N>(private val native: UNative<N>,
 			old == null -> nodeAttached(transformedNode, targetIndex)
 			old.index > targetIndex -> nodeReattached(old.value, transformedNode, targetIndex)
 			old.index < targetIndex -> throw IllegalStateException("Diffing algorithm bug!")
-			else -> elementReplaced(old.value, transformedNode)
+			else -> replaced(old.value, transformedNode)
 		}
 	}
 
-	private fun List<UNativeNode<N>>.detachExcessiveNodes(limit: Int) =
+	private fun NativeList<UNativeNode<N>>.detachExcessiveNodes(limit: Int) =
 			mapIndexedNotNull { index, node ->
 				if(index < limit) node
 				else null.also { detach(node) }
 			}
 
-	private fun List<UNativeNode<N>>.nodeAttached(node: UNativeNode<N>, targetIndex: Int) =
-			elementInserted(node, targetIndex).also { attach(node, targetIndex) }
+	private fun NativeList<UNativeNode<N>>.nodeAttached(node: UNativeNode<N>, targetIndex: Int) =
+			inserted(node, targetIndex).also { attach(node, targetIndex) }
 
-	private fun List<UNativeNode<N>>.nodeDetached(node: UNativeNode<N>) =
-			elementRemoved(node).also { detach(node) }
+	private fun NativeList<UNativeNode<N>>.nodeDetached(node: UNativeNode<N>) =
+			removed(node).also { detach(node) }
 
-	private fun List<UNativeNode<N>>.nodeReattached(oldNode: UNativeNode<N>, targetNode: UNativeNode<N>, targetIndex: Int) =
+	private fun NativeList<UNativeNode<N>>.nodeReattached(oldNode: UNativeNode<N>, targetNode: UNativeNode<N>, targetIndex: Int) =
 			nodeDetached(oldNode).nodeAttached(targetNode, targetIndex)
 
 	private fun attach(node: UNativeNode<N>, targetIndex: Int) = nativeAsContainer.attach(node.native, targetIndex)

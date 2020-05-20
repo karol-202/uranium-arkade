@@ -32,5 +32,8 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.5")
             }
         }
+	    all {
+		    languageSettings.enableLanguageFeature("InlineClasses")
+	    }
     }
 }

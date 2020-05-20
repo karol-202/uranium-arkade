@@ -24,7 +24,7 @@ class WCCollisionDomain(props: Props) : WCAbstractNativeContainerComponent<WCCol
 
 	override fun URenderBuilder<WC>.render() { + props.content }
 
-	private fun PhysicsContext.transform(): PhysicsContext = withColliders(native.collectColliders())
+	private fun PhysicsContext.transform(): PhysicsContext = withColliders(native.collectColliders().toList())
 }
 
 fun WCRenderScope.collisionDomain(key: Any = AutoKey,

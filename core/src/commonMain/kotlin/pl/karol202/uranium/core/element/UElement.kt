@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 
 class UElement<N, P : UProps>(private val constructor: (P) -> UComponent<N, P>,
                               override val props: P,
-                              internal val propsClass: KClass<P>) : UPropsProvider<P>
+                              internal val propsClass: KClass<P> /* TODO Change class to name */) : UPropsProvider<P>
 {
 	fun withProps(propsBuilder: P.() -> P) = UElement(constructor, props.propsBuilder(), propsClass)
 

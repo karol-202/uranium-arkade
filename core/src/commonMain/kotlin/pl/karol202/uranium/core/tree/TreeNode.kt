@@ -8,7 +8,12 @@ import pl.karol202.uranium.core.component.componentContext
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.native.UNativeNode
 import pl.karol202.uranium.core.tree.TreeNodeOperation.*
-import pl.karol202.uranium.core.util.elementInserted
+import pl.karol202.uranium.core.util.*
+import pl.karol202.uranium.core.util.NativeList
+import pl.karol202.uranium.core.util.inserted
+import pl.karol202.uranium.core.util.emptyNativeList
+import pl.karol202.uranium.core.util.nativeListOf
+import kotlin.collections.fold
 import kotlin.reflect.KClass
 
 internal fun <N, P : UProps> UElement<N, P>.createNode(invalidateCallback: (TreeNode<N, *>) -> Unit) =
@@ -21,12 +26,12 @@ internal class TreeNode<N, P : UProps> internal constructor(private val componen
 	override val key get() = component.key
 	internal val props get() = component.props
 
-	private var children = emptyList<TreeNode<N, *>>()
+	private var children = emptyNativeList<TreeNode<N, *>>()
 
-	val nativeNodes: List<UNativeNode<N>>
+	val nativeNodes: NativeList<UNativeNode<N>>
 		get() = when(component)
 		{
-			is UNativeComponent<N, P> -> listOf(UNativeNode(component.native, children.flatMap { it.nativeNodes }))
+			is UNativeComponent<N, P> -> nativeListOf(UNativeNode(component.native, children.flatMap { it.nativeNodes }))
 			else -> children.flatMap { it.nativeNodes }
 		}
 
@@ -47,15 +52,17 @@ internal class TreeNode<N, P : UProps> internal constructor(private val componen
 
 	private fun render()
 	{
-		children = dispatchDiff(children, component.render()).fold(children) { children, op -> op.applyTo(children) }
+		children = dispatchDiff(children, component.render().toNativeList()).fold(children) { children, op ->
+			op.applyTo(children)
+		}
 	}
 
-	private fun TreeNodeOperation<N>.applyTo(children: List<TreeNode<N, *>>) = when(this)
+	private fun TreeNodeOperation<N>.applyTo(children: NativeList<TreeNode<N, *>>) = when(this)
 	{
-		is CreateAndAttachNode<N> -> children.elementInserted(createChild(element), index)
+		is CreateAndAttachNode<N> -> children.inserted(createChild(element), index)
 		is UpdateNode<N, *> -> children.also { this.apply() }
 		is DestroyAndDetachNode<N> -> children - node.also { it.destroy() }
-		is AttachNode<N> -> children.elementInserted(node, index)
+		is AttachNode<N> -> children.inserted(node, index)
 		is DetachNode<N> -> children - node
 	}
 
@@ -91,7 +98,7 @@ internal class TreeNode<N, P : UProps> internal constructor(private val componen
 	private fun destroyChildren()
 	{
 		children.forEach { it.destroy() }
-		children = emptyList()
+		children = emptyNativeList()
 	}
 
 	private fun destroyComponent() = component.destroy()
