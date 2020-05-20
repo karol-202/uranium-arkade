@@ -10,8 +10,9 @@ data class PolarVector(val angle: Double /* Radians */,
 {
 	companion object
 	{
-		fun randomDirection() = PolarVector(angle = Random.nextDouble() * 2 * PI,
-		                                    length = 1.0)
+		fun randomDirection(startAngle: Double = 0.0, endAngle: Double = 2 * PI) =
+				PolarVector(angle = Random.nextDouble(startAngle, endAngle),
+				            length = 1.0)
 	}
 
 	val x get() = length * cos(angle)
