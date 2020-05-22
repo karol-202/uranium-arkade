@@ -19,7 +19,7 @@ internal class UNativeNode<N>(private val native: UNative<N>,
 
 	private fun NativeList<UNativeNode<N>>.childTransformedTo(targetNode: UNativeNode<N>, targetIndex: Int): NativeList<UNativeNode<N>>
 	{
-		val old = withIndex().find { it.value.native == targetNode.native }
+		val old = withIndex().find { it.value.native === targetNode.native }
 		val transformedNode = (old?.value ?: UNativeNode(targetNode.native)).transformedTo(targetNode.children)
 		return when
 		{

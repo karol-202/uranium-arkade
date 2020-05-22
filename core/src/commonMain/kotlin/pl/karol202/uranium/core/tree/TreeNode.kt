@@ -3,7 +3,6 @@ package pl.karol202.uranium.core.tree
 import pl.karol202.uranium.core.common.UKeyProvider
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.component.UComponent
-import pl.karol202.uranium.core.component.UNativeComponent
 import pl.karol202.uranium.core.component.componentContext
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.native.UNativeNode
@@ -28,10 +27,10 @@ internal class TreeNode<N, P : UProps> internal constructor(private val componen
 	private var children = emptyNativeList<TreeNode<N, *>>()
 
 	val nativeNodes: NativeList<UNativeNode<N>>
-		get() = when(component)
+		get()
 		{
-			is UNativeComponent<N, P> -> nativeListOf(UNativeNode(component.native, children.flatMap { it.nativeNodes }))
-			else -> children.flatMap { it.nativeNodes }
+			val native = component.native ?: return children.flatMap { it.nativeNodes }
+			return nativeListOf(UNativeNode(native, children.flatMap { it.nativeNodes }))
 		}
 
 	fun init()
@@ -69,22 +68,24 @@ internal class TreeNode<N, P : UProps> internal constructor(private val componen
 
 	private fun <P : UProps> UpdateNode<N, P>.apply() = node.reuse(props)
 
-	fun reuse(props: P)
+	fun reuse(newProps: P)
 	{
-		if(needsUpdate(props)) keepProps { prevProps ->
-			setProps(props)
+		val prevProps = component.props
+		if(needsUpdate(prevProps, newProps))
+		{
+			setProps(newProps)
 			render()
-			update(prevProps)
+			update(previousProps = prevProps)
 		}
-		else setProps(props)
+		else setProps(newProps)
 	}
 
-	// Returning false doesn't have to necessarily mean that props haven't changed
-	private fun needsUpdate(props: P) = component.props != props
+	private fun needsUpdate(prevProps: P, newProps: P) = newProps !== prevProps && component.needsUpdate(newProps)
 
-	private fun <R> keepProps(block: (P) -> R) = component.props.let(block)
-
-	private fun setProps(props: P) = component.modifyPropsInternal(props)
+	private fun setProps(newProps: P)
+	{
+		component.modifyPropsInternal(newProps)
+	}
 
 	private fun update(previousProps: P? = null) = component.onUpdate(previousProps)
 

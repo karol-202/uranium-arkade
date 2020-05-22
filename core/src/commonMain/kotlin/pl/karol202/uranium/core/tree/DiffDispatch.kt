@@ -69,7 +69,7 @@ private fun <N> DispatchUnit<N, *>.isCorrespondingTo(unit: DispatchUnit<N, *>) =
 {
 	propsClass !== unit.propsClass -> false
 	key === AutoKey -> unit.key === AutoKey // TODO Handle case of multiple AutoKeys in one component
-	else -> unit.key === key
+	else -> unit.key == key
 }
 
 private fun <N> DispatchingState<N>.destroyExcessiveUnits(limit: Int) =

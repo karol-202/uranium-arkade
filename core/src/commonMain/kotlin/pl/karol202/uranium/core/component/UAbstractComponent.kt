@@ -25,6 +25,8 @@ abstract class UAbstractComponent<N, P : UProps>(props: P) : UComponent<N, P>
 
 	protected open fun onDestroy() { }
 
+	override fun needsUpdate(newProps: P) = true
+
 	final override fun modifyPropsInternal(props: P)
 	{
 		this.props = props
