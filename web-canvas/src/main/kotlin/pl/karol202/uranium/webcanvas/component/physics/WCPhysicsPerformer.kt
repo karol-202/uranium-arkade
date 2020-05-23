@@ -13,11 +13,13 @@ import pl.karol202.uranium.webcanvas.values.InputEvent
 class WCPhysicsPerformer(props: Props) : WCAbstractNativeLeafComponent<WCPhysicsPerformer.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
-	                 val listener: PhysicsContext.() -> Unit) : UProps
+	                 val listener: (PhysicsContext) -> Unit) : UProps
 
-	override val native = WCPhysicsNativeLeaf { props.listener(it) }
+	override val native = WCPhysicsNativeLeaf(::perform)
+
+	private fun perform(context: PhysicsContext) = props.listener(context)
 }
 
 fun WCRenderScope.physicsPerformer(key: Any = AutoKey,
-                                   listener: PhysicsContext.() -> Unit) =
+                                   listener: (PhysicsContext) -> Unit) =
 		component(::WCPhysicsPerformer, WCPhysicsPerformer.Props(key, listener))

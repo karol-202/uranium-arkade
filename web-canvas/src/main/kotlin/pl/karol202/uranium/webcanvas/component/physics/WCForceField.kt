@@ -13,22 +13,10 @@ import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
 import pl.karol202.uranium.webcanvas.physics.force.Force
 
-class WCForceField(props: Props) : WCAbstractComponent<WCForceField.Props>(props)
-{
-	data class Props(override val key: Any = AutoKey,
-	                 val force: Force,
-	                 val content: List<WCElement<*>>) : UProps
-
-	override fun URenderBuilder<WC>.render() {
-		+ physicsTransformer(transform = { transform() }) {
-			+ props.content
-		}
-	}
-
-	private fun PhysicsContext.transform() = withForce(props.force)
-}
-
 fun WCRenderScope.forceField(key: Any = AutoKey,
                              force: Force,
                              content: WCRenderBuilder.() -> Unit) =
-		component(::WCForceField, WCForceField.Props(key, force, content.render()))
+		physicsTransformer(key = key,
+		                   transform = { it.withForce(force) }) {
+			+ content.render()
+		}

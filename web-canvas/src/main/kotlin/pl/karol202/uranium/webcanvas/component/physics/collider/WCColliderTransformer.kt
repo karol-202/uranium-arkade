@@ -21,9 +21,11 @@ class WCColliderTransformer(props: Props) : WCAbstractNativeContainerComponent<W
 	                 val transform: Collider.() -> Collider,
 	                 val content: List<WCElement<*>>) : UProps
 
-	override val native = WCColliderNativeContainer { props.transform(it) }
+	override val native = WCColliderNativeContainer(::transform)
 
 	override fun URenderBuilder<WC>.render() { + props.content }
+
+	private fun transform(collider: Collider) = props.transform(collider)
 }
 
 fun WCRenderScope.colliderTransformer(key: Any = AutoKey,

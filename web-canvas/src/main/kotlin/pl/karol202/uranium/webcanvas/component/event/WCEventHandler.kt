@@ -15,7 +15,7 @@ class WCEventHandler(props: Props) : WCAbstractNativeLeafComponent<WCEventHandle
 	                 val keyListener: (InputEvent.Key) -> Unit,
 	                 val allListener: (InputEvent) -> Unit) : UProps
 
-	override val native = WCEventNativeLeaf { notify(it) }
+	override val native = WCEventNativeLeaf(::notify)
 
 	private fun notify(event: InputEvent)
 	{

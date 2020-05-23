@@ -16,15 +16,17 @@ import pl.karol202.uranium.webcanvas.physics.PhysicsContext
 class WCPhysicsTransformer(props: Props) : WCAbstractNativeContainerComponent<WCPhysicsTransformer.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
-	                 val transform: PhysicsContext.() -> PhysicsContext,
+	                 val transform: (PhysicsContext) -> PhysicsContext,
 	                 val content: List<WCElement<*>>) : UProps
 
-	override val native = WCPhysicsNativeContainer { props.transform(it) }
+	override val native = WCPhysicsNativeContainer(::transform)
 
 	override fun URenderBuilder<WC>.render() { + props.content }
+
+	private fun transform(context: PhysicsContext) = props.transform(context)
 }
 
 fun WCRenderScope.physicsTransformer(key: Any = AutoKey,
-                                     transform: PhysicsContext.() -> PhysicsContext,
+                                     transform: (PhysicsContext) -> PhysicsContext,
                                      content: WCRenderBuilder.() -> Unit) =
 		component(::WCPhysicsTransformer, WCPhysicsTransformer.Props(key, transform, content.render()))

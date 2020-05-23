@@ -19,9 +19,11 @@ class WCEventTransformer(props: Props) : WCAbstractNativeContainerComponent<WCEv
 	                 val transform: (InputEvent) -> InputEvent,
 	                 val content: List<WCElement<*>>) : UProps
 
-	override val native = WCEventNativeContainer { props.transform(it) }
+	override val native = WCEventNativeContainer(::transform)
 
 	override fun URenderBuilder<WC>.render() { + props.content }
+
+	private fun transform(event: InputEvent) = props.transform(event)
 }
 
 fun WCRenderScope.eventTransformer(key: Any = AutoKey,

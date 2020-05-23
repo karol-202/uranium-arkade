@@ -11,6 +11,7 @@ import pl.karol202.uranium.webcanvas.WCElement
 import pl.karol202.uranium.webcanvas.WCRenderBuilder
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractNativeContainerComponent
+import pl.karol202.uranium.webcanvas.draw.DrawContext
 import pl.karol202.uranium.webcanvas.draw.DrawOperation
 import pl.karol202.uranium.webcanvas.native.WCDrawNativeContainer
 
@@ -21,10 +22,14 @@ class WCDrawContainer(props: Props) : WCAbstractNativeContainerComponent<WCDrawC
 	                 val afterDrawOperation: DrawOperation,
 	                 val content: List<WCElement<*>>) : UProps
 
-	override val native = WCDrawNativeContainer(beforeDrawOperation = { props.beforeDrawOperation(this) },
-	                                            afterDrawOperation = { props.afterDrawOperation(this) })
+	override val native = WCDrawNativeContainer(beforeDrawOperation = { beforeDraw() },
+	                                            afterDrawOperation = { afterDraw() })
 
 	override fun URenderBuilder<WC>.render() { + props.content }
+
+	private fun DrawContext.beforeDraw() = props.beforeDrawOperation(this)
+
+	private fun DrawContext.afterDraw() = props.afterDrawOperation(this)
 }
 
 fun WCRenderScope.drawContainer(key: Any = AutoKey,

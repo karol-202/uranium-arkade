@@ -44,10 +44,10 @@ data class Vector(val x: Double = 0.0,
 
 	operator fun div(factor: Double) = if(factor != 0.0) Vector(x / factor, y / factor) else null
 
+	infix fun dot(other: Vector) = (x * other.x) + (y * other.y)
+
 	infix fun clampIn(bounds: Bounds) =
 			Vector(x.coerceIn(bounds.start.x, bounds.end.x), y.coerceIn(bounds.start.y, bounds.end.y))
-
-	infix fun dot(other: Vector) = (x * other.x) + (y * other.y)
 }
 
 operator fun Double.div(vector: Vector) =

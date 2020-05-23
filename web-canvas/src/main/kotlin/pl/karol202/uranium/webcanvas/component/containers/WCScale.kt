@@ -19,50 +19,24 @@ import pl.karol202.uranium.webcanvas.values.InputEvent
 import pl.karol202.uranium.webcanvas.values.Vector
 import pl.karol202.uranium.webcanvas.values.div
 
-class WCScale(props: Props) : WCAbstractComponent<WCScale.Props>(props)
-{
-	data class Props(override val key: Any,
-	                 val vector: Vector,
-	                 val content: List<WCElement<*>>) : UProps
-
-	override fun URenderBuilder<WC>.render()
-	{
-		+ drawContainer(beforeDrawOperation = { before() },
-		                afterDrawOperation = { after() }) {
-			+ eventTransformer(transform = { it.transform() }) {
-				+ physicsTransformer(transform = { transform() }) {
-					+ colliderTransformer(transform = { transform() }) {
-						+ props.content
-					}
-				}
-			}
-		}
-	}
-
-	private fun DrawContext.before()
-	{
-		save()
-		scale(props.vector.x, props.vector.y)
-	}
-
-	private fun DrawContext.after() = restore()
-
-	private fun InputEvent.transform() = when(this)
-	{
-		is InputEvent.Mouse -> withLocation(location / props.vector ?: Vector.ZERO)
-		is InputEvent.Key -> this
-	}
-
-	private fun PhysicsContext.transform(): PhysicsContext
-	{
-		val scale = 1.0 / props.vector ?: return noForces().noColliders()
-		return scale(scale)
-	}
-
-	private fun Collider.transform() = scale(props.vector)
-}
-
 fun WCRenderScope.scale(key: Any = AutoKey,
                         vector: Vector,
                         content: WCRenderBuilder.() -> Unit) =
-		component(::WCScale, WCScale.Props(key, vector, content.render()))
+		fullTransform(key = key,
+		              beforeDraw = {
+			              save()
+			              scale(vector.x, vector.y)
+		              },
+		              afterDraw = { restore() },
+		              transformEvent = { when(it)
+		              {
+			              is InputEvent.Mouse -> it.withLocation(it.location / vector ?: Vector.ZERO)
+			              is InputEvent.Key -> it
+		              } },
+		              transformPhysics = {
+			              val scale = 1.0 / vector
+			              if(scale != null) it.scale(scale) else it.noForces().noColliders()
+		              },
+		              transformCollider = { it.scale(vector) }) {
+			+ content.render()
+		}

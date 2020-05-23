@@ -41,7 +41,7 @@ class WCRigidbody(props: Props) : WCAbstractComponent<WCRigidbody.Props>(props)
 	override fun WCRenderBuilder.render()
 	{
 		+ translate(vector = state.position) {
-			+ physicsPerformer { performPhysics(this) }
+			+ physicsPerformer { performPhysics(it) }
 			+ collider(collider = props.collider)
 			+ props.content
 		}

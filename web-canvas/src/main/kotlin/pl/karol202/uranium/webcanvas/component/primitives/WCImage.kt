@@ -11,28 +11,12 @@ import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.draw.drawComponent
 import pl.karol202.uranium.webcanvas.values.Bounds
 
-class WCImage(props: Props) : WCAbstractComponent<WCImage.Props>(props)
-{
-	data class Props(override val key: Any,
-	                 val image: CanvasImageSource,
-	                 val drawBounds: Bounds,
-	                 val clipBounds: Bounds?) : UProps
-
-	private val bounds get() = props.drawBounds
-	private val clip get() = props.clipBounds
-
-	override fun URenderBuilder<WC>.render()
-	{
-		+ drawComponent {
-			val clip = clip
-			if(clip == null) drawImage(props.image, bounds.x, bounds.y, bounds.width, bounds.height)
-			else drawImage(props.image, clip.x, clip.y, clip.width, clip.height, bounds.x, bounds.y, bounds.width, bounds.height)
-		}
-	}
-}
-
 fun WCRenderScope.image(key: Any = AutoKey,
                         image: CanvasImageSource,
                         drawBounds: Bounds,
                         clipBounds: Bounds? = null) =
-		component(::WCImage, WCImage.Props(key, image, drawBounds, clipBounds))
+		drawComponent(key = key) {
+			if(clipBounds == null) drawImage(image, drawBounds.x, drawBounds.y, drawBounds.width, drawBounds.height)
+			else drawImage(image, clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height,
+			               drawBounds.x, drawBounds.y, drawBounds.width, drawBounds.height)
+		}

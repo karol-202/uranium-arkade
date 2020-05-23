@@ -12,33 +12,21 @@ import pl.karol202.uranium.webcanvas.draw.DrawContext
 import pl.karol202.uranium.webcanvas.draw.DrawOperation
 import pl.karol202.uranium.webcanvas.values.Path
 
-class WCPath(props: Props) : WCAbstractComponent<WCPath.Props>(props)
-{
-	data class Props(override val key: Any,
-	                 val path: Path,
-	                 val finishOperation: DrawOperation) : UProps
-
-	private val points get() = props.path.points
-
-	override fun URenderBuilder<WC>.render()
-	{
-		+ drawComponent { drawPath() }
-	}
-
-	private fun DrawContext.drawPath()
-	{
-		if(points.size < 2) return
-		beginPath()
-		points.forEachIndexed { index, point ->
-			if(index == 0) moveTo(point.x, point.y)
-			else lineTo(point.x, point.y)
-		}
-		if(props.path.closed) closePath()
-		props.finishOperation(this)
-	}
-}
-
 fun WCRenderScope.path(key: Any = AutoKey,
                        path: Path,
                        finishOperation: DrawOperation) =
-		component(::WCPath, WCPath.Props(key, path, finishOperation))
+		drawComponent(key = key) { drawPath(path = path,
+		                                    finishOperation = finishOperation) }
+
+private fun DrawContext.drawPath(path: Path,
+                                 finishOperation: DrawOperation)
+{
+	if(path.points.size < 2) return
+	beginPath()
+	path.points.forEachIndexed { index, point ->
+		if(index == 0) moveTo(point.x, point.y)
+		else lineTo(point.x, point.y)
+	}
+	if(path.closed) closePath()
+	finishOperation()
+}

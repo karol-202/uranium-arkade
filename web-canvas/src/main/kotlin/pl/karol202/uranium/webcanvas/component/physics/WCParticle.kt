@@ -30,7 +30,7 @@ class WCParticle(props: Props) : WCAbstractComponent<WCParticle.Props>(props)
 	override fun WCRenderBuilder.render()
 	{
 		+ translate(vector = state.position) {
-			+ physicsPerformer { performPhysics(this) }
+			+ physicsPerformer { performPhysics(it) }
 			+ props.content
 		}
 	}

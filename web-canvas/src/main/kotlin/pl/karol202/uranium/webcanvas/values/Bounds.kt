@@ -10,6 +10,9 @@ data class Bounds(val start: Vector = Vector.ZERO,
 	val center by lazy { start + halfSize }
 	val end by lazy { start + size }
 
+	val xRange by lazy { start.x..end.x }
+	val yRange by lazy { start.y..end.y }
+
 	val x by lazy { start.x }
 	val y by lazy { start.y }
 	val width by lazy { size.x }
@@ -39,4 +42,6 @@ data class Bounds(val start: Vector = Vector.ZERO,
 
 	private fun fixNegativeSize() = Bounds(start = Vector(min(start.x, end.x), min(start.y, end.y)),
 	                                       size = Vector(abs(size.x), abs(size.y)))
+
+	fun lerp(factor: Vector) = Vector(xRange.lerp(factor.x), yRange.lerp(factor.y))
 }

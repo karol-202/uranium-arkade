@@ -21,7 +21,9 @@ class WCCollider(props: Props) : WCAbstractNativeLeafComponent<WCCollider.Props>
 	data class Props(override val key: Any = AutoKey,
 	                 val collider: Collider) : UProps
 
-	override val native = WCColliderNativeLeaf { props.collider }
+	override val native = WCColliderNativeLeaf(::provide)
+
+	private fun provide() = props.collider
 }
 
 fun WCRenderScope.collider(key: Any = AutoKey,

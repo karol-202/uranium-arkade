@@ -10,21 +10,19 @@ import pl.karol202.uranium.webcanvas.WCElement
 import pl.karol202.uranium.webcanvas.WCRenderBuilder
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractNativeContainerComponent
-import pl.karol202.uranium.webcanvas.native.WCColliderNativeContainer
 import pl.karol202.uranium.webcanvas.native.WCPhysicsNativeContainer
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
-import pl.karol202.uranium.webcanvas.physics.collider.Collider
 
 class WCCollisionDomain(props: Props) : WCAbstractNativeContainerComponent<WCCollisionDomain.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 val content: List<WCElement<*>>) : UProps
 
-	override val native = WCPhysicsNativeContainer { it.transform() }
+	override val native = WCPhysicsNativeContainer(::transform)
 
 	override fun URenderBuilder<WC>.render() { + props.content }
 
-	private fun PhysicsContext.transform(): PhysicsContext = withColliders(native.collectColliders().toList())
+	private fun transform(context: PhysicsContext): PhysicsContext = context.withColliders(native.collectColliders().toList())
 }
 
 fun WCRenderScope.collisionDomain(key: Any = AutoKey,

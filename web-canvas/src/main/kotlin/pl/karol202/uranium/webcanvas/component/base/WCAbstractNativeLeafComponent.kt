@@ -11,4 +11,6 @@ abstract class WCAbstractNativeLeafComponent<P : UProps>(props: P) : UAbstractCo
 	abstract override val native: UNative<WC>
 
 	final override fun render() = emptyList<WCElement<*>>()
+
+	override fun needsUpdate(newProps: P) = false
 }
