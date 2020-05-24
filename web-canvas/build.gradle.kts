@@ -1,21 +1,85 @@
-import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
+import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinNativeCompile
 
 plugins {
-	kotlin("js") version "1.3.72"
+	kotlin("multiplatform") version "1.3.72"
 	`maven-publish`
 }
 
-dependencies {
-	api(project(":core"))
+val jsInteropPackage = "kotlinx.interop.wasm.dom"
+val jsInteropKlibFile = buildDir.resolve("klib").resolve("$jsInteropPackage-jsInterop.klib")
 
-	implementation(kotlin("stdlib-js"))
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.5")
+kotlin {
+	js {
+		targets {
+			browser()
+		}
+	}
+	wasm32()
+
+	sourceSets {
+		val commonMain by getting {
+			dependencies {
+				api(project(":core"))
+				implementation(kotlin("stdlib-common"))
+				implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.7")
+			}
+		}
+
+		val jsMain by getting {
+			dependencies {
+				implementation(kotlin("stdlib-js"))
+				implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.7")
+			}
+		}
+
+		val wasm32Main by getting {
+			dependencies {
+				implementation(files(jsInteropKlibFile))
+			}
+		}
+
+		all {
+			languageSettings.useExperimentalAnnotation("kotlin.time.ExperimentalTime")
+		}
+	}
 }
 
-kotlin.target.browser { }
+tasks {
+	val jsInterop by registering(Exec::class) {
+		workingDir = projectDir
 
-tasks.withType(Kotlin2JsCompile::class) {
-	kotlinOptions.freeCompilerArgs += listOf("-Xopt-in=kotlin.time.ExperimentalTime")
+		val isWindows = System.getProperty("os.name").startsWith("Windows")
+		val ext = if(isWindows) ".bat" else ""
+		val distributionPath = project.properties["kotlin.native.home"] as String?
+
+		if(distributionPath != null)
+		{
+			val jsInteropCommand = file(distributionPath).resolve("bin").resolve("jsinterop$ext")
+
+			inputs.property("jsInteropCommand", jsInteropCommand)
+			inputs.property("jsInteropPackage", jsInteropPackage)
+			outputs.file(jsInteropKlibFile)
+
+			commandLine(jsInteropCommand,
+			            "-pkg", jsInteropPackage,
+			            "-o", jsInteropKlibFile,
+			            "-target", "wasm32")
+		}
+		else
+		{
+			doFirst {
+				throw GradleException("""
+	                    |Kotlin/Native distribution path must be specified to build the JavaScript interop.
+	                    |Use 'kotlin.native.home' project property to specify it.
+	                """.trimMargin()
+				)
+			}
+		}
+	}
+
+	withType<AbstractKotlinNativeCompile<*>>().all {
+		dependsOn(jsInterop)
+	}
 }
 
 publishing {
