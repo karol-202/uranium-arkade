@@ -12,8 +12,8 @@ import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.event.eventHandler
 import pl.karol202.uranium.webcanvas.component.primitives.image
 import pl.karol202.uranium.webcanvas.values.Bounds
-import pl.karol202.uranium.webcanvas.values.InputEvent
-import pl.karol202.uranium.webcanvas.values.InputEvent.Mouse.Type
+import pl.karol202.uranium.webcanvas.input.InputEvent
+import pl.karol202.uranium.webcanvas.input.InputEvent.Mouse.Type
 import pl.karol202.uranium.webcanvas.values.Vector
 
 class WCButton(props: Props) : WCAbstractComponent<WCButton.Props>(props),

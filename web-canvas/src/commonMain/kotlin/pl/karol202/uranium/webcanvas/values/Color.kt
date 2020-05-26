@@ -37,5 +37,5 @@ sealed class Color(val asText: String) : FillStyle
 	                     val lightness: Double,
 	                     val alpha: Double) : Color("hsla($hue,${saturation * 100}%,${lightness * 100}%,$alpha)")
 
-	override fun createNativeStyle(context: DrawContext) = asText
+	override fun createNativeStyle(context: DrawContext) = NativeFillStyle.fromString(asText)
 }

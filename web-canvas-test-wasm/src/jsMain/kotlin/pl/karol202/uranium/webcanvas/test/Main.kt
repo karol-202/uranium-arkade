@@ -4,23 +4,19 @@ external val konan: dynamic
 external val instance: dynamic
 external val heap: dynamic
 
-//external fun kotlinObject(arenaIndex: Int, objectIndex: Any): dynamic
-external fun toUTF16String(pointer: Int, size: Int): String
-
-fun extern_test(strPtr: Int, strLen: Int)
+fun extern_test(a: Boolean, lambdaIndex: Int, lambdaResultArena: Int)
 {
-	println("extern test in js ${toUTF16String(strPtr, strLen)}")
-	/*//val str = toString(aPtr)
-	println("extern test in js")
-	//val ko = kotlinObject(0, 0)
-	//console.log(ko)
-	val libraries = konan.libraries as Array<dynamic>
-	val addObject = libraries.mapNotNull { it.Konan_js_addObjectToArena }.single()
-	addObject(0, jsObject {
-		abcd = "efgh"
-	})*/
+	println("extern $a")
 
-	instance.exports.intern_test(666)
+	val libraries = konan.libraries as Array<dynamic>
+	val wrapLambda = libraries.mapNotNull { it.Konan_js_wrapLambda }.single()
+	val lambda = wrapLambda(lambdaResultArena, lambdaIndex)
+
+	val obj = jsObject {
+		bool = true
+		test = 42
+	}
+	lambda(1, "xyz", 3.8, obj)
 }
 
 inline fun jsObject(init: dynamic.() -> Unit): dynamic {

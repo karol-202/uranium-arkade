@@ -21,20 +21,17 @@ kotlin {
 			dependencies {
 				api(project(":core"))
 				implementation(kotlin("stdlib-common"))
-				implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.7")
 			}
 		}
 
 		val jsMain by getting {
 			dependencies {
 				implementation(kotlin("stdlib-js"))
-				implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.7")
 			}
 		}
 
 		val wasm32Main by getting {
 			dependencies {
-				implementation(files(jsInteropKlibFile))
 			}
 		}
 
@@ -77,9 +74,9 @@ tasks {
 		}
 	}
 
-	withType<AbstractKotlinNativeCompile<*>>().all {
+	/*withType<AbstractKotlinNativeCompile<*>>().all {
 		dependsOn(jsInterop)
-	}
+	}*/
 }
 
 publishing {

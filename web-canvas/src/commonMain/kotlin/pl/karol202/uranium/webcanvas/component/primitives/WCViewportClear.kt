@@ -3,6 +3,6 @@ package pl.karol202.uranium.webcanvas.component.primitives
 import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.draw.drawComponent
-import pl.karol202.uranium.webcanvas.draw.clearCanvas
+import pl.karol202.uranium.webcanvas.draw.clearViewport
 
-fun WCRenderScope.canvasClear(key: Any = AutoKey) = drawComponent(key = key) { clearCanvas() }
+fun WCRenderScope.viewportClear(key: Any = AutoKey) = drawComponent(key = key) { clearViewport() }

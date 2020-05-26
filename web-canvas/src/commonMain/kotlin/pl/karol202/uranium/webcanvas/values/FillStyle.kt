@@ -4,5 +4,5 @@ import pl.karol202.uranium.webcanvas.draw.DrawContext
 
 interface FillStyle
 {
-	fun createNativeStyle(context: DrawContext): Any
+	fun createNativeStyle(context: DrawContext): NativeFillStyle
 }

@@ -1,6 +1,6 @@
 package pl.karol202.uranium.webcanvas.native
 
-import pl.karol202.uranium.webcanvas.values.InputEvent
+import pl.karol202.uranium.webcanvas.input.InputEvent
 
 class WCEventNativeContainer(private val transform: (InputEvent) -> InputEvent) : WCNativeContainer by nativeContainer()
 {

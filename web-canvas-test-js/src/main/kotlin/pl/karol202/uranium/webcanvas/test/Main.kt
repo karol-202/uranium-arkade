@@ -20,7 +20,7 @@ import pl.karol202.uranium.webcanvas.component.physics.rigidbody
 import pl.karol202.uranium.webcanvas.component.primitives.image
 import pl.karol202.uranium.webcanvas.component.primitives.rectFill
 import pl.karol202.uranium.webcanvas.component.primitives.textFill
-import pl.karol202.uranium.webcanvas.draw.startOnCanvas
+import pl.karol202.uranium.webcanvas.startOnCanvas
 import pl.karol202.uranium.webcanvas.physics.collider.CircleCollider
 import pl.karol202.uranium.webcanvas.physics.collider.RectCollider
 import pl.karol202.uranium.webcanvas.physics.force.GravitationalForce

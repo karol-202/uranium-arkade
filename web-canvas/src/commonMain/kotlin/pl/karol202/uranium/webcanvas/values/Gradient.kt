@@ -1,6 +1,5 @@
 package pl.karol202.uranium.webcanvas.values
 
-import org.w3c.dom.CanvasGradient
 import pl.karol202.uranium.webcanvas.draw.DrawContext
 
 infix fun Color.at(position: Double) = Gradient.Step(position, this)
@@ -48,7 +47,7 @@ sealed class Gradient : FillStyle
 
 	override fun createNativeStyle(context: DrawContext) = createEmptyGradient(context).apply {
 		steps.forEach { (position, color) -> addColorStop(position, color.asText) }
-	}
+	}.asNativeFillStyle
 
-	protected abstract fun createEmptyGradient(context: DrawContext): CanvasGradient
+	protected abstract fun createEmptyGradient(context: DrawContext): NativeGradient
 }
