@@ -1,12 +1,10 @@
 package pl.karol202.uranium.webcanvas.values
 
-import org.w3c.dom.Path2D
-
-data class Path(val nativePath: Path2D)
+data class Path(val nativePath: NativePath)
 {
 	companion object
 	{
-		fun fromSVG(data: String) = Path(Path2D(d = data))
+		fun fromSVG(data: String) = Path(NativePath.fromData(data))
 
 		fun closed(vararg points: Vector): Path
 		{
@@ -22,7 +20,7 @@ data class Path(val nativePath: Path2D)
 			return Path(createNativePath(*points))
 		}
 
-		private fun createNativePath(vararg points: Vector) = Path2D().apply {
+		private fun createNativePath(vararg points: Vector) = NativePath.create().apply {
 			moveTo(points.first().x, points.first().y)
 			points.drop(1).forEach {
 				lineTo(it.x, it.y)

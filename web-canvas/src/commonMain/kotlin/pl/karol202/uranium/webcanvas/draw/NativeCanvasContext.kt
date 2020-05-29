@@ -1,8 +1,7 @@
 package pl.karol202.uranium.webcanvas.draw
 
 import pl.karol202.uranium.webcanvas.assets.NativeImage
-import pl.karol202.uranium.webcanvas.values.NativeFillStyle
-import pl.karol202.uranium.webcanvas.values.NativeGradient
+import pl.karol202.uranium.webcanvas.values.*
 
 expect class NativeCanvasContext
 {
@@ -10,6 +9,9 @@ expect class NativeCanvasContext
 
 	var fillStyle: NativeFillStyle
 	var font: String
+	var textAlign: String
+	var textBaseline: String
+	var direction: String
 
 	fun fillRect(x: Double, y: Double, width: Double, height: Double)
 
@@ -36,9 +38,9 @@ expect class NativeCanvasContext
 
 	fun closePath()
 
-	fun fill()
+	fun fill(fillRule: String = PathFillRule.NONZERO.native)
 
-	fun fill(fillRule: String)
+	fun fill(path: NativePath, fillRule: String = PathFillRule.NONZERO.native)
 
 	fun save()
 

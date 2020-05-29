@@ -1,12 +1,8 @@
 package pl.karol202.uranium.webcanvas.draw
 
-import org.w3c.dom.CanvasFillRule
-import org.w3c.dom.CanvasRenderingContext2D
-import org.w3c.dom.HTMLCanvasElement
+import org.w3c.dom.*
 import pl.karol202.uranium.webcanvas.assets.NativeImage
-import pl.karol202.uranium.webcanvas.values.FillStyle
-import pl.karol202.uranium.webcanvas.values.NativeFillStyle
-import pl.karol202.uranium.webcanvas.values.NativeGradient
+import pl.karol202.uranium.webcanvas.values.*
 import kotlin.browser.document
 
 actual class NativeCanvasContext(private val context: CanvasRenderingContext2D)
@@ -19,6 +15,15 @@ actual class NativeCanvasContext(private val context: CanvasRenderingContext2D)
 	actual var font: String
 		get() = context.font
 		set(value) { context.font = value }
+	actual var textAlign: String
+		get() = context.textAlign.unsafeCast<String>()
+		set(value) { context.textAlign = value.unsafeCast<CanvasTextAlign>() }
+	actual var textBaseline: String
+		get() = context.textBaseline.unsafeCast<String>()
+		set(value) { context.textBaseline = value.unsafeCast<CanvasTextBaseline>() }
+	actual var direction: String
+		get() = context.direction.unsafeCast<String>()
+		set(value) { context.direction = value.unsafeCast<CanvasDirection>() }
 
 	actual fun fillRect(x: Double, y: Double, width: Double, height: Double) = context.fillRect(x, y, width, height)
 
@@ -49,9 +54,9 @@ actual class NativeCanvasContext(private val context: CanvasRenderingContext2D)
 
 	actual fun closePath() = context.closePath()
 
-	actual fun fill() = context.fill()
-
 	actual fun fill(fillRule: String) = context.fill(fillRule.unsafeCast<CanvasFillRule>())
+
+	actual fun fill(path: NativePath, fillRule: String) = context.fill(path.path2D, fillRule.unsafeCast<CanvasFillRule>())
 
 	actual fun save() = context.save()
 

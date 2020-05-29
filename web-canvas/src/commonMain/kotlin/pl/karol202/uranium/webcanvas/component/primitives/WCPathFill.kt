@@ -5,12 +5,7 @@ import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.draw.drawComponent
 import pl.karol202.uranium.webcanvas.values.FillStyle
 import pl.karol202.uranium.webcanvas.values.Path
-
-enum class PathFillRule(val native: String)
-{
-	NONZERO("nonzero"),
-	EVENODD("evenodd")
-}
+import pl.karol202.uranium.webcanvas.values.PathFillRule
 
 fun WCRenderScope.pathFill(key: Any = AutoKey,
                            path: Path,

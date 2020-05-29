@@ -6,6 +6,7 @@ import pl.karol202.uranium.webcanvas.assets.NativeImage
 import pl.karol202.uranium.webcanvas.retrieveObject
 import pl.karol202.uranium.webcanvas.values.NativeFillStyle
 import pl.karol202.uranium.webcanvas.values.NativeGradient
+import pl.karol202.uranium.webcanvas.values.NativePath
 
 @SymbolName("uranium_NativeCanvasContext_getCanvas")
 private external fun NativeCanvasContext_getCanvas(arena: Arena, index: Object, resultArena: Arena): Int
@@ -19,6 +20,17 @@ private external fun NativeCanvasContext_setFillStyle(arena: Arena, index: Objec
 @SymbolName("uranium_NativeCanvasContext_setFont")
 private external fun NativeCanvasContext_setFont(arena: Arena, index: Object, fontPtr: Pointer, fontLength: Int)
 
+@SymbolName("uranium_NativeCanvasContext_setTextAlign")
+private external fun NativeCanvasContext_setTextAlign(arena: Arena, index: Object, alignPtr: Pointer, alignLength: Int)
+
+@SymbolName("uranium_NativeCanvasContext_setTextBaseline")
+private external fun NativeCanvasContext_setTextBaseline(arena: Arena, index: Object,
+                                                         baselinePtr: Pointer, baselineLength: Int)
+
+@SymbolName("uranium_NativeCanvasContext_setDirection")
+private external fun NativeCanvasContext_setDirection(arena: Arena, index: Object,
+                                                      directionPtr: Pointer, directionLength: Int)
+
 @SymbolName("uranium_NativeCanvasContext_fillRect")
 private external fun NativeCanvasContext_fillRect(arena: Arena, index: Int,
                                                   x: Double, y: Double, width: Double, height: Double)
@@ -31,22 +43,22 @@ private external fun NativeCanvasContext_clearRect(arena: Arena, index: Int,
 private external fun NativeCanvasContext_drawImage(arena: Arena, index: Int, imageArena: Arena, imageIndex: Object,
                                                    drawX: Double, drawY: Double)
 
-@SymbolName("uranium_NativeCanvasContext_drawImage")
-private external fun NativeCanvasContext_drawImage(arena: Arena, index: Int, imageArena: Arena, imageIndex: Object,
-                                                   drawX: Double, drawY: Double, drawWidth: Double, drawHeight: Double)
+@SymbolName("uranium_NativeCanvasContext_drawImage_size")
+private external fun NativeCanvasContext_drawImage_size(arena: Arena, index: Int, imageArena: Arena, imageIndex: Object,
+                                                        drawX: Double, drawY: Double, drawWidth: Double, drawHeight: Double)
 
-@SymbolName("uranium_NativeCanvasContext_drawImage")
-private external fun NativeCanvasContext_drawImage(arena: Arena, index: Int, imageArena: Arena, imageIndex: Object,
-                                                   srcX: Double, srcY: Double, srcWidth: Double, srcHeight: Double,
-                                                   drawX: Double, drawY: Double, drawWidth: Double, drawHeight: Double)
+@SymbolName("uranium_NativeCanvasContext_drawImage_src_size")
+private external fun NativeCanvasContext_drawImage_src_size(arena: Arena, index: Int, imageArena: Arena, imageIndex: Object,
+                                                            srcX: Double, srcY: Double, srcWidth: Double, srcHeight: Double,
+                                                            drawX: Double, drawY: Double, drawWidth: Double, drawHeight: Double)
 
 @SymbolName("uranium_NativeCanvasContext_fillText")
 private external fun NativeCanvasContext_fillText(arena: Arena, index: Int, textPtr: Pointer, textLength: Int,
                                                   x: Double, y: Double)
 
-@SymbolName("uranium_NativeCanvasContext_fillText")
-private external fun NativeCanvasContext_fillText(arena: Arena, index: Int, textPtr: Pointer, textLength: Int,
-                                                  x: Double, y: Double, maxWidth: Double)
+@SymbolName("uranium_NativeCanvasContext_fillText_max")
+private external fun NativeCanvasContext_fillText_max(arena: Arena, index: Int, textPtr: Pointer, textLength: Int,
+                                                      x: Double, y: Double, maxWidth: Double)
 
 @SymbolName("uranium_NativeCanvasContext_beginPath")
 private external fun NativeCanvasContext_beginPath(arena: Arena, index: Int)
@@ -66,10 +78,11 @@ private external fun NativeCanvasContext_arc(arena: Arena, index: Int,
 private external fun NativeCanvasContext_closePath(arena: Arena, index: Int)
 
 @SymbolName("uranium_NativeCanvasContext_fill")
-private external fun NativeCanvasContext_fill(arena: Arena, index: Int)
-
-@SymbolName("uranium_NativeCanvasContext_fill")
 private external fun NativeCanvasContext_fill(arena: Arena, index: Int, fillRulePtr: Pointer, fillRuleLength: Int)
+
+@SymbolName("uranium_NativeCanvasContext_fill_path")
+private external fun NativeCanvasContext_fill_path(arena: Arena, index: Int, pathArena: Arena, pathIndex: Object,
+                                                   fillRulePtr: Pointer, fillRuleLength: Int)
 
 @SymbolName("uranium_NativeCanvasContext_save")
 private external fun NativeCanvasContext_save(arena: Arena, index: Int)
@@ -104,6 +117,15 @@ actual class NativeCanvasContext(override val arena: Arena,
 	actual var font: String
 		get() = TODO()
 		set(value) { NativeCanvasContext_setFont(arena, index, stringPointer(value), stringLengthBytes(value)) }
+	actual var textAlign: String
+		get() = TODO()
+		set(value) { NativeCanvasContext_setTextAlign(arena, index, stringPointer(value), stringLengthBytes(value)) }
+	actual var textBaseline: String
+		get() = TODO()
+		set(value) { NativeCanvasContext_setTextBaseline(arena, index, stringPointer(value), stringLengthBytes(value)) }
+	actual var direction: String
+		get() = TODO()
+		set(value) { NativeCanvasContext_setDirection(arena, index, stringPointer(value), stringLengthBytes(value)) }
 
 	actual fun fillRect(x: Double, y: Double, width: Double, height: Double) =
 			NativeCanvasContext_fillRect(arena, index, x, y, width, height)
@@ -115,18 +137,18 @@ actual class NativeCanvasContext(override val arena: Arena,
 			NativeCanvasContext_drawImage(arena, index, image.arena, image.index, drawX, drawY)
 
 	actual fun drawImage(image: NativeImage, drawX: Double, drawY: Double, drawWidth: Double, drawHeight: Double) =
-			NativeCanvasContext_drawImage(arena, index, image.arena, image.index, drawX, drawY, drawWidth, drawHeight)
+			NativeCanvasContext_drawImage_size(arena, index, image.arena, image.index, drawX, drawY, drawWidth, drawHeight)
 
 	actual fun drawImage(image: NativeImage, sourceX: Double, sourceY: Double, sourceWidth: Double, sourceHeight: Double,
 	                     drawX: Double, drawY: Double, drawWidth: Double, drawHeight: Double) =
-			NativeCanvasContext_drawImage(arena, index, image.arena, image.index,
-			                              sourceX, sourceY, sourceWidth, sourceHeight, drawX, drawY, drawWidth, drawHeight)
+			NativeCanvasContext_drawImage_src_size(arena, index, image.arena, image.index,
+			                                       sourceX, sourceY, sourceWidth, sourceHeight, drawX, drawY, drawWidth, drawHeight)
 
 	actual fun fillText(text: String, x: Double, y: Double) =
 			NativeCanvasContext_fillText(arena, index, stringPointer(text), stringLengthBytes(text), x, y)
 
 	actual fun fillText(text: String, x: Double, y: Double, maxWidth: Double) =
-			NativeCanvasContext_fillText(arena, index, stringPointer(text), stringLengthBytes(text), x, y, maxWidth)
+			NativeCanvasContext_fillText_max(arena, index, stringPointer(text), stringLengthBytes(text), x, y, maxWidth)
 
 	actual fun beginPath() =
 			NativeCanvasContext_beginPath(arena, index)
@@ -143,11 +165,12 @@ actual class NativeCanvasContext(override val arena: Arena,
 	actual fun closePath() =
 			NativeCanvasContext_closePath(arena, index)
 
-	actual fun fill() =
-			NativeCanvasContext_fill(arena, index)
-
 	actual fun fill(fillRule: String) =
 			NativeCanvasContext_fill(arena, index, stringPointer(fillRule), stringLengthBytes(fillRule))
+
+	actual fun fill(path: NativePath, fillRule: String) =
+			NativeCanvasContext_fill_path(arena, index, path.arena, path.index,
+			                              stringPointer(fillRule), stringLengthBytes(fillRule))
 
 	actual fun save() =
 			NativeCanvasContext_save(arena, index)
