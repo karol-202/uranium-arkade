@@ -4,15 +4,14 @@ import pl.karol202.uranium.core.common.AutoKey
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderBuilder
-import pl.karol202.uranium.core.render.URenderScope
 import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.WCElement
 import pl.karol202.uranium.webcanvas.WCRenderBuilder
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractNativeContainerComponent
-import pl.karol202.uranium.webcanvas.draw.DrawContext
-import pl.karol202.uranium.webcanvas.draw.DrawOperation
+import pl.karol202.uranium.webcanvas.values.DrawContext
+import pl.karol202.uranium.webcanvas.values.DrawOperation
 import pl.karol202.uranium.webcanvas.native.WCDrawNativeContainer
 
 class WCDrawContainer(props: Props) : WCAbstractNativeContainerComponent<WCDrawContainer.Props>(props)

@@ -1,5 +1,7 @@
 package pl.karol202.uranium.webcanvas.values
 
+import pl.karol202.uranium.webcanvas.dom.values.NativePath
+
 data class Path(val nativePath: NativePath)
 {
 	companion object

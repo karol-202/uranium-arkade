@@ -11,7 +11,7 @@ import pl.karol202.uranium.webcanvas.WCRenderBuilder
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractNativeContainerComponent
 import pl.karol202.uranium.webcanvas.native.WCEventNativeContainer
-import pl.karol202.uranium.webcanvas.input.InputEvent
+import pl.karol202.uranium.webcanvas.values.InputEvent
 
 class WCEventTransformer(props: Props) : WCAbstractNativeContainerComponent<WCEventTransformer.Props>(props)
 {

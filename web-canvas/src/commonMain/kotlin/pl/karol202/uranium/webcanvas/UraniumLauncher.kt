@@ -1,16 +1,14 @@
 package pl.karol202.uranium.webcanvas
 
 import pl.karol202.uranium.core.render.render
-import pl.karol202.uranium.webcanvas.draw.clearViewport
-import pl.karol202.uranium.webcanvas.draw.getNativeCanvas
+import pl.karol202.uranium.webcanvas.dom.canvas.getNativeCanvas
+import pl.karol202.uranium.webcanvas.dom.input.NativeKeyboardEvent
+import pl.karol202.uranium.webcanvas.dom.input.NativeMouseEvent
+import pl.karol202.uranium.webcanvas.dom.window.NativeWindow
+import pl.karol202.uranium.webcanvas.values.clearViewport
 import pl.karol202.uranium.webcanvas.native.nativeContainer
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
-import pl.karol202.uranium.webcanvas.input.InputEvent
-import pl.karol202.uranium.webcanvas.input.setKeyboardEventListener
-import pl.karol202.uranium.webcanvas.input.setMouseEventListener
-import pl.karol202.uranium.webcanvas.util.clearInterval
-import pl.karol202.uranium.webcanvas.util.now
-import pl.karol202.uranium.webcanvas.util.setInterval
+import pl.karol202.uranium.webcanvas.values.InputEvent
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
@@ -34,8 +32,8 @@ class UraniumLauncher(private val canvasId: String,
 		initContext()
 		initEventListeners()
 		renderManager.scheduleInit()
-		renderTimer = setInterval(renderInterval, this::draw)
-		physicsTimer = setInterval(physicsInterval, this::performPhysics)
+		renderTimer = NativeWindow.setInterval(renderInterval, this::draw)
+		physicsTimer = NativeWindow.setInterval(physicsInterval, this::performPhysics)
 	}
 
 	private fun initContext()
@@ -46,14 +44,20 @@ class UraniumLauncher(private val canvasId: String,
 
 	private fun initEventListeners()
 	{
-		setMouseEventListener(canvasId, ::handleEvent)
-		setKeyboardEventListener(::handleEvent)
+		canvas.setOnMouseDownListener(::handleMouseEvent)
+		canvas.setOnMouseMoveListener(::handleMouseEvent)
+		canvas.setOnMouseUpListener(::handleMouseEvent)
+		canvas.setOnMouseEnterListener(::handleMouseEvent)
+		canvas.setOnMouseLeaveListener(::handleMouseEvent)
+		NativeWindow.setOnKeyDownListener(::handleKeyEvent)
+		NativeWindow.setOnKeyPressListener(::handleKeyEvent)
+		NativeWindow.setOnKeyUpListener(::handleKeyEvent)
 	}
 
 	fun stop()
 	{
-		renderTimer?.let { clearInterval(it) }
-		physicsTimer?.let { clearInterval(it) }
+		renderTimer?.let { NativeWindow.clearInterval(it) }
+		physicsTimer?.let { NativeWindow.clearInterval(it) }
 	}
 
 	private fun draw()
@@ -68,13 +72,15 @@ class UraniumLauncher(private val canvasId: String,
 
 	private fun calculateDeltaTime(): Duration
 	{
-		val currentTime = now()
+		val currentTime = NativeWindow.now()
 		val lastTime = lastPhysicsTime ?: currentTime
 		lastPhysicsTime = currentTime
 		return (currentTime - lastTime).milliseconds
 	}
 
-	private fun handleEvent(event: InputEvent) = container.handleEvent(event)
+	private fun handleMouseEvent(event: NativeMouseEvent) = container.handleEvent(InputEvent.Mouse.from(event))
+
+	private fun handleKeyEvent(event: NativeKeyboardEvent) = container.handleEvent(InputEvent.Key.from(event))
 }
 
 fun startOnCanvas(canvasId: String,

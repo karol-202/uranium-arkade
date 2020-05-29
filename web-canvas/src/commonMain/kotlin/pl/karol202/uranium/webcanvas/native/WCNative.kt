@@ -5,10 +5,10 @@ import pl.karol202.uranium.core.native.UNativeContainer
 import pl.karol202.uranium.core.util.NativeList
 import pl.karol202.uranium.core.util.emptyNativeList
 import pl.karol202.uranium.webcanvas.WC
-import pl.karol202.uranium.webcanvas.draw.DrawContext
+import pl.karol202.uranium.webcanvas.values.DrawContext
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
 import pl.karol202.uranium.webcanvas.physics.collider.Collider
-import pl.karol202.uranium.webcanvas.input.InputEvent
+import pl.karol202.uranium.webcanvas.values.InputEvent
 
 private val UNative<WC>.asWCNative get() = this as WCNative
 

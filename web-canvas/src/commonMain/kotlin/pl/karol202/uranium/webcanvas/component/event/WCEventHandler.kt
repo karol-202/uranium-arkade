@@ -6,7 +6,7 @@ import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractNativeLeafComponent
 import pl.karol202.uranium.webcanvas.native.WCEventNativeLeaf
-import pl.karol202.uranium.webcanvas.input.InputEvent
+import pl.karol202.uranium.webcanvas.values.InputEvent
 
 class WCEventHandler(props: Props) : WCAbstractNativeLeafComponent<WCEventHandler.Props>(props)
 {

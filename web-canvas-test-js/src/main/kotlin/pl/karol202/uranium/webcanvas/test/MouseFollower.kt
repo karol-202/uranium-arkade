@@ -11,8 +11,8 @@ import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.containers.translate
 import pl.karol202.uranium.webcanvas.component.event.eventHandler
-import pl.karol202.uranium.webcanvas.input.InputEvent
-import pl.karol202.uranium.webcanvas.input.InputEvent.Mouse.Type
+import pl.karol202.uranium.webcanvas.values.InputEvent
+import pl.karol202.uranium.webcanvas.values.InputEvent.Mouse.Type
 import pl.karol202.uranium.webcanvas.values.Vector
 
 class MouseFollower(props: Props) : WCAbstractComponent<MouseFollower.Props>(props),

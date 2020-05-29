@@ -1,6 +1,6 @@
 package pl.karol202.uranium.webcanvas.values
 
-import pl.karol202.uranium.webcanvas.draw.DrawContext
+import pl.karol202.uranium.webcanvas.dom.values.NativeGradient
 
 infix fun Color.at(position: Double) = Gradient.Step(position, this)
 
