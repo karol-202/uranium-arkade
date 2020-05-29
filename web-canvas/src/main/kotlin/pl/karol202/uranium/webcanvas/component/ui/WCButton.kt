@@ -1,13 +1,14 @@
 package pl.karol202.uranium.webcanvas.component.ui
 
-import org.w3c.dom.CanvasImageSource
 import pl.karol202.uranium.core.common.*
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderBuilder
+import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.WC
+import pl.karol202.uranium.webcanvas.WCElement
+import pl.karol202.uranium.webcanvas.WCRenderBuilder
 import pl.karol202.uranium.webcanvas.WCRenderScope
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
-import pl.karol202.uranium.webcanvas.component.containers.translate
 import pl.karol202.uranium.webcanvas.component.event.eventHandler
 import pl.karol202.uranium.webcanvas.component.primitives.image
 import pl.karol202.uranium.webcanvas.values.Bounds
@@ -19,11 +20,10 @@ class WCButton(props: Props) : WCAbstractComponent<WCButton.Props>(props),
                                UStateful<WCButton.State>
 {
 	data class Props(override val key: Any = AutoKey,
-	                 val position: Vector,
 	                 val size: Vector,
-	                 val idleImage: CanvasImageSource,
-	                 val hoverImage: CanvasImageSource,
-	                 val clickImage: CanvasImageSource,
+	                 val idleContent: List<WCElement<*>>,
+	                 val hoverContent: List<WCElement<*>>,
+	                 val clickContent: List<WCElement<*>>,
 	                 val onClick: () -> Unit) : UProps
 
 	data class State(val status: ButtonStatus = ButtonStatus.IDLE) : UState
@@ -36,19 +36,17 @@ class WCButton(props: Props) : WCAbstractComponent<WCButton.Props>(props),
 	override var state by state(State())
 
 	private val eventBounds get() = Bounds(size = props.size)
-	private val image get() = when(state.status)
+	private val content get() = when(state.status)
 	{
-		ButtonStatus.IDLE -> props.idleImage
-		ButtonStatus.HOVER -> props.hoverImage
-		ButtonStatus.CLICK -> props.clickImage
+		ButtonStatus.IDLE -> props.idleContent
+		ButtonStatus.HOVER -> props.hoverContent
+		ButtonStatus.CLICK -> props.clickContent
 	}
 
 	override fun URenderBuilder<WC>.render()
 	{
-		+ translate(vector = props.position) {
-			+ eventHandler(mouseListener = { handleEvent(it) })
-			+ image(image = image, drawBounds = Bounds(size = props.size))
-		}
+		+ eventHandler(mouseListener = { handleEvent(it) })
+		+ content
 	}
 
 	private fun handleEvent(event: InputEvent.Mouse)
@@ -72,10 +70,10 @@ class WCButton(props: Props) : WCAbstractComponent<WCButton.Props>(props),
 }
 
 fun WCRenderScope.button(key: Any = AutoKey,
-                         position: Vector,
                          size: Vector,
-                         idleImage: CanvasImageSource,
-                         hoverImage: CanvasImageSource,
-                         clickImage: CanvasImageSource,
+                         idleContent: WCRenderBuilder.() -> Unit,
+                         hoverContent: WCRenderBuilder.() -> Unit = idleContent,
+                         clickContent: WCRenderBuilder.() -> Unit = idleContent,
                          onClick: () -> Unit) =
-		component(::WCButton, WCButton.Props(key, position, size, idleImage, hoverImage, clickImage, onClick))
+		component(::WCButton,
+		          WCButton.Props(key, size, idleContent.render(), hoverContent.render(), clickContent.render(), onClick))
