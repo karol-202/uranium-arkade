@@ -4,14 +4,13 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.UElement
 import pl.karol202.uranium.core.native.UNativeContainer
 import pl.karol202.uranium.core.native.asNode
-import pl.karol202.uranium.core.schedule.queueRenderScheduler
 import pl.karol202.uranium.core.tree.TreeNode
 import pl.karol202.uranium.core.tree.createNode
 
 class RenderManager<N, P : UProps>(element: UElement<N, P>,
-                                   container: UNativeContainer<N>)
+                                   container: UNativeContainer<N>,
+                                   private val scheduler: RenderScheduler)
 {
-	private val scheduler = queueRenderScheduler()
 	private val rootTreeNode = element.createNode { scheduleInvalidate(it) }
 
 	private var rootNativeNode = container.asNode()

@@ -1,5 +1,6 @@
 package pl.karol202.uranium.webcanvas
 
+import pl.karol202.uranium.core.manager.RenderScheduler
 import pl.karol202.uranium.core.render.render
 import pl.karol202.uranium.webcanvas.dom.canvas.getNativeCanvas
 import pl.karol202.uranium.webcanvas.dom.input.NativeKeyboardEvent
@@ -12,6 +13,8 @@ import pl.karol202.uranium.webcanvas.values.InputEvent
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
+expect fun createRenderScheduler(): RenderScheduler
+
 class UraniumLauncher(canvasId: String,
                       private val renderInterval: Int,
                       private val physicsInterval: Int,
@@ -20,7 +23,7 @@ class UraniumLauncher(canvasId: String,
 	private val canvas = getNativeCanvas(canvasId)
 	private val drawContext = canvas.context.asDrawContext
 	private val container = nativeContainer()
-	private val renderManager by lazy { WCRenderManager(elementProvider.render(), container) }
+	private val renderManager by lazy { WCRenderManager(elementProvider.render(), container, createRenderScheduler()) }
 
 	private var renderTimer: Int? = null
 	private var physicsTimer: Int? = null

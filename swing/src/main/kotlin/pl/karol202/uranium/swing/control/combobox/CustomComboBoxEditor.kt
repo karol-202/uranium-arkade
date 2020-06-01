@@ -1,6 +1,7 @@
 package pl.karol202.uranium.swing.control.combobox
 
 import pl.karol202.uranium.core.manager.RenderManager
+import pl.karol202.uranium.core.manager.queueRenderScheduler
 import pl.karol202.uranium.swing.SwingElement
 import pl.karol202.uranium.swing.SwingRenderManager
 import pl.karol202.uranium.swing.SwingRenderScope
@@ -47,7 +48,8 @@ class CustomComboBoxEditor<E>(var renderFunction: SwingRenderScope.(Props<E>) ->
 
 	private fun reuse(props: Props<E>) = renderManager?.reuse(renderRoot(props).props)
 
-	private fun render(props: Props<E>) = RenderManager(renderRoot(props), container).also { renderManager = it }.init()
+	private fun render(props: Props<E>) =
+			RenderManager(renderRoot(props), container, queueRenderScheduler()).also { renderManager = it }.init()
 
 	private fun renderRoot(props: Props<E>) = renderScope().singleWrapper { renderFunction(props) }
 

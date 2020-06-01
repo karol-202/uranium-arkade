@@ -1,6 +1,7 @@
 package pl.karol202.uranium.swing.util
 
 import pl.karol202.uranium.core.manager.RenderManager
+import pl.karol202.uranium.core.manager.queueRenderScheduler
 import pl.karol202.uranium.swing.SwingElement
 import pl.karol202.uranium.swing.SwingRenderManager
 import pl.karol202.uranium.swing.native.SwingNative
@@ -20,7 +21,8 @@ class EmbeddedRenderer
 
 	private fun reuse(rootElement: SwingElement<*>) = renderManager?.reuse(rootElement.wrapped.props)
 
-	private fun render(rootElement: SwingElement<*>) = RenderManager(rootElement.wrapped, container).also { renderManager = it }.init()
+	private fun render(rootElement: SwingElement<*>) =
+			RenderManager(rootElement.wrapped, container, queueRenderScheduler()).also { renderManager = it }.init()
 
 	private val SwingElement<*>.wrapped get() = let { element -> renderScope()
 			.singleWrapper { element } }

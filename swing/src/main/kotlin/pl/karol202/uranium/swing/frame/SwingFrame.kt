@@ -2,6 +2,7 @@ package pl.karol202.uranium.swing.frame
 
 import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.manager.RenderManager
+import pl.karol202.uranium.core.manager.queueRenderScheduler
 import pl.karol202.uranium.swing.native.SwingNative
 import pl.karol202.uranium.swing.SwingElement
 import pl.karol202.uranium.swing.SwingRenderManager
@@ -28,7 +29,7 @@ abstract class SwingFrame
 	private fun render() = getOrCreateRenderManager(renderRoot()).scheduleInit()
 
 	private fun <P : UProps> getOrCreateRenderManager(element: SwingElement<P>) =
-			renderManager ?: RenderManager(element, container).also { renderManager = it }
+			renderManager ?: RenderManager(element, container, queueRenderScheduler()).also { renderManager = it }
 
 	protected abstract fun renderRoot(): SwingElement<*>
 

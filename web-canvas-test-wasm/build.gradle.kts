@@ -22,11 +22,6 @@ kotlin {
 				implementation(project(":web-canvas"))
 			}
 		}
-		val jsMain by getting {
-			dependencies {
-				implementation(kotlin("stdlib-js"))
-			}
-		}
 
 		all {
 			languageSettings.useExperimentalAnnotation("kotlin.time.ExperimentalTime")

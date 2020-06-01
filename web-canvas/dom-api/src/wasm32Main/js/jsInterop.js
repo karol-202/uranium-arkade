@@ -5,8 +5,10 @@ konan.libraries.push({
         kotlinObject(arena, index).charCodeAt(charIndex)
 });
 
-function newArenaObject(arenaIndex, object) {
-    const arena = konan_dependencies.env.arenas.get(arenaIndex);
-    arena.push(object);
-    return arena.length - 1;
+function newArenaObject(arena, index) {
+    return konan_dependencies.env.Konan_js_addObjectToArena(arena, index)
+}
+
+function wrapLambda(lambdaIndex, arena) {
+    return konan_dependencies.env.Konan_js_wrapLambda(lambdaIndex, arena);
 }

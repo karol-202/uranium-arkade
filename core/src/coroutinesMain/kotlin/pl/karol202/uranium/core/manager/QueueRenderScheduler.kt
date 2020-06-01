@@ -1,4 +1,4 @@
-package pl.karol202.uranium.core.schedule
+package pl.karol202.uranium.core.manager
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -6,19 +6,20 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import pl.karol202.uranium.core.util.StackTrace
 
-internal actual fun queueRenderScheduler(queueSize: Int): RenderScheduler =
+// Due to bug, making this constant private makes error "e: Compilation failed: No coordinates found for DeclarationId(id=2)"
+// appear when compiling dependent modules to Kotlin/Native.
+private const val MAX_BUFFER_SIZE = 64
+
+fun queueRenderScheduler(queueSize: Int = MAX_BUFFER_SIZE): RenderScheduler =
 		QueueRenderScheduler(CoroutineScope(Dispatchers.Main), queueSize)
 
 internal class QueueRenderScheduler(coroutineScope: CoroutineScope,
                                     queueSize: Int) : RenderScheduler
 {
-	private data class Request(private val function: () -> Unit,
-	                           val stackTrace: StackTrace) // For debugging purposes
-	{
-		fun execute() = function()
-	}
+	internal data class RenderRequest(val execute: () -> Unit,
+	                                  val stackTrace: StackTrace) // For debugging purposes
 
-	private val scheduleChannel = Channel<Request>(queueSize)
+	private val scheduleChannel = Channel<RenderRequest>(queueSize)
 
 	init
 	{
@@ -32,7 +33,7 @@ internal class QueueRenderScheduler(coroutineScope: CoroutineScope,
 
 	override fun submit(function: () -> Unit)
 	{
-		val request = Request(function, StackTrace.current)
+		val request = RenderRequest(function, StackTrace.current)
 		scheduleChannel.offer(request) || throw RuntimeException("Too many scheduled renders (probably an infinite loop)")
 	}
 }

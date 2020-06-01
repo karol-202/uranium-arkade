@@ -26,11 +26,6 @@ kotlin {
 			}
 		}
 
-		val wasm32Main by getting {
-			dependencies {
-			}
-		}
-
 		all {
 			languageSettings.useExperimentalAnnotation("kotlin.time.ExperimentalTime")
 		}

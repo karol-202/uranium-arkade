@@ -20,14 +20,14 @@ internal data class ObjectRetrieveContext(val resultArena: Arena)
 
 internal fun <R> retrieveObject(constructor: (Arena, Object) -> R, provider: ObjectRetrieveContext.() -> Int): R
 {
-	val resultArena = ArenaManager.currentArena
+	val resultArena = ArenaManager.globalArena
 	val resultIndex = ObjectRetrieveContext(resultArena).provider()
 	return constructor(resultArena, resultIndex)
 }
 
 internal fun retrieveString(provider: ObjectRetrieveContext.() -> Int): String
 {
-	val resultArena = ArenaManager.currentArena
+	val resultArena = ArenaManager.globalArena
 	val resultIndex = ObjectRetrieveContext(resultArena).provider()
 	val length = string_length(resultArena, resultIndex)
 	return CharArray(length) { string_data(resultArena, resultIndex, it) }.concatToString()
