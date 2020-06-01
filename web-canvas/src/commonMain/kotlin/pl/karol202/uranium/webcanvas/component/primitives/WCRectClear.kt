@@ -8,5 +8,5 @@ import pl.karol202.uranium.webcanvas.values.Bounds
 fun WCRenderScope.rectClear(key: Any = AutoKey,
                             bounds: Bounds) =
 		drawComponent(key = key) {
-			clearRect(bounds.x, bounds.y, bounds.width, bounds.height)
+			clearRect(bounds.start, bounds.size)
 		}

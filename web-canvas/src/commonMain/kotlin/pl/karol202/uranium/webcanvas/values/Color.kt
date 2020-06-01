@@ -1,8 +1,9 @@
 package pl.karol202.uranium.webcanvas.values
 
 import pl.karol202.uranium.webcanvas.dom.values.NativeFillStyle
+import pl.karol202.uranium.webcanvas.draw.DrawContext
 
-sealed class Color(val asText: String) : FillStyle
+sealed class Color(val asText: String) : FillStyle()
 {
 	companion object
 	{

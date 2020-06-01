@@ -5,20 +5,20 @@ import pl.karol202.uranium.webcanvas.dom.canvas.getNativeCanvas
 import pl.karol202.uranium.webcanvas.dom.input.NativeKeyboardEvent
 import pl.karol202.uranium.webcanvas.dom.input.NativeMouseEvent
 import pl.karol202.uranium.webcanvas.dom.window.NativeWindow
-import pl.karol202.uranium.webcanvas.values.clearViewport
+import pl.karol202.uranium.webcanvas.draw.asDrawContext
 import pl.karol202.uranium.webcanvas.native.nativeContainer
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
 import pl.karol202.uranium.webcanvas.values.InputEvent
 import kotlin.time.Duration
 import kotlin.time.milliseconds
 
-class UraniumLauncher(private val canvasId: String,
+class UraniumLauncher(canvasId: String,
                       private val renderInterval: Int,
                       private val physicsInterval: Int,
                       elementProvider: WCRenderScope.() -> WCElement<*>)
 {
 	private val canvas = getNativeCanvas(canvasId)
-	private val drawContext = canvas.context
+	private val drawContext = canvas.context.asDrawContext
 	private val container = nativeContainer()
 	private val renderManager by lazy { WCRenderManager(elementProvider.render(), container) }
 
@@ -38,8 +38,7 @@ class UraniumLauncher(private val canvasId: String,
 
 	private fun initContext()
 	{
-		canvas.width = canvas.clientWidth
-		canvas.height = canvas.clientHeight
+		drawContext.size = drawContext.clientSize
 	}
 
 	private fun initEventListeners()

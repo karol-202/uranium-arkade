@@ -8,7 +8,7 @@ import pl.karol202.uranium.webcanvas.component.draw.drawContainer
 import pl.karol202.uranium.webcanvas.component.event.eventTransformer
 import pl.karol202.uranium.webcanvas.component.physics.collider.colliderTransformer
 import pl.karol202.uranium.webcanvas.component.physics.physicsTransformer
-import pl.karol202.uranium.webcanvas.values.DrawOperation
+import pl.karol202.uranium.webcanvas.draw.DrawOperation
 import pl.karol202.uranium.webcanvas.physics.PhysicsContext
 import pl.karol202.uranium.webcanvas.physics.collider.Collider
 import pl.karol202.uranium.webcanvas.values.InputEvent

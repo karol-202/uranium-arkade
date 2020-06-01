@@ -1,13 +1,11 @@
 package pl.karol202.uranium.webcanvas.test
 
-import kotlinx.html.dom.append
-import kotlinx.html.js.canvas
 import pl.karol202.uranium.core.common.*
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.webcanvas.WC
 import pl.karol202.uranium.webcanvas.WCRenderScope
-import pl.karol202.uranium.webcanvas.assets.loadImage
+import pl.karol202.uranium.webcanvas.assets.Image
 import pl.karol202.uranium.webcanvas.component.base.WCAbstractComponent
 import pl.karol202.uranium.webcanvas.component.containers.flip
 import pl.karol202.uranium.webcanvas.component.containers.scale
@@ -20,17 +18,14 @@ import pl.karol202.uranium.webcanvas.component.physics.rigidbody
 import pl.karol202.uranium.webcanvas.component.primitives.image
 import pl.karol202.uranium.webcanvas.component.primitives.rectFill
 import pl.karol202.uranium.webcanvas.component.primitives.textFill
-import pl.karol202.uranium.webcanvas.startOnCanvas
 import pl.karol202.uranium.webcanvas.physics.collider.CircleCollider
 import pl.karol202.uranium.webcanvas.physics.collider.RectCollider
 import pl.karol202.uranium.webcanvas.physics.force.GravitationalForce
 import pl.karol202.uranium.webcanvas.physics.force.HomogenousForce
+import pl.karol202.uranium.webcanvas.startOnCanvas
 import pl.karol202.uranium.webcanvas.values.*
-import kotlin.browser.document
 
-private val canvas = document.body!!.append.canvas { }
-
-fun main() = startOnCanvas(canvas, renderInterval = 20, physicsInterval = 20) { app() }
+fun main() = startOnCanvas("canvas", renderInterval = 20, physicsInterval = 20) { app() }
 
 class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props),
                                UStateful<App.State>
@@ -85,7 +80,7 @@ class App(props: BasicProps) : WCAbstractComponent<BasicProps>(props),
 						            onStateChange = { setState { copy(ballState = it) } },
 						            onCollision = { bounce(it.selfNormal, 0.5) }) {
 							+ flip(horizontal = true) {
-								+ image(image = loadImage("assets/ball.png"),
+								+ image(image = Image.load("assets/ball.png"),
 								        drawBounds = Bounds(x = -30.0, y = -30.0,
 								                            width = 60.0, height = 60.0))
 							}

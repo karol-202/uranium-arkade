@@ -4,7 +4,6 @@ import pl.karol202.uranium.webcanvas.dom.assets.NativeImage
 import pl.karol202.uranium.webcanvas.dom.values.NativeFillStyle
 import pl.karol202.uranium.webcanvas.dom.values.NativeGradient
 import pl.karol202.uranium.webcanvas.dom.values.NativePath
-import pl.karol202.uranium.webcanvas.dom.values.PathFillRule
 
 expect class NativeCanvasContext
 {
@@ -37,13 +36,13 @@ expect class NativeCanvasContext
 
 	fun lineTo(x: Double, y: Double)
 
-	fun arc(x: Double, y: Double, radius: Double, startAngle: Double, endAngle: Double, anticlockwise: Boolean = false)
+	fun arc(x: Double, y: Double, radius: Double, startAngle: Double, endAngle: Double, anticlockwise: Boolean)
 
 	fun closePath()
 
-	fun fill(fillRule: String = PathFillRule.NONZERO.native)
+	fun fill(fillRule: String)
 
-	fun fill(path: NativePath, fillRule: String = PathFillRule.NONZERO.native)
+	fun fill(path: NativePath, fillRule: String)
 
 	fun save()
 

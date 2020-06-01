@@ -10,6 +10,6 @@ fun WCRenderScope.rectFill(key: Any = AutoKey,
                            bounds: Bounds,
                            fillStyle: FillStyle) =
 		drawComponent(key = key) {
-			this.fillStyle = fillStyle.createNativeStyle(this)
-			fillRect(bounds.x, bounds.y, bounds.width, bounds.height)
+			setFillStyle(fillStyle)
+			fillRect(bounds.start, bounds.size)
 		}

@@ -1,10 +1,11 @@
 package pl.karol202.uranium.webcanvas.values
 
 import pl.karol202.uranium.webcanvas.dom.values.NativeGradient
+import pl.karol202.uranium.webcanvas.draw.DrawContext
 
 infix fun Color.at(position: Double) = Gradient.Step(position, this)
 
-sealed class Gradient : FillStyle
+sealed class Gradient : FillStyle()
 {
 	data class Linear(val start: Vector,
 	                  val end: Vector,
@@ -19,7 +20,7 @@ sealed class Gradient : FillStyle
 					create(start, end, startColor at 0.0, endColor at 1.0)
 		}
 
-		override fun createEmptyGradient(context: DrawContext) = context.createLinearGradient(start.x, start.y, end.x, end.y)
+		override fun createEmptyGradient(context: DrawContext) = context.createLinearGradient(start, end)
 	}
 
 	data class Radial(val startCircle: Circle,
@@ -36,8 +37,7 @@ sealed class Gradient : FillStyle
 		}
 
 		override fun createEmptyGradient(context: DrawContext) =
-				context.createRadialGradient(startCircle.center.x, startCircle.center.y, startCircle.radius,
-				                             endCircle.center.x, endCircle.center.y, endCircle.radius)
+				context.createRadialGradient(startCircle.center, startCircle.radius, endCircle.center, endCircle.radius)
 	}
 
 	data class Step(val position: Double,

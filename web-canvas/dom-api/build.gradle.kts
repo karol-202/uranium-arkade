@@ -3,7 +3,11 @@ plugins {
 }
 
 kotlin {
-	js()
+	js {
+		targets {
+			browser()
+		}
+	}
 	wasm32()
 
 	sourceSets {

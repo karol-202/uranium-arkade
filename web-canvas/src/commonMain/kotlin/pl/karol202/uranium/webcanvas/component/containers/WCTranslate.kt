@@ -12,7 +12,7 @@ fun WCRenderScope.translate(key: Any = AutoKey,
 		fullTransform(key = key,
 		              beforeDraw = {
 			              save()
-			              translate(vector.x, vector.y)
+			              translate(vector)
 		              },
 		              afterDraw = { restore() },
 		              transformEvent = { when(it)

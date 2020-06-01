@@ -13,7 +13,7 @@ fun WCRenderScope.scale(key: Any = AutoKey,
 		fullTransform(key = key,
 		              beforeDraw = {
 			              save()
-			              scale(vector.x, vector.y)
+			              scale(vector)
 		              },
 		              afterDraw = { restore() },
 		              transformEvent = { when(it)

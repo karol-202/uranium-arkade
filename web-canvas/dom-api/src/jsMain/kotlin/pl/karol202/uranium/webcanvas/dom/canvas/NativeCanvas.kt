@@ -9,10 +9,14 @@ actual class NativeCanvas(private val canvas: HTMLCanvasElement)
 {
 	actual val context get() = NativeCanvasContext(canvas.getContext("2d") as CanvasRenderingContext2D)
 
-	actual var width = canvas.width
-	actual var height = canvas.height
-	actual val clientWidth = canvas.clientWidth
-	actual val clientHeight = canvas.clientHeight
+	actual var width: Int
+		get() = canvas.width
+		set(value) { canvas.width = value }
+	actual var height: Int
+		get() = canvas.height
+		set(value) { canvas.height = value }
+	actual val clientWidth get() = canvas.clientWidth
+	actual val clientHeight get() = canvas.clientHeight
 
 	actual fun setOnMouseDownListener(listener: ((NativeMouseEvent) -> Unit)?)
 	{
@@ -40,4 +44,9 @@ actual class NativeCanvas(private val canvas: HTMLCanvasElement)
 	}
 }
 
-actual fun getNativeCanvas(canvasId: String) = NativeCanvas(document.getElementById(canvasId) as HTMLCanvasElement)
+actual fun getNativeCanvas(canvasId: String): NativeCanvas
+{
+	val element = document.getElementById(canvasId) ?: throw IllegalArgumentException("No such element: $canvasId")
+	val canvas = element as? HTMLCanvasElement ?: throw IllegalArgumentException("$canvasId is not a canvas")
+	return NativeCanvas(canvas)
+}

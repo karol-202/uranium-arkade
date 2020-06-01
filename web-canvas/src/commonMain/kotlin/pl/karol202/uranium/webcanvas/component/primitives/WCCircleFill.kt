@@ -14,8 +14,8 @@ fun WCRenderScope.circleFill(key: Any = AutoKey,
                              endAngle: Double = 2 * PI,
                              fillStyle: FillStyle) =
 		drawComponent(key = key) {
-			this.fillStyle = fillStyle.createNativeStyle(this)
+			setFillStyle(fillStyle)
 			beginPath()
-			arc(center.x, center.y, radius, startAngle, endAngle, false)
+			arc(center, radius, startAngle, endAngle)
 			fill()
 		}

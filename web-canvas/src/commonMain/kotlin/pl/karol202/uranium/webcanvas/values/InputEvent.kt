@@ -32,7 +32,7 @@ sealed class InputEvent
 			private const val TYPE_MOUSE_ENTER = "mouseenter"
 			private const val TYPE_MOUSE_LEAVE = "mouseleave"
 
-			fun from(event: NativeMouseEvent) = event.run {
+			internal fun from(event: NativeMouseEvent) = event.run {
 				Mouse(eventType, location, buttonTyped, buttonsTyped, altKey, ctrlKey, metaKey, shiftKey)
 			}
 
@@ -93,7 +93,7 @@ sealed class InputEvent
 			private const val TYPE_KEY_PRESS = "keypress"
 			private const val TYPE_KEY_UP = "keyup"
 
-			fun from(event: NativeKeyboardEvent) = event.run {
+			internal fun from(event: NativeKeyboardEvent) = event.run {
 				Key(eventType, key, code, repeat, altKey, ctrlKey, metaKey, shiftKey)
 			}
 

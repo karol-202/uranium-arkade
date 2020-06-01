@@ -14,10 +14,10 @@ fun WCRenderScope.textFill(key: Any = AutoKey,
                            baseline: TextBaseline = TextBaseline.ALPHABETIC,
                            direction: TextDirection = TextDirection.INHERIT) =
 		drawComponent(key = key) {
-			this.font = font.asText
-			this.fillStyle = fillStyle.createNativeStyle(this)
-			this.textAlign = align.native
-			this.textBaseline = baseline.native
-			this.direction = direction.native
-			fillText(text, position.x, position.y)
+			setFont(font)
+			setFillStyle(fillStyle)
+			setTextAlign(align)
+			setTextBaseline(baseline)
+			setDirection(direction)
+			fillText(text, position)
 		}

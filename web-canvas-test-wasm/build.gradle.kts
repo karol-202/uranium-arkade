@@ -19,7 +19,7 @@ kotlin {
 	sourceSets {
 		val commonMain by getting {
 			dependencies {
-				implementation(project(":core"))
+				implementation(project(":web-canvas"))
 			}
 		}
 		val jsMain by getting {
