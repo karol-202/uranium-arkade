@@ -2,13 +2,24 @@ plugins {
 	kotlin("multiplatform")
 }
 
+val jsIncludesPath = "src/wasm32Main/js"
+
 kotlin {
 	js {
 		targets {
 			browser()
 		}
 	}
-	wasm32()
+	wasm32 {
+		val main by compilations.getting {
+			kotlinOptions {
+				freeCompilerArgs = fileTree(jsIncludesPath).flatMap {
+					listOf("-ib", it.absolutePath)
+				}
+			}
+			compileKotlinTask.inputs.dir(jsIncludesPath)
+		}
+	}
 
 	sourceSets {
 		val commonMain by getting {
@@ -24,8 +35,7 @@ kotlin {
 		}
 
 		val wasm32Main by getting {
-			dependencies {
-			}
+			resources.srcDirs(jsIncludesPath)
 		}
 	}
 }

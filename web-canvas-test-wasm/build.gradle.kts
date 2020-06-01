@@ -11,7 +11,7 @@ kotlin {
 	wasm32 {
 		binaries {
 			executable {
-				entryPoint = "pl.karol202.uranium.webcanvas.test.helloWorld"
+				entryPoint = "pl.karol202.uranium.webcanvas.test.main"
 			}
 		}
 	}
@@ -25,7 +25,6 @@ kotlin {
 		val jsMain by getting {
 			dependencies {
 				implementation(kotlin("stdlib-js"))
-				implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.7.1")
 			}
 		}
 

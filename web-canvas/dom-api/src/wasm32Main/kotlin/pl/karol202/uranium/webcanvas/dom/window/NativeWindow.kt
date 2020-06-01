@@ -1,6 +1,5 @@
 package pl.karol202.uranium.webcanvas.dom.window
 
-import kotlinx.wasm.jsinterop.JsValue
 import kotlinx.wasm.jsinterop.KtFunction
 import pl.karol202.uranium.webcanvas.dom.input.NativeKeyboardEvent
 

@@ -45,77 +45,77 @@ private external fun NativeCanvasContext_setDirection(arena: Arena, index: Objec
                                                       directionPtr: Pointer, directionLength: Int)
 
 @SymbolName("uranium_NativeCanvasContext_fillRect")
-private external fun NativeCanvasContext_fillRect(arena: Arena, index: Int,
+private external fun NativeCanvasContext_fillRect(arena: Arena, index: Object,
                                                   x: Double, y: Double, width: Double, height: Double)
 
 @SymbolName("uranium_NativeCanvasContext_clearRect")
-private external fun NativeCanvasContext_clearRect(arena: Arena, index: Int,
+private external fun NativeCanvasContext_clearRect(arena: Arena, index: Object,
                                                    x: Double, y: Double, width: Double, height: Double)
 
 @SymbolName("uranium_NativeCanvasContext_drawImage")
-private external fun NativeCanvasContext_drawImage(arena: Arena, index: Int, imageArena: Arena, imageIndex: Object,
+private external fun NativeCanvasContext_drawImage(arena: Arena, index: Object, imageArena: Arena, imageIndex: Object,
                                                    drawX: Double, drawY: Double)
 
 @SymbolName("uranium_NativeCanvasContext_drawImage_size")
-private external fun NativeCanvasContext_drawImage_size(arena: Arena, index: Int, imageArena: Arena, imageIndex: Object,
+private external fun NativeCanvasContext_drawImage_size(arena: Arena, index: Object, imageArena: Arena, imageIndex: Object,
                                                         drawX: Double, drawY: Double, drawWidth: Double, drawHeight: Double)
 
 @SymbolName("uranium_NativeCanvasContext_drawImage_src_size")
-private external fun NativeCanvasContext_drawImage_src_size(arena: Arena, index: Int, imageArena: Arena, imageIndex: Object,
+private external fun NativeCanvasContext_drawImage_src_size(arena: Arena, index: Object, imageArena: Arena, imageIndex: Object,
                                                             srcX: Double, srcY: Double, srcWidth: Double, srcHeight: Double,
                                                             drawX: Double, drawY: Double, drawWidth: Double, drawHeight: Double)
 
 @SymbolName("uranium_NativeCanvasContext_fillText")
-private external fun NativeCanvasContext_fillText(arena: Arena, index: Int, textPtr: Pointer, textLength: Int,
+private external fun NativeCanvasContext_fillText(arena: Arena, index: Object, textPtr: Pointer, textLength: Int,
                                                   x: Double, y: Double)
 
 @SymbolName("uranium_NativeCanvasContext_fillText_max")
-private external fun NativeCanvasContext_fillText_max(arena: Arena, index: Int, textPtr: Pointer, textLength: Int,
+private external fun NativeCanvasContext_fillText_max(arena: Arena, index: Object, textPtr: Pointer, textLength: Int,
                                                       x: Double, y: Double, maxWidth: Double)
 
 @SymbolName("uranium_NativeCanvasContext_beginPath")
-private external fun NativeCanvasContext_beginPath(arena: Arena, index: Int)
+private external fun NativeCanvasContext_beginPath(arena: Arena, index: Object)
 
 @SymbolName("uranium_NativeCanvasContext_moveTo")
-private external fun NativeCanvasContext_moveTo(arena: Arena, index: Int, x: Double, y: Double)
+private external fun NativeCanvasContext_moveTo(arena: Arena, index: Object, x: Double, y: Double)
 
 @SymbolName("uranium_NativeCanvasContext_lineTo")
-private external fun NativeCanvasContext_lineTo(arena: Arena, index: Int, x: Double, y: Double)
+private external fun NativeCanvasContext_lineTo(arena: Arena, index: Object, x: Double, y: Double)
 
 @SymbolName("uranium_NativeCanvasContext_arc")
-private external fun NativeCanvasContext_arc(arena: Arena, index: Int,
+private external fun NativeCanvasContext_arc(arena: Arena, index: Object,
                                              x: Double, y: Double, radius: Double, startAngle: Double, endAngle: Double,
                                              anticlockwise: Boolean)
 
 @SymbolName("uranium_NativeCanvasContext_closePath")
-private external fun NativeCanvasContext_closePath(arena: Arena, index: Int)
+private external fun NativeCanvasContext_closePath(arena: Arena, index: Object)
 
 @SymbolName("uranium_NativeCanvasContext_fill")
-private external fun NativeCanvasContext_fill(arena: Arena, index: Int, fillRulePtr: Pointer, fillRuleLength: Int)
+private external fun NativeCanvasContext_fill(arena: Arena, index: Object, fillRulePtr: Pointer, fillRuleLength: Int)
 
 @SymbolName("uranium_NativeCanvasContext_fill_path")
-private external fun NativeCanvasContext_fill_path(arena: Arena, index: Int, pathArena: Arena, pathIndex: Object,
+private external fun NativeCanvasContext_fill_path(arena: Arena, index: Object, pathArena: Arena, pathIndex: Object,
                                                    fillRulePtr: Pointer, fillRuleLength: Int)
 
 @SymbolName("uranium_NativeCanvasContext_save")
-private external fun NativeCanvasContext_save(arena: Arena, index: Int)
+private external fun NativeCanvasContext_save(arena: Arena, index: Object)
 
 @SymbolName("uranium_NativeCanvasContext_restore")
-private external fun NativeCanvasContext_restore(arena: Arena, index: Int)
+private external fun NativeCanvasContext_restore(arena: Arena, index: Object)
 
 @SymbolName("uranium_NativeCanvasContext_translate")
-private external fun NativeCanvasContext_translate(arena: Arena, index: Int, x: Double, y: Double)
+private external fun NativeCanvasContext_translate(arena: Arena, index: Object, x: Double, y: Double)
 
 @SymbolName("uranium_NativeCanvasContext_scale")
-private external fun NativeCanvasContext_scale(arena: Arena, index: Int, x: Double, y: Double)
+private external fun NativeCanvasContext_scale(arena: Arena, index: Object, x: Double, y: Double)
 
 @SymbolName("uranium_NativeCanvasContext_createLinearGradient")
-private external fun NativeCanvasContext_createLinearGradient(arena: Arena, index: Int,
+private external fun NativeCanvasContext_createLinearGradient(arena: Arena, index: Object,
                                                               x0: Double, y0: Double,
                                                               x1: Double, y1: Double, resultArena: Arena): Int
 
 @SymbolName("uranium_NativeCanvasContext_createRadialGradient")
-private external fun NativeCanvasContext_createRadialGradient(arena: Arena, index: Int,
+private external fun NativeCanvasContext_createRadialGradient(arena: Arena, index: Object,
                                                               x0: Double, y0: Double, r0: Double,
                                                               x1: Double, y1: Double, r1: Double, resultArena: Arena): Int
 
