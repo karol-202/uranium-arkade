@@ -14,7 +14,7 @@ kotlin {
 	sourceSets {
 		val commonMain by getting {
 			dependencies {
-				api(project(":uranium-arkade-core"))
+				api("pl.karol202.uranium:uranium-core:0.2")
 
 				implementation(kotlin("stdlib-common"))
 				implementation(project("dom-api"))
@@ -25,6 +25,10 @@ kotlin {
 			dependencies {
 				implementation(kotlin("stdlib-js"))
 			}
+		}
+
+		all {
+			languageSettings.useExperimentalAnnotation("kotlin.time.ExperimentalTime")
 		}
 	}
 }

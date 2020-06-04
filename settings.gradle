@@ -2,7 +2,6 @@ rootProject.name = 'uranium-arkade'
 
 enableFeaturePreview("GRADLE_METADATA")
 
-include ':uranium-arkade-core'
 include ':uranium-arkade-canvas'
 include ':uranium-arkade-canvas:dom-api'
 include ':sample-canvas-js'
