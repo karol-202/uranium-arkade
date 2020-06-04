@@ -1,5 +1,8 @@
+import com.jfrog.bintray.gradle.BintrayExtension.PackageConfig
+
 plugins {
-	kotlin("multiplatform") version "1.3.72"
+	kotlin("multiplatform")
+	id("com.jfrog.bintray")
 	`maven-publish`
 }
 
@@ -33,10 +36,44 @@ kotlin {
 	}
 }
 
+bintray {
+	user = project.findProperty("bintray.user") as String?
+	key = project.findProperty("bintray.key") as String?
+	setPublications(*publishing.publications.names.toTypedArray())
+	publish = true
+
+	pkg(delegateClosureOf<PackageConfig> {
+		repo = "uranium"
+		name = "uranium-arkade-canvas"
+		description = "2D game engine for HTML5 canvas using Uranium"
+		vcsUrl = "https://github.com/karol-202/uranium-arkade"
+		githubRepo = "karol-202/uranium-arkade"
+		setLicenses("MIT")
+	})
+}
+
 publishing {
-	publications {
-		create<MavenPublication>("uranium-arkade-canvas") {
-			from(components["kotlin"])
+	publications.withType<MavenPublication>().all {
+		pom {
+			name.set(bintray.pkg.name)
+			description.set(bintray.pkg.desc)
+			url.set(bintray.pkg.vcsUrl)
+			licenses {
+				license {
+					name.set("MIT")
+					url.set("https://opensource.org/licenses/MIT")
+				}
+			}
+			developers {
+				developer {
+					id.set("karol202")
+					name.set("Karol Jurski")
+					email.set("karoljurski1@gmail.com")
+				}
+			}
+			scm {
+				url.set(bintray.pkg.vcsUrl)
+			}
 		}
 	}
 }
