@@ -30,19 +30,24 @@ private external fun NativeCanvas_getClientWidth(canvasArena: Arena, canvasIndex
 private external fun NativeCanvas_getClientHeight(canvasArena: Arena, canvasIndex: Object): Int
 
 @SymbolName("uranium_NativeCanvas_setOnMouseDownListener")
-private external fun NativeCanvas_setOnMouseDownListener(canvasArena: Arena, canvasIndex: Object, handler: KtFunction<Unit>)
+private external fun NativeCanvas_setOnMouseDownListener(canvasArena: Arena, canvasIndex: Object,
+                                                         handlerIndex: Int, handlerArena: Arena)
 
 @SymbolName("uranium_NativeCanvas_setOnMouseMoveListener")
-private external fun NativeCanvas_setOnMouseMoveListener(canvasArena: Arena, canvasIndex: Object, handler: KtFunction<Unit>)
+private external fun NativeCanvas_setOnMouseMoveListener(canvasArena: Arena, canvasIndex: Object,
+                                                         handlerIndex: Int, handlerArena: Arena)
 
 @SymbolName("uranium_NativeCanvas_setOnMouseUpListener")
-private external fun NativeCanvas_setOnMouseUpListener(canvasArena: Arena, canvasIndex: Object, handler: KtFunction<Unit>)
+private external fun NativeCanvas_setOnMouseUpListener(canvasArena: Arena, canvasIndex: Object,
+                                                       handlerIndex: Int, handlerArena: Arena)
 
 @SymbolName("uranium_NativeCanvas_setOnMouseEnterListener")
-private external fun NativeCanvas_setOnMouseEnterListener(canvasArena: Arena, canvasIndex: Object, handler: KtFunction<Unit>)
+private external fun NativeCanvas_setOnMouseEnterListener(canvasArena: Arena, canvasIndex: Object,
+                                                          handlerIndex: Int, handlerArena: Arena)
 
 @SymbolName("uranium_NativeCanvas_setOnMouseLeaveListener")
-private external fun NativeCanvas_setOnMouseLeaveListener(canvasArena: Arena, canvasIndex: Object, handler: KtFunction<Unit>)
+private external fun NativeCanvas_setOnMouseLeaveListener(canvasArena: Arena, canvasIndex: Object,
+                                                          handlerIndex: Int, handlerArena: Arena)
 
 actual class NativeCanvas(override val arena: Arena,
                           override val index: Object) : NativeValue
@@ -62,19 +67,19 @@ actual class NativeCanvas(override val arena: Arena,
 	actual val clientHeight get() = NativeCanvas_getClientHeight(arena, index)
 
 	actual fun setOnMouseDownListener(listener: ((NativeMouseEvent) -> Unit)?) =
-			NativeCanvas_setOnMouseDownListener(arena, index, mouseHandler(listener))
+			NativeCanvas_setOnMouseDownListener(arena, index, wrapFunction(mouseHandler(listener)), ArenaManager.globalArena)
 
 	actual fun setOnMouseMoveListener(listener: ((NativeMouseEvent) -> Unit)?) =
-			NativeCanvas_setOnMouseMoveListener(arena, index, mouseHandler(listener))
+			NativeCanvas_setOnMouseMoveListener(arena, index, wrapFunction(mouseHandler(listener)), ArenaManager.globalArena)
 
 	actual fun setOnMouseUpListener(listener: ((NativeMouseEvent) -> Unit)?) =
-			NativeCanvas_setOnMouseUpListener(arena, index, mouseHandler(listener))
+			NativeCanvas_setOnMouseUpListener(arena, index, wrapFunction(mouseHandler(listener)), ArenaManager.globalArena)
 
 	actual fun setOnMouseEnterListener(listener: ((NativeMouseEvent) -> Unit)?) =
-			NativeCanvas_setOnMouseEnterListener(arena, index, mouseHandler(listener))
+			NativeCanvas_setOnMouseEnterListener(arena, index, wrapFunction(mouseHandler(listener)), ArenaManager.globalArena)
 
 	actual fun setOnMouseLeaveListener(listener: ((NativeMouseEvent) -> Unit)?) =
-			NativeCanvas_setOnMouseLeaveListener(arena, index, mouseHandler(listener))
+			NativeCanvas_setOnMouseLeaveListener(arena, index, wrapFunction(mouseHandler(listener)), ArenaManager.globalArena)
 
 	private fun mouseHandler(listener: ((NativeMouseEvent) -> Unit)?): KtFunction<Unit> = { (eventJsValue) ->
 		listener?.invoke(NativeMouseEvent(eventJsValue.arena, eventJsValue.index))

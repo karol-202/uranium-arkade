@@ -21,14 +21,14 @@ konan.libraries.push({
         kotlinObject(canvasArena, canvasIndex).clientWidth,
     uranium_NativeCanvas_getClientHeight: (canvasArena, canvasIndex) =>
         kotlinObject(canvasArena, canvasIndex).clientHeight,
-    uranium_NativeCanvas_setOnMouseDownListener: (canvasArena, canvasIndex, handler) =>
-        kotlinObject(canvasArena, canvasIndex).onmousedown = handler,
-    uranium_NativeCanvas_setOnMouseMoveListener: (canvasArena, canvasIndex, handler) =>
-        kotlinObject(canvasArena, canvasIndex).onmousemove = handler,
-    uranium_NativeCanvas_setOnMouseUpListener: (canvasArena, canvasIndex, handler) =>
-        kotlinObject(canvasArena, canvasIndex).onmouseup = handler,
-    uranium_NativeCanvas_setOnMouseEnterListener: (canvasArena, canvasIndex, handler) =>
-        kotlinObject(canvasArena, canvasIndex).onmouseenter = handler,
-    uranium_NativeCanvas_setOnMouseLeaveListener: (canvasArena, canvasIndex, handler) =>
-        kotlinObject(canvasArena, canvasIndex).onmouseleave = handler,
+    uranium_NativeCanvas_setOnMouseDownListener: (canvasArena, canvasIndex, handlerIndex, handlerArena) =>
+        kotlinObject(canvasArena, canvasIndex).onmousedown = wrapLambda(handlerArena, handlerIndex),
+    uranium_NativeCanvas_setOnMouseMoveListener: (canvasArena, canvasIndex, handlerIndex, handlerArena) =>
+        kotlinObject(canvasArena, canvasIndex).onmousemove = wrapLambda(handlerArena, handlerIndex),
+    uranium_NativeCanvas_setOnMouseUpListener: (canvasArena, canvasIndex, handlerIndex, handlerArena) =>
+        kotlinObject(canvasArena, canvasIndex).onmouseup = wrapLambda(handlerArena, handlerIndex),
+    uranium_NativeCanvas_setOnMouseEnterListener: (canvasArena, canvasIndex, handlerIndex, handlerArena) =>
+        kotlinObject(canvasArena, canvasIndex).onmouseenter = wrapLambda(handlerArena, handlerIndex),
+    uranium_NativeCanvas_setOnMouseLeaveListener: (canvasArena, canvasIndex, handlerIndex, handlerArena) =>
+        kotlinObject(canvasArena, canvasIndex).onmouseleave = wrapLambda(handlerArena, handlerIndex),
 });
