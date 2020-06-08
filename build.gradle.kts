@@ -1,7 +1,6 @@
 plugins {
     kotlin("multiplatform") version "1.3.72" apply false
     kotlin("js") version "1.3.72" apply false
-    id("com.jfrog.bintray") version "1.8.5" apply false
 }
 
 allprojects {
@@ -10,6 +9,5 @@ allprojects {
 
     repositories {
         jcenter()
-        mavenLocal()
     }
 }

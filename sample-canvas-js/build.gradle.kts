@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-	api(project(":uranium-arkade-canvas"))
+	api(project(":uranium-arkade-htmlcanvas"))
 
 	implementation(kotlin("stdlib-js"))
 }

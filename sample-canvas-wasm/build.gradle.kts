@@ -19,7 +19,7 @@ kotlin {
 	sourceSets {
 		val commonMain by getting {
 			dependencies {
-				api(project(":uranium-arkade-canvas"))
+				api(project(":uranium-arkade-htmlcanvas"))
 			}
 		}
 
