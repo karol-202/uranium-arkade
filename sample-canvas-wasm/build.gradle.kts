@@ -11,7 +11,7 @@ kotlin {
 	wasm32 {
 		binaries {
 			executable {
-				entryPoint = "pl.karol202.uranium.arkade.canvas.sample.wasm.main"
+				entryPoint = "pl.karol202.uranium.arkade.htmlcanvas.sample.wasm.main"
 			}
 		}
 	}
