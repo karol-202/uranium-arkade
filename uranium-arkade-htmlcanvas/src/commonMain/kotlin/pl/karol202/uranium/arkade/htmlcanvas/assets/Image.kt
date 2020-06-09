@@ -2,7 +2,7 @@ package pl.karol202.uranium.arkade.htmlcanvas.assets
 
 import pl.karol202.uranium.arkade.htmlcanvas.dom.assets.NativeImage
 
-class Image(internal val native: NativeImage)
+class Image internal constructor(internal val native: NativeImage)
 {
 	companion object
 	{

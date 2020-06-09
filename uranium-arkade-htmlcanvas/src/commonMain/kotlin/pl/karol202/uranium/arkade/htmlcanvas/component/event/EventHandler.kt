@@ -2,7 +2,7 @@ package pl.karol202.uranium.arkade.htmlcanvas.component.event
 
 import pl.karol202.uranium.arkade.htmlcanvas.Arkade
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderScope
-import pl.karol202.uranium.arkade.htmlcanvas.component.base.AbstractNativeLeafComponent
+import pl.karol202.uranium.arkade.htmlcanvas.component.base.ArkadeAbstractNativeLeafComponent
 import pl.karol202.uranium.arkade.htmlcanvas.native.ArkadeEventNativeLeaf
 import pl.karol202.uranium.arkade.htmlcanvas.values.InputEvent
 import pl.karol202.uranium.core.common.AutoKey
@@ -10,7 +10,7 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.native.UNative
 
-class EventHandler(props: Props) : AbstractNativeLeafComponent<EventHandler.Props>(props)
+class EventHandler(props: Props) : ArkadeAbstractNativeLeafComponent<EventHandler.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 val mouseListener: (InputEvent.Mouse) -> Unit,

@@ -4,9 +4,9 @@ import pl.karol202.uranium.arkade.htmlcanvas.assets.Image
 import pl.karol202.uranium.arkade.htmlcanvas.dom.canvas.NativeCanvasContext
 import pl.karol202.uranium.arkade.htmlcanvas.values.*
 
-val NativeCanvasContext.asDrawContext get() = DrawContext(this)
+internal val NativeCanvasContext.asDrawContext get() = DrawContext(this)
 
-class DrawContext(internal val native: NativeCanvasContext)
+class DrawContext internal constructor(internal val native: NativeCanvasContext)
 {
 	val clientSize: Vector
 		get() = Vector(native.canvas.clientWidth.toDouble(), native.canvas.clientHeight.toDouble())
@@ -78,10 +78,10 @@ class DrawContext(internal val native: NativeCanvasContext)
 	fun scale(vector: Vector) =
 			native.scale(vector.x, vector.y)
 
-	fun createLinearGradient(start: Vector, end: Vector) =
+	internal fun createLinearGradient(start: Vector, end: Vector) =
 			native.createLinearGradient(start.x, start.y, end.x, end.y)
 
-	fun createRadialGradient(start: Vector, startRadius: Double, end: Vector, endRadius: Double) =
+	internal fun createRadialGradient(start: Vector, startRadius: Double, end: Vector, endRadius: Double) =
 			native.createRadialGradient(start.x, start.y, startRadius, end.x, end.y, endRadius)
 
 	fun setFillStyle(fillStyle: FillStyle)

@@ -2,7 +2,7 @@ package pl.karol202.uranium.arkade.htmlcanvas.component.physics
 
 import pl.karol202.uranium.arkade.htmlcanvas.Arkade
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderScope
-import pl.karol202.uranium.arkade.htmlcanvas.component.base.AbstractNativeLeafComponent
+import pl.karol202.uranium.arkade.htmlcanvas.component.base.ArkadeAbstractNativeLeafComponent
 import pl.karol202.uranium.arkade.htmlcanvas.native.ArkadePhysicsNativeLeaf
 import pl.karol202.uranium.arkade.htmlcanvas.physics.PhysicsContext
 import pl.karol202.uranium.core.common.AutoKey
@@ -10,7 +10,7 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.native.UNative
 
-class PhysicsPerformer(props: Props) : AbstractNativeLeafComponent<PhysicsPerformer.Props>(props)
+class PhysicsPerformer(props: Props) : ArkadeAbstractNativeLeafComponent<PhysicsPerformer.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 val listener: (PhysicsContext) -> Unit) : UProps

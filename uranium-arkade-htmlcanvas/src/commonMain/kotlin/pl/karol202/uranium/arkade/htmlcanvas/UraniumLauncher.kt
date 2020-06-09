@@ -9,6 +9,7 @@ import pl.karol202.uranium.arkade.htmlcanvas.native.nativeContainer
 import pl.karol202.uranium.arkade.htmlcanvas.physics.PhysicsContext
 import pl.karol202.uranium.arkade.htmlcanvas.scheduler.createRenderScheduler
 import pl.karol202.uranium.arkade.htmlcanvas.values.InputEvent
+import pl.karol202.uranium.arkade.htmlcanvas.values.Vector
 import pl.karol202.uranium.core.render.render
 import kotlin.time.Duration
 import kotlin.time.milliseconds
@@ -16,12 +17,11 @@ import kotlin.time.milliseconds
 class UraniumLauncher(canvasId: String,
                       private val renderInterval: Int,
                       private val physicsInterval: Int,
-                      elementProvider: ArkadeRenderScope.() -> ArkadeElement<*>)
+                      private val elementProvider: ArkadeRenderScope.(size: Vector) -> ArkadeElement<*>)
 {
 	private val canvas = getNativeCanvas(canvasId)
-	private val drawContext = canvas.context.asDrawContext
+	private val canvasContext = canvas.context.asDrawContext
 	private val container = nativeContainer()
-	private val renderManager by lazy { ArkadeRenderManager(elementProvider.render(), container, createRenderScheduler()) }
 
 	private var renderTimer: Int? = null
 	private var physicsTimer: Int? = null
@@ -32,14 +32,13 @@ class UraniumLauncher(canvasId: String,
 	{
 		initContext()
 		initEventListeners()
-		renderManager.scheduleInit()
-		renderTimer = NativeWindow.setInterval(renderInterval, this::draw)
-		physicsTimer = NativeWindow.setInterval(physicsInterval, this::performPhysics)
+		initTimers()
+		createRenderManager().scheduleInit()
 	}
 
 	private fun initContext()
 	{
-		drawContext.size = drawContext.clientSize
+		canvasContext.size = canvasContext.clientSize
 	}
 
 	private fun initEventListeners()
@@ -54,7 +53,37 @@ class UraniumLauncher(canvasId: String,
 		NativeWindow.setOnKeyUpListener(::handleKeyEvent)
 	}
 
+	private fun initTimers()
+	{
+		renderTimer = NativeWindow.setInterval(renderInterval, this::draw)
+		physicsTimer = NativeWindow.setInterval(physicsInterval, this::performPhysics)
+	}
+
+	private fun createRenderManager(): ArkadeRenderManager<*>
+	{
+		val size = Vector(canvas.width.toDouble(), canvas.height.toDouble())
+		return ArkadeRenderManager(elementProvider.render(size), container, createRenderScheduler())
+	}
+
 	fun stop()
+	{
+		resetEventListeners()
+		resetTimers()
+	}
+
+	private fun resetEventListeners()
+	{
+		canvas.setOnMouseDownListener(null)
+		canvas.setOnMouseMoveListener(null)
+		canvas.setOnMouseUpListener(null)
+		canvas.setOnMouseEnterListener(null)
+		canvas.setOnMouseLeaveListener(null)
+		NativeWindow.setOnKeyDownListener(null)
+		NativeWindow.setOnKeyPressListener(null)
+		NativeWindow.setOnKeyUpListener(null)
+	}
+
+	private fun resetTimers()
 	{
 		renderTimer?.let { NativeWindow.clearInterval(it) }
 		physicsTimer?.let { NativeWindow.clearInterval(it) }
@@ -62,8 +91,8 @@ class UraniumLauncher(canvasId: String,
 
 	private fun draw()
 	{
-		drawContext.clearViewport()
-		container.draw(drawContext)
+		canvasContext.clearViewport()
+		container.draw(canvasContext)
 	}
 
 	private fun performPhysics() = container.performPhysics(createPhysicsContext())
@@ -86,6 +115,6 @@ class UraniumLauncher(canvasId: String,
 fun startOnCanvas(canvasId: String,
                   renderInterval: Int,
                   physicsInterval: Int,
-                  elementProvider: ArkadeRenderScope.() -> ArkadeElement<*>) =
+                  elementProvider: ArkadeRenderScope.(size: Vector) -> ArkadeElement<*>) =
 		UraniumLauncher(canvasId, renderInterval, physicsInterval, elementProvider).start()
 

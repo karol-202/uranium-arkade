@@ -2,7 +2,7 @@ package pl.karol202.uranium.arkade.htmlcanvas.values
 
 import pl.karol202.uranium.arkade.htmlcanvas.dom.values.NativePath
 
-data class Path(internal val native: NativePath)
+data class Path internal constructor(internal val native: NativePath)
 {
 	companion object
 	{

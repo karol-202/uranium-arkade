@@ -3,21 +3,31 @@ plugins {
 	`maven-publish`
 }
 
+val jsIncludesPath = "src/wasm32Main/js"
+
 kotlin {
 	js {
 		targets {
 			browser()
 		}
 	}
-	wasm32()
+	wasm32 {
+		val main by compilations.getting {
+			kotlinOptions {
+				freeCompilerArgs = fileTree(jsIncludesPath).flatMap {
+					listOf("-ib", it.absolutePath)
+				}
+			}
+			compileKotlinTask.inputs.dir(jsIncludesPath)
+		}
+	}
 
 	sourceSets {
 		val commonMain by getting {
 			dependencies {
-				api("pl.karol202.uranium:uranium-core:0.2.1")
+				api("pl.karol202.uranium:uranium-core:0.2.2")
 
 				implementation(kotlin("stdlib-common"))
-				implementation(project("dom-api"))
 			}
 		}
 
@@ -25,6 +35,10 @@ kotlin {
 			dependencies {
 				implementation(kotlin("stdlib-js"))
 			}
+		}
+
+		val wasm32Main by getting {
+			resources.srcDirs(jsIncludesPath)
 		}
 
 		all {

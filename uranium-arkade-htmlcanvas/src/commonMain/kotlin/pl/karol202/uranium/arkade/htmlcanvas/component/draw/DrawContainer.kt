@@ -4,7 +4,7 @@ import pl.karol202.uranium.arkade.htmlcanvas.Arkade
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeElement
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderBuilder
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderScope
-import pl.karol202.uranium.arkade.htmlcanvas.component.base.AbstractNativeContainerComponent
+import pl.karol202.uranium.arkade.htmlcanvas.component.base.ArkadeAbstractNativeContainerComponent
 import pl.karol202.uranium.arkade.htmlcanvas.draw.DrawContext
 import pl.karol202.uranium.arkade.htmlcanvas.draw.DrawOperation
 import pl.karol202.uranium.arkade.htmlcanvas.native.ArkadeDrawNativeContainer
@@ -15,7 +15,7 @@ import pl.karol202.uranium.core.native.UNativeContainer
 import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.core.render.render
 
-class DrawContainer(props: Props) : AbstractNativeContainerComponent<DrawContainer.Props>(props)
+class DrawContainer(props: Props) : ArkadeAbstractNativeContainerComponent<DrawContainer.Props>(props)
 {
 	data class Props(override val key: Any,
 	                 val beforeDrawOperation: DrawOperation,

@@ -49,5 +49,5 @@ sealed class Gradient : FillStyle()
 		steps.forEach { (position, color) -> addColorStop(position, color.asText) }
 	}.asNativeFillStyle
 
-	protected abstract fun createEmptyGradient(context: DrawContext): NativeGradient
+	internal abstract fun createEmptyGradient(context: DrawContext): NativeGradient
 }

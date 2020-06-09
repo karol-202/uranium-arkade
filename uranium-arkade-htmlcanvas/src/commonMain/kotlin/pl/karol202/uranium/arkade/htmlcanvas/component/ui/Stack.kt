@@ -26,10 +26,7 @@ fun <E> ArkadeRenderScope.stack(key: Any = AutoKey,
 			elements.forEachIndexed { index, element ->
 				+ translate(key = index,
 				            vector = elementOffset * index.toDouble()) {
-					+ elementContent.asRenderer(element, index).render()
+					+ elementContent.render(element, index)
 				}
 			}
 		}
-
-private fun <E> (ArkadeRenderBuilder.(E, Int) -> Unit).asRenderer(element: E, index: Int): ArkadeRenderBuilder.() -> Unit =
-		{ this@asRenderer(element, index) }

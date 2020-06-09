@@ -4,7 +4,7 @@ import pl.karol202.uranium.arkade.htmlcanvas.Arkade
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeElement
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderBuilder
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderScope
-import pl.karol202.uranium.arkade.htmlcanvas.component.base.AbstractNativeContainerComponent
+import pl.karol202.uranium.arkade.htmlcanvas.component.base.ArkadeAbstractNativeContainerComponent
 import pl.karol202.uranium.arkade.htmlcanvas.native.ColliderNativeContainer
 import pl.karol202.uranium.arkade.htmlcanvas.physics.collider.Collider
 import pl.karol202.uranium.core.common.AutoKey
@@ -14,7 +14,7 @@ import pl.karol202.uranium.core.native.UNativeContainer
 import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.core.render.render
 
-class ColliderTransformer(props: Props) : AbstractNativeContainerComponent<ColliderTransformer.Props>(props)
+class ColliderTransformer(props: Props) : ArkadeAbstractNativeContainerComponent<ColliderTransformer.Props>(props)
 {
 	data class Props(override val key: Any = AutoKey,
 	                 val transform: Collider.() -> Collider,

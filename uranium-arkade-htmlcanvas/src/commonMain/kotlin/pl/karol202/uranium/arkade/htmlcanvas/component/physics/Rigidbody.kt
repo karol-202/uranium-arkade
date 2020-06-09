@@ -3,7 +3,7 @@ package pl.karol202.uranium.arkade.htmlcanvas.component.physics
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeElement
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderBuilder
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderScope
-import pl.karol202.uranium.arkade.htmlcanvas.component.base.AbstractComponent
+import pl.karol202.uranium.arkade.htmlcanvas.component.base.ArkadeAbstractComponent
 import pl.karol202.uranium.arkade.htmlcanvas.component.containers.translate
 import pl.karol202.uranium.arkade.htmlcanvas.component.physics.collider.colliderProvider
 import pl.karol202.uranium.arkade.htmlcanvas.physics.Collision
@@ -16,7 +16,7 @@ import pl.karol202.uranium.core.common.UProps
 import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.render
 
-class Rigidbody(props: Props) : AbstractComponent<Rigidbody.Props>(props)
+class Rigidbody(props: Props) : ArkadeAbstractComponent<Rigidbody.Props>(props)
 {
 	data class Props(override val key: Any,
 	                 val state: State,

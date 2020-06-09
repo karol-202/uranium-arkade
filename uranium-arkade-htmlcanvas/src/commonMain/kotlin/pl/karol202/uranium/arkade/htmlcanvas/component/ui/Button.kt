@@ -4,7 +4,7 @@ import pl.karol202.uranium.arkade.htmlcanvas.Arkade
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeElement
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderBuilder
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderScope
-import pl.karol202.uranium.arkade.htmlcanvas.component.base.AbstractComponent
+import pl.karol202.uranium.arkade.htmlcanvas.component.base.ArkadeAbstractComponent
 import pl.karol202.uranium.arkade.htmlcanvas.component.event.eventHandler
 import pl.karol202.uranium.arkade.htmlcanvas.values.Bounds
 import pl.karol202.uranium.arkade.htmlcanvas.values.InputEvent
@@ -15,7 +15,7 @@ import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.core.render.render
 
-class Button(props: Props) : AbstractComponent<Button.Props>(props),
+class Button(props: Props) : ArkadeAbstractComponent<Button.Props>(props),
                              UStateful<Button.State>
 {
 	data class Props(override val key: Any = AutoKey,
