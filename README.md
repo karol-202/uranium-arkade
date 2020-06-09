@@ -1,4 +1,4 @@
-# Uranium
+# uranium-arkade
 
 ![Deployment](
 https://github.com/karol-202/uranium-arkade/workflows/Deployment/badge.svg
@@ -10,7 +10,8 @@ https://bintray.com/karol202/uranium/uranium-arkade-htmlcanvas/_latestVersion
 https://opensource.org/licenses/MIT
 )
 
-uranium-arkade is 2D game engine for Kotlin with simple, component-based architecture.
+uranium-arkade is 2D game engine for Kotlin based on [uranium](https://github.com/karol-202/uranium).
+It's unique because of its React-like, component-based architecture with unidirectional data flow.
 Currently it supports HTML5 canvas, but support for more targets is planned.
 
 ## Contents

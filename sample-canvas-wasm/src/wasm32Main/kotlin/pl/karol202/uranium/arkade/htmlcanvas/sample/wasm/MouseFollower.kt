@@ -4,7 +4,7 @@ import pl.karol202.uranium.arkade.htmlcanvas.Arkade
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeElement
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderBuilder
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderScope
-import pl.karol202.uranium.arkade.htmlcanvas.component.base.AbstractComponent
+import pl.karol202.uranium.arkade.htmlcanvas.component.base.ArkadeAbstractComponent
 import pl.karol202.uranium.arkade.htmlcanvas.component.containers.translate
 import pl.karol202.uranium.arkade.htmlcanvas.component.event.eventHandler
 import pl.karol202.uranium.arkade.htmlcanvas.values.InputEvent
@@ -15,7 +15,7 @@ import pl.karol202.uranium.core.element.component
 import pl.karol202.uranium.core.render.URenderBuilder
 import pl.karol202.uranium.core.render.render
 
-class MouseFollower(props: Props) : AbstractComponent<MouseFollower.Props>(props),
+class MouseFollower(props: Props) : ArkadeAbstractComponent<MouseFollower.Props>(props),
                                     UStateful<MouseFollower.State>
 {
 	data class Props(override val key: Any,

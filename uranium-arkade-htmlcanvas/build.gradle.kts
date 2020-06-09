@@ -25,7 +25,7 @@ kotlin {
 	sourceSets {
 		val commonMain by getting {
 			dependencies {
-				api("pl.karol202.uranium:uranium-core:0.2.2")
+				api("pl.karol202.uranium:uranium-core:0.2.3")
 
 				implementation(kotlin("stdlib-common"))
 			}

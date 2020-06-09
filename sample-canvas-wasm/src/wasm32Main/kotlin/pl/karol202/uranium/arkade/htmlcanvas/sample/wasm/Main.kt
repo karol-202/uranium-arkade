@@ -3,7 +3,7 @@ package pl.karol202.uranium.arkade.htmlcanvas.sample.wasm
 import pl.karol202.uranium.arkade.htmlcanvas.Arkade
 import pl.karol202.uranium.arkade.htmlcanvas.ArkadeRenderScope
 import pl.karol202.uranium.arkade.htmlcanvas.assets.Image
-import pl.karol202.uranium.arkade.htmlcanvas.component.base.AbstractComponent
+import pl.karol202.uranium.arkade.htmlcanvas.component.base.ArkadeAbstractComponent
 import pl.karol202.uranium.arkade.htmlcanvas.component.containers.flip
 import pl.karol202.uranium.arkade.htmlcanvas.component.containers.scale
 import pl.karol202.uranium.arkade.htmlcanvas.component.containers.translate
@@ -27,7 +27,7 @@ import pl.karol202.uranium.core.render.URenderBuilder
 
 fun main() = startOnCanvas("canvas", renderInterval = 20, physicsInterval = 20) { app() }
 
-class App(props: BasicProps) : AbstractComponent<BasicProps>(props),
+class App(props: BasicProps) : ArkadeAbstractComponent<BasicProps>(props),
                                UStateful<App.State>
 {
 	data class State(val ballState: Rigidbody.State) : UState
