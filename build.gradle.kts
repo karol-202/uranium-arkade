@@ -4,8 +4,8 @@ plugins {
 }
 
 allprojects {
-    group = "pl.karol202.uranium"
-    version = "0.2"
+    group = "pl.karol202.uranium.arkade"
+    version = "0.2.1"
 
     repositories {
         jcenter()

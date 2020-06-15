@@ -40,14 +40,14 @@ The below snippets demonstrate how to use the Kotlin/JS artifact of `uranium-ark
 Gradle (Kotlin DSL):
 ```kotlin
 dependencies {
-    implementation("pl.karol202.uranium:uranium-arkade-htmlcanvas-js:0.2")
+    implementation("pl.karol202.uranium.arkade:uranium-arkade-htmlcanvas-js:0.2.1")
 }
 ```
 
 Gradle (Groovy):
 ```groovy
 dependencies {
-    implementation "pl.karol202.uranium:uranium-arkade-htmlcanvas-js:0.2"
+    implementation "pl.karol202.uranium.arkade:uranium-arkade-htmlcanvas-js:0.2.1"
 }
 ```
 
