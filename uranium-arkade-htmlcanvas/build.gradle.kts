@@ -50,7 +50,7 @@ kotlin {
 object Publish
 {
 	const val repo = "uranium"
-	const val name = "uranium-arkade-htmlcanvas"
+	const val name = "uranium-arkade"
 	const val description = "2D game engine for HTML5 canvas using Uranium"
 	const val vcsUrl = "https://github.com/karol-202/uranium-arkade"
 }
